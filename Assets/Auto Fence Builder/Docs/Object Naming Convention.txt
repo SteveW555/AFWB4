@@ -1,0 +1,15 @@
+﻿
+
+BrickSquare_Post[2 v1]_click_sq03
+
+BrickSquare  The source asset		
+_Post	     The type of component in AFWB		
+[2 v1] 	     The 2nd post, variation 1 of 4 Post assets used						
+_click	     This was/wasn't a click-point
+_sq03	     settings from 3rd step of a sequence (if used)	
+
+
+
+
+	
+

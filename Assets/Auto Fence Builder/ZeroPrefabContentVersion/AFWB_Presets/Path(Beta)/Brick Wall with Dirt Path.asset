@@ -1,0 +1,2422 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f413cba91fa148029d24f8978014515, type: 3}
+  m_Name: Brick Wall with Dirt Path
+  m_EditorClassIdentifier: 
+  categoryName: Path(Beta)
+  presetSeedsList:
+  - extraVarIndexSeed: 12345
+    extraRandomSeed: 12345
+    globalSpacingSeed: 12345
+    sizeXZSeed: 12345
+    shiftXZSeed: 12345
+    heightSeed: 12345
+    smallRotSeed: 12345
+    quantRotSeed: 12345
+    chanceMissingSeed: 12345
+    layer: 2
+    rExtraVarIndex: []
+    rExtraRandom: []
+    rSizeX:
+    - 0.9652598
+    - 0.98699343
+    - 1.0969064
+    - 1.0196018
+    - 1.0585303
+    - 0.96923846
+    - 1.1373985
+    - 0.8680955
+    - 1.0842099
+    - 1.1923194
+    - 1.1427865
+    - 1.0569053
+    - 0.91760445
+    - 0.8854832
+    rSizeZ:
+    - 0.8401758
+    - 0.83380574
+    - 1.0299743
+    - 0.9936439
+    - 1.1601536
+    - 0.9818245
+    - 1.1393683
+    - 0.959808
+    - 1.1502991
+    - 1.0414824
+    - 1.1466289
+    - 0.9247386
+    - 1.0775614
+    - 1.1623702
+    rShiftX:
+    - -0.017370142
+    - -0.006503284
+    - 0.04845321
+    - 0.009800874
+    - 0.029265165
+    - -0.015380777
+    - 0.06869926
+    - -0.06595225
+    - 0.04210496
+    - 0.09615972
+    - 0.07139323
+    - 0.028452583
+    - -0.041197784
+    - -0.05725842
+    rShiftZ:
+    - -0.07991212
+    - -0.08309715
+    - 0.014987148
+    - -0.0031780824
+    - 0.080076836
+    - -0.009087741
+    - 0.069684125
+    - -0.020096004
+    - 0.075149536
+    - 0.02074121
+    - 0.07331443
+    - -0.037630714
+    - 0.038780663
+    - 0.08118505
+    rSmallRot:
+    - {x: -0.0052110422, y: -0.023973634, z: -0.0019509848}
+    - {x: -0.024929145, y: 0.014535962, z: 0.004496144}
+    - {x: 0.0029402617, y: -0.0009534247, z: 0.008779549}
+    - {x: 0.02402305, y: -0.004614232, z: -0.002726322}
+    - {x: 0.02060978, y: 0.020905236, z: -0.019785674}
+    - {x: -0.0060288003, y: 0.012631487, z: 0.022544859}
+    - {x: 0.028847916, y: 0.0062223645, z: 0.021417966}
+    - {x: 0.021994328, y: 0.008535774, z: -0.011289214}
+    - {x: -0.012359337, y: 0.011634198, z: -0.017177524}
+    - {x: 0.024355516, y: -0.010651478, z: -0.004069186}
+    - {x: -0.021270353, y: 0.02903148, z: 0.022200221}
+    - {x: 0.015125104, y: 0.028959988, z: 0.00294773}
+    - {x: 0.021175051, y: 0.002172851, z: -0.02374084}
+    - {x: -0.020975396, y: 0.025451066, z: 0.020619377}
+    unused: 1
+  - extraVarIndexSeed: 12345
+    extraRandomSeed: 12345
+    globalSpacingSeed: 12345
+    sizeXZSeed: 12345
+    shiftXZSeed: 12345
+    heightSeed: 12345
+    smallRotSeed: 12345
+    quantRotSeed: 12345
+    chanceMissingSeed: 12345
+    layer: 0
+    rExtraVarIndex: []
+    rExtraRandom: []
+    rSizeX: []
+    rSizeZ: []
+    rShiftX: []
+    rShiftZ: []
+    rSmallRot:
+    - {x: 0, y: -1.5982423, z: 0}
+    - {x: 0, y: 0.9690642, z: 0}
+    - {x: 0, y: -0.06356168, z: 0}
+    - {x: 0, y: -0.30761552, z: 0}
+    - {x: 0, y: 1.3936825, z: 0}
+    - {x: 0, y: 0.84209913, z: 0}
+    - {x: 0, y: 0.41482425, z: 0}
+    - {x: 0, y: 0.5690517, z: 0}
+    - {x: 0, y: 0.77561325, z: 0}
+    - {x: 0, y: -0.7100985, z: 0}
+    - {x: 0, y: 1.935432, z: 0}
+    - {x: 0, y: 1.930666, z: 0}
+    - {x: 0, y: 0.14485669, z: 0}
+    - {x: 0, y: 1.6967378, z: 0}
+    - {x: 0, y: 0.1437223, z: 0}
+    - {x: 0, y: 1.2020602, z: 0}
+    - {x: 0, y: 1.4126058, z: 0}
+    - {x: 0, y: 0.57001966, z: 0}
+    - {x: 0, y: 1.3867064, z: 0}
+    - {x: 0, y: 1.6243787, z: 0}
+    - {x: 0, y: -1.888123, z: 0}
+    - {x: 0, y: -0.8019941, z: 0}
+    - {x: 0, y: -1.8252769, z: 0}
+    - {x: 0, y: -0.53258634, z: 0}
+    - {x: 0, y: 1.8238244, z: 0}
+    - {x: 0, y: 0.88053316, z: 0}
+    - {x: 0, y: -1.5771618, z: 0}
+    - {x: 0, y: -0.032033205, z: 0}
+    - {x: 0, y: 0.6576032, z: 0}
+    - {x: 0, y: -0.72853637, z: 0}
+    - {x: 0, y: 1.3782525, z: 0}
+    - {x: 0, y: 1.4877625, z: 0}
+    - {x: 0, y: 0.2143333, z: 0}
+    - {x: 0, y: -0.8406794, z: 0}
+    - {x: 0, y: 1.635602, z: 0}
+    - {x: 0, y: -1.7699728, z: 0}
+    - {x: 0, y: 0.10694623, z: 0}
+    - {x: 0, y: 1.98314, z: 0}
+    - {x: 0, y: -0.5615351, z: 0}
+    - {x: 0, y: 0.22930312, z: 0}
+    - {x: 0, y: -1.5210314, z: 0}
+    - {x: 0, y: -1.734757, z: 0}
+    - {x: 0, y: 0.59731, z: 0}
+    - {x: 0, y: -0.96392894, z: 0}
+    - {x: 0, y: 0.56602806, z: 0}
+    - {x: 0, y: -1.5244479, z: 0}
+    - {x: 0, y: -0.09682202, z: 0}
+    - {x: 0, y: 0.87742084, z: 0}
+    - {x: 0, y: -0.7645967, z: 0}
+    - {x: 0, y: -1.3535671, z: 0}
+    - {x: 0, y: 0.7991738, z: 0}
+    - {x: 0, y: 0.09359765, z: 0}
+    - {x: 0, y: -0.83843017, z: 0}
+    - {x: 0, y: -0.39787698, z: 0}
+    - {x: 0, y: -1.5867581, z: 0}
+    - {x: 0, y: 1.9717569, z: 0}
+    - {x: 0, y: -1.529954, z: 0}
+    - {x: 0, y: -1.4101882, z: 0}
+    - {x: 0, y: 0.48185802, z: 0}
+    - {x: 0, y: 0.26854777, z: 0}
+    - {x: 0, y: -0.41524196, z: 0}
+    - {x: 0, y: 1.8169498, z: 0}
+    - {x: 0, y: 1.0644479, z: 0}
+    - {x: 0, y: 0.061755896, z: 0}
+    - {x: 0, y: 1.387609, z: 0}
+    - {x: 0, y: 0.023709059, z: 0}
+    - {x: 0, y: -1.659812, z: 0}
+    - {x: 0, y: 1.9694891, z: 0}
+    - {x: 0, y: 0.95894665, z: 0}
+    - {x: 0, y: 1.2277551, z: 0}
+    - {x: 0, y: 1.5698481, z: 0}
+    - {x: 0, y: 0.738614, z: 0}
+    - {x: 0, y: 0.6626839, z: 0}
+    - {x: 0, y: 1.1859913, z: 0}
+    - {x: 0, y: 1.955215, z: 0}
+    - {x: 0, y: -0.87049127, z: 0}
+    - {x: 0, y: 1.0509939, z: 0}
+    - {x: 0, y: -0.99211097, z: 0}
+    - {x: 0, y: -0.81845117, z: 0}
+    - {x: 0, y: 0.27828765, z: 0}
+    - {x: 0, y: -1.4094238, z: 0}
+    - {x: 0, y: -0.044363737, z: 0}
+    - {x: 0, y: -1.0996642, z: 0}
+    - {x: 0, y: -1.8270168, z: 0}
+    - {x: 0, y: 0.50455517, z: 0}
+    - {x: 0, y: -1.8575249, z: 0}
+    - {x: 0, y: 0.49826026, z: 0}
+    - {x: 0, y: -0.091306925, z: 0}
+    - {x: 0, y: -1.6370025, z: 0}
+    - {x: 0, y: -1.5625253, z: 0}
+    - {x: 0, y: 1.266254, z: 0}
+    - {x: 0, y: -1.3022757, z: 0}
+    - {x: 0, y: 0.8441133, z: 0}
+    - {x: 0, y: 1.8311062, z: 0}
+    - {x: 0, y: 0.251745, z: 0}
+    - {x: 0, y: 0.8824453, z: 0}
+    - {x: 0, y: -1.5004592, z: 0}
+    - {x: 0, y: -0.33794522, z: 0}
+    - {x: 0, y: -1.3114424, z: 0}
+    - {x: 0, y: 1.1863484, z: 0}
+    - {x: 0, y: -0.1994226, z: 0}
+    - {x: 0, y: -0.46622205, z: 0}
+    - {x: 0, y: -1.9431868, z: 0}
+    - {x: 0, y: 0.4187796, z: 0}
+    - {x: 0, y: 0.28969312, z: 0}
+    - {x: 0, y: 0.08698201, z: 0}
+    - {x: 0, y: 0.31998134, z: 0}
+    - {x: 0, y: 0.3862393, z: 0}
+    - {x: 0, y: 1.2894473, z: 0}
+    - {x: 0, y: 0.35417533, z: 0}
+    - {x: 0, y: 1.289845, z: 0}
+    - {x: 0, y: 0.6313457, z: 0}
+    - {x: 0, y: 1.842946, z: 0}
+    - {x: 0, y: -1.4714408, z: 0}
+    - {x: 0, y: 0.7449884, z: 0}
+    - {x: 0, y: 1.3201828, z: 0}
+    - {x: 0, y: -0.6102841, z: 0}
+    - {x: 0, y: -1.3194103, z: 0}
+    - {x: 0, y: -0.10589814, z: 0}
+    - {x: 0, y: 0.96283096, z: 0}
+    - {x: 0, y: -0.9838865, z: 0}
+    - {x: 0, y: 1.2697582, z: 0}
+    - {x: 0, y: 1.923624, z: 0}
+    - {x: 0, y: -0.29550338, z: 0}
+    - {x: 0, y: -1.0235629, z: 0}
+    - {x: 0, y: 1.1051154, z: 0}
+    - {x: 0, y: 1.0540643, z: 0}
+    - {x: 0, y: -0.63364244, z: 0}
+    - {x: 0, y: 0.4491217, z: 0}
+    - {x: 0, y: -1.1829047, z: 0}
+    - {x: 0, y: -1.6857357, z: 0}
+    - {x: 0, y: 0.037927866, z: 0}
+    - {x: 0, y: 1.3675113, z: 0}
+    - {x: 0, y: -1.0606232, z: 0}
+    - {x: 0, y: -0.6727865, z: 0}
+    - {x: 0, y: 1.9448605, z: 0}
+    - {x: 0, y: 0.55982965, z: 0}
+    - {x: 0, y: 1.9897299, z: 0}
+    - {x: 0, y: -1.0435643, z: 0}
+    - {x: 0, y: -1.231597, z: 0}
+    - {x: 0, y: -0.19730496, z: 0}
+    - {x: 0, y: 0.17507672, z: 0}
+    - {x: 0, y: 0.035734415, z: 0}
+    - {x: 0, y: -0.62973857, z: 0}
+    - {x: 0, y: 1.5373082, z: 0}
+    - {x: 0, y: -1.738059, z: 0}
+    - {x: 0, y: 0.42472005, z: 0}
+    - {x: 0, y: -1.6690302, z: 0}
+    - {x: 0, y: 1.6073151, z: 0}
+    - {x: 0, y: -1.2276511, z: 0}
+    - {x: 0, y: -1.6254239, z: 0}
+    - {x: 0, y: -0.25920272, z: 0}
+    - {x: 0, y: -0.94654727, z: 0}
+    - {x: 0, y: 1.3136725, z: 0}
+    - {x: 0, y: 0.42921662, z: 0}
+    - {x: 0, y: -0.1312182, z: 0}
+    - {x: 0, y: -1.5848894, z: 0}
+    - {x: 0, y: 0.90090793, z: 0}
+    - {x: 0, y: -0.14873052, z: 0}
+    - {x: 0, y: -1.2142229, z: 0}
+    - {x: 0, y: 0.7524356, z: 0}
+    - {x: 0, y: 0.00045084953, z: 0}
+    - {x: 0, y: 0.14058757, z: 0}
+    - {x: 0, y: -0.82312894, z: 0}
+    - {x: 0, y: 1.8279495, z: 0}
+    - {x: 0, y: 1.8528676, z: 0}
+    - {x: 0, y: -0.42075992, z: 0}
+    - {x: 0, y: -0.7315309, z: 0}
+    - {x: 0, y: 1.6461215, z: 0}
+    - {x: 0, y: 1.9303312, z: 0}
+    - {x: 0, y: 0.081232786, z: 0}
+    - {x: 0, y: 1.1277375, z: 0}
+    - {x: 0, y: 1.0069447, z: 0}
+    - {x: 0, y: 1.7573323, z: 0}
+    - {x: 0, y: 0.6262707, z: 0}
+    - {x: 0, y: -0.9546287, z: 0}
+    - {x: 0, y: 1.0073571, z: 0}
+    - {x: 0, y: -0.257138, z: 0}
+    - {x: 0, y: 0.056616545, z: 0}
+    - {x: 0, y: -1.8995938, z: 0}
+    - {x: 0, y: -1.5964808, z: 0}
+    - {x: 0, y: -0.52828765, z: 0}
+    - {x: 0, y: -1.663177, z: 0}
+    - {x: 0, y: 0.82286066, z: 0}
+    - {x: 0, y: 1.8113256, z: 0}
+    - {x: 0, y: -1.3807817, z: 0}
+    - {x: 0, y: 0.15754199, z: 0}
+    - {x: 0, y: -1.3334217, z: 0}
+    - {x: 0, y: 1.8871136, z: 0}
+    - {x: 0, y: -0.65923667, z: 0}
+    - {x: 0, y: 1.0026541, z: 0}
+    - {x: 0, y: -0.0055143833, z: 0}
+    - {x: 0, y: 1.340446, z: 0}
+    - {x: 0, y: -0.12681508, z: 0}
+    - {x: 0, y: 1.8975396, z: 0}
+    - {x: 0, y: 1.11025, z: 0}
+    - {x: 0, y: -0.73832345, z: 0}
+    - {x: 0, y: 0.07838082, z: 0}
+    - {x: 0, y: -0.082695246, z: 0}
+    - {x: 0, y: 0.3177297, z: 0}
+    - {x: 0, y: 0.7032928, z: 0}
+    - {x: 0, y: -0.60371137, z: 0}
+    - {x: 0, y: -1.0678239, z: 0}
+    - {x: 0, y: 0.3821671, z: 0}
+    - {x: 0, y: 0.43449855, z: 0}
+    - {x: 0, y: -0.8294194, z: 0}
+    - {x: 0, y: 1.9930091, z: 0}
+    - {x: 0, y: -0.74966025, z: 0}
+    - {x: 0, y: -0.10233331, z: 0}
+    - {x: 0, y: -0.13042998, z: 0}
+    - {x: 0, y: 0.46452165, z: 0}
+    - {x: 0, y: -0.6187055, z: 0}
+    - {x: 0, y: -0.6574538, z: 0}
+    - {x: 0, y: 1.0681529, z: 0}
+    - {x: 0, y: 0.79483694, z: 0}
+    - {x: 0, y: 1.2712483, z: 0}
+    - {x: 0, y: 1.717999, z: 0}
+    - {x: 0, y: -1.4721146, z: 0}
+    - {x: 0, y: -1.5911832, z: 0}
+    - {x: 0, y: 0.80417866, z: 0}
+    - {x: 0, y: 0.3080547, z: 0}
+    - {x: 0, y: 0.5116562, z: 0}
+    - {x: 0, y: 1.4232082, z: 0}
+    - {x: 0, y: 1.4194007, z: 0}
+    - {x: 0, y: 0.12132096, z: 0}
+    - {x: 0, y: 0.14883828, z: 0}
+    - {x: 0, y: 0.013145685, z: 0}
+    - {x: 0, y: -1.4216938, z: 0}
+    - {x: 0, y: 1.9844322, z: 0}
+    - {x: 0, y: 1.144299, z: 0}
+    - {x: 0, y: -1.4843345, z: 0}
+    - {x: 0, y: 1.9068184, z: 0}
+    - {x: 0, y: -0.78000045, z: 0}
+    - {x: 0, y: -1.3516731, z: 0}
+    - {x: 0, y: -0.20295787, z: 0}
+    - {x: 0, y: 0.49207377, z: 0}
+    - {x: 0, y: -1.9712453, z: 0}
+    - {x: 0, y: 1.3145275, z: 0}
+    - {x: 0, y: 0.21468663, z: 0}
+    - {x: 0, y: -1.71697, z: 0}
+    unused: 1
+  - extraVarIndexSeed: 12345
+    extraRandomSeed: 12345
+    globalSpacingSeed: 12345
+    sizeXZSeed: 12345
+    shiftXZSeed: 12345
+    heightSeed: 12345
+    smallRotSeed: 12345
+    quantRotSeed: 12345
+    chanceMissingSeed: 12345
+    layer: 1
+    rExtraVarIndex: []
+    rExtraRandom: []
+    rSizeX: []
+    rSizeZ: []
+    rShiftX: []
+    rShiftZ: []
+    rSmallRot:
+    - {x: -0.0052110422, y: -0.023973634, z: -0.0019509848}
+    - {x: -0.024929145, y: 0.014535962, z: 0.004496144}
+    - {x: 0.0029402617, y: -0.0009534247, z: 0.008779549}
+    - {x: 0.02402305, y: -0.004614232, z: -0.002726322}
+    - {x: 0.02060978, y: 0.020905236, z: -0.019785674}
+    - {x: -0.0060288003, y: 0.012631487, z: 0.022544859}
+    - {x: 0.028847916, y: 0.0062223645, z: 0.021417966}
+    - {x: 0.021994328, y: 0.008535774, z: -0.011289214}
+    - {x: -0.012359337, y: 0.011634198, z: -0.017177524}
+    - {x: 0.024355516, y: -0.010651478, z: -0.004069186}
+    - {x: -0.021270353, y: 0.02903148, z: 0.022200221}
+    - {x: 0.015125104, y: 0.028959988, z: 0.00294773}
+    - {x: 0.021175051, y: 0.002172851, z: -0.02374084}
+    - {x: -0.020975396, y: 0.025451066, z: 0.020619377}
+    - {x: 0.0015615141, y: 0.0021558348, z: -0.0013905186}
+    - {x: 0.0012230203, y: 0.018030902, z: -0.026943604}
+    - {x: -0.022799356, y: 0.021189084, z: -0.010930627}
+    - {x: 0.025836239, y: 0.008550295, z: -0.001051709}
+    - {x: 0.023199448, y: 0.020800594, z: -0.007696012}
+    - {x: -0.00027419627, y: 0.02436568, z: 0.00073233247}
+    - {x: -0.024582459, y: -0.028321845, z: 0.024630396}
+    - {x: -0.009738182, y: -0.01202991, z: 0.0075355964}
+    - {x: 0.0013860827, y: -0.027379153, z: -0.010181318}
+    - {x: -0.0018305574, y: -0.007988795, z: 0.028577542}
+    - {x: 0.0007178765, y: 0.027357364, z: 0.011845642}
+    - {x: 0.0020087417, y: 0.013207996, z: 0.0010903329}
+    - {x: -0.023152305, y: -0.023657426, z: 0.02182037}
+    - {x: -0.021012826, y: -0.00048049726, z: 0.01823289}
+    - {x: 0.004375116, y: 0.009864048, z: 0.0124913175}
+    - {x: 0.0036193337, y: -0.010928045, z: -0.012874829}
+    unused: 1
+  - extraVarIndexSeed: 12345
+    extraRandomSeed: 12345
+    globalSpacingSeed: 12345
+    sizeXZSeed: 12345
+    shiftXZSeed: 12345
+    heightSeed: 12345
+    smallRotSeed: 12345
+    quantRotSeed: 12345
+    chanceMissingSeed: 12345
+    layer: 4
+    rExtraVarIndex: []
+    rExtraRandom: []
+    rSizeX: []
+    rSizeZ: []
+    rShiftX: []
+    rShiftZ: []
+    rSmallRot:
+    - {x: 0, y: -1.5982423, z: 0}
+    - {x: 0, y: 0.9690642, z: 0}
+    - {x: 0, y: -0.06356168, z: 0}
+    - {x: 0, y: -0.30761552, z: 0}
+    - {x: 0, y: 1.3936825, z: 0}
+    - {x: 0, y: 0.84209913, z: 0}
+    - {x: 0, y: 0.41482425, z: 0}
+    - {x: 0, y: 0.5690517, z: 0}
+    - {x: 0, y: 0.77561325, z: 0}
+    - {x: 0, y: -0.7100985, z: 0}
+    - {x: 0, y: 1.935432, z: 0}
+    - {x: 0, y: 1.930666, z: 0}
+    - {x: 0, y: 0.14485669, z: 0}
+    - {x: 0, y: 1.6967378, z: 0}
+    - {x: 0, y: 0.1437223, z: 0}
+    - {x: 0, y: 1.2020602, z: 0}
+    - {x: 0, y: 1.4126058, z: 0}
+    - {x: 0, y: 0.57001966, z: 0}
+    - {x: 0, y: 1.3867064, z: 0}
+    - {x: 0, y: 1.6243787, z: 0}
+    - {x: 0, y: -1.888123, z: 0}
+    - {x: 0, y: -0.8019941, z: 0}
+    - {x: 0, y: -1.8252769, z: 0}
+    - {x: 0, y: -0.53258634, z: 0}
+    - {x: 0, y: 1.8238244, z: 0}
+    - {x: 0, y: 0.88053316, z: 0}
+    - {x: 0, y: -1.5771618, z: 0}
+    - {x: 0, y: -0.032033205, z: 0}
+    - {x: 0, y: 0.6576032, z: 0}
+    - {x: 0, y: -0.72853637, z: 0}
+    - {x: 0, y: 1.3782525, z: 0}
+    - {x: 0, y: 1.4877625, z: 0}
+    - {x: 0, y: 0.2143333, z: 0}
+    - {x: 0, y: -0.8406794, z: 0}
+    - {x: 0, y: 1.635602, z: 0}
+    - {x: 0, y: -1.7699728, z: 0}
+    - {x: 0, y: 0.10694623, z: 0}
+    - {x: 0, y: 1.98314, z: 0}
+    - {x: 0, y: -0.5615351, z: 0}
+    - {x: 0, y: 0.22930312, z: 0}
+    - {x: 0, y: -1.5210314, z: 0}
+    - {x: 0, y: -1.734757, z: 0}
+    - {x: 0, y: 0.59731, z: 0}
+    - {x: 0, y: -0.96392894, z: 0}
+    - {x: 0, y: 0.56602806, z: 0}
+    - {x: 0, y: -1.5244479, z: 0}
+    - {x: 0, y: -0.09682202, z: 0}
+    - {x: 0, y: 0.87742084, z: 0}
+    - {x: 0, y: -0.7645967, z: 0}
+    - {x: 0, y: -1.3535671, z: 0}
+    - {x: 0, y: 0.7991738, z: 0}
+    - {x: 0, y: 0.09359765, z: 0}
+    - {x: 0, y: -0.83843017, z: 0}
+    - {x: 0, y: -0.39787698, z: 0}
+    - {x: 0, y: -1.5867581, z: 0}
+    - {x: 0, y: 1.9717569, z: 0}
+    - {x: 0, y: -1.529954, z: 0}
+    - {x: 0, y: -1.4101882, z: 0}
+    - {x: 0, y: 0.48185802, z: 0}
+    - {x: 0, y: 0.26854777, z: 0}
+    - {x: 0, y: -0.41524196, z: 0}
+    - {x: 0, y: 1.8169498, z: 0}
+    - {x: 0, y: 1.0644479, z: 0}
+    - {x: 0, y: 0.061755896, z: 0}
+    - {x: 0, y: 1.387609, z: 0}
+    - {x: 0, y: 0.023709059, z: 0}
+    - {x: 0, y: -1.659812, z: 0}
+    - {x: 0, y: 1.9694891, z: 0}
+    - {x: 0, y: 0.95894665, z: 0}
+    - {x: 0, y: 1.2277551, z: 0}
+    - {x: 0, y: 1.5698481, z: 0}
+    - {x: 0, y: 0.738614, z: 0}
+    - {x: 0, y: 0.6626839, z: 0}
+    - {x: 0, y: 1.1859913, z: 0}
+    - {x: 0, y: 1.955215, z: 0}
+    - {x: 0, y: -0.87049127, z: 0}
+    - {x: 0, y: 1.0509939, z: 0}
+    - {x: 0, y: -0.99211097, z: 0}
+    - {x: 0, y: -0.81845117, z: 0}
+    - {x: 0, y: 0.27828765, z: 0}
+    - {x: 0, y: -1.4094238, z: 0}
+    - {x: 0, y: -0.044363737, z: 0}
+    - {x: 0, y: -1.0996642, z: 0}
+    - {x: 0, y: -1.8270168, z: 0}
+    - {x: 0, y: 0.50455517, z: 0}
+    - {x: 0, y: -1.8575249, z: 0}
+    - {x: 0, y: 0.49826026, z: 0}
+    - {x: 0, y: -0.091306925, z: 0}
+    - {x: 0, y: -1.6370025, z: 0}
+    - {x: 0, y: -1.5625253, z: 0}
+    - {x: 0, y: 1.266254, z: 0}
+    - {x: 0, y: -1.3022757, z: 0}
+    - {x: 0, y: 0.8441133, z: 0}
+    - {x: 0, y: 1.8311062, z: 0}
+    - {x: 0, y: 0.251745, z: 0}
+    - {x: 0, y: 0.8824453, z: 0}
+    - {x: 0, y: -1.5004592, z: 0}
+    - {x: 0, y: -0.33794522, z: 0}
+    - {x: 0, y: -1.3114424, z: 0}
+    - {x: 0, y: 1.1863484, z: 0}
+    - {x: 0, y: -0.1994226, z: 0}
+    - {x: 0, y: -0.46622205, z: 0}
+    - {x: 0, y: -1.9431868, z: 0}
+    - {x: 0, y: 0.4187796, z: 0}
+    - {x: 0, y: 0.28969312, z: 0}
+    - {x: 0, y: 0.08698201, z: 0}
+    - {x: 0, y: 0.31998134, z: 0}
+    - {x: 0, y: 0.3862393, z: 0}
+    - {x: 0, y: 1.2894473, z: 0}
+    - {x: 0, y: 0.35417533, z: 0}
+    - {x: 0, y: 1.289845, z: 0}
+    - {x: 0, y: 0.6313457, z: 0}
+    - {x: 0, y: 1.842946, z: 0}
+    - {x: 0, y: -1.4714408, z: 0}
+    - {x: 0, y: 0.7449884, z: 0}
+    - {x: 0, y: 1.3201828, z: 0}
+    - {x: 0, y: -0.6102841, z: 0}
+    - {x: 0, y: -1.3194103, z: 0}
+    - {x: 0, y: -0.10589814, z: 0}
+    - {x: 0, y: 0.96283096, z: 0}
+    - {x: 0, y: -0.9838865, z: 0}
+    - {x: 0, y: 1.2697582, z: 0}
+    - {x: 0, y: 1.923624, z: 0}
+    - {x: 0, y: -0.29550338, z: 0}
+    - {x: 0, y: -1.0235629, z: 0}
+    - {x: 0, y: 1.1051154, z: 0}
+    - {x: 0, y: 1.0540643, z: 0}
+    - {x: 0, y: -0.63364244, z: 0}
+    - {x: 0, y: 0.4491217, z: 0}
+    - {x: 0, y: -1.1829047, z: 0}
+    - {x: 0, y: -1.6857357, z: 0}
+    - {x: 0, y: 0.037927866, z: 0}
+    - {x: 0, y: 1.3675113, z: 0}
+    - {x: 0, y: -1.0606232, z: 0}
+    - {x: 0, y: -0.6727865, z: 0}
+    - {x: 0, y: 1.9448605, z: 0}
+    - {x: 0, y: 0.55982965, z: 0}
+    - {x: 0, y: 1.9897299, z: 0}
+    - {x: 0, y: -1.0435643, z: 0}
+    - {x: 0, y: -1.231597, z: 0}
+    - {x: 0, y: -0.19730496, z: 0}
+    - {x: 0, y: 0.17507672, z: 0}
+    - {x: 0, y: 0.035734415, z: 0}
+    - {x: 0, y: -0.62973857, z: 0}
+    - {x: 0, y: 1.5373082, z: 0}
+    - {x: 0, y: -1.738059, z: 0}
+    - {x: 0, y: 0.42472005, z: 0}
+    - {x: 0, y: -1.6690302, z: 0}
+    - {x: 0, y: 1.6073151, z: 0}
+    - {x: 0, y: -1.2276511, z: 0}
+    - {x: 0, y: -1.6254239, z: 0}
+    - {x: 0, y: -0.25920272, z: 0}
+    - {x: 0, y: -0.94654727, z: 0}
+    - {x: 0, y: 1.3136725, z: 0}
+    - {x: 0, y: 0.42921662, z: 0}
+    - {x: 0, y: -0.1312182, z: 0}
+    - {x: 0, y: -1.5848894, z: 0}
+    - {x: 0, y: 0.90090793, z: 0}
+    - {x: 0, y: -0.14873052, z: 0}
+    - {x: 0, y: -1.2142229, z: 0}
+    - {x: 0, y: 0.7524356, z: 0}
+    - {x: 0, y: 0.00045084953, z: 0}
+    - {x: 0, y: 0.14058757, z: 0}
+    - {x: 0, y: -0.82312894, z: 0}
+    - {x: 0, y: 1.8279495, z: 0}
+    - {x: 0, y: 1.8528676, z: 0}
+    - {x: 0, y: -0.42075992, z: 0}
+    - {x: 0, y: -0.7315309, z: 0}
+    - {x: 0, y: 1.6461215, z: 0}
+    - {x: 0, y: 1.9303312, z: 0}
+    - {x: 0, y: 0.081232786, z: 0}
+    - {x: 0, y: 1.1277375, z: 0}
+    - {x: 0, y: 1.0069447, z: 0}
+    - {x: 0, y: 1.7573323, z: 0}
+    - {x: 0, y: 0.6262707, z: 0}
+    - {x: 0, y: -0.9546287, z: 0}
+    - {x: 0, y: 1.0073571, z: 0}
+    - {x: 0, y: -0.257138, z: 0}
+    - {x: 0, y: 0.056616545, z: 0}
+    - {x: 0, y: -1.8995938, z: 0}
+    - {x: 0, y: -1.5964808, z: 0}
+    - {x: 0, y: -0.52828765, z: 0}
+    - {x: 0, y: -1.663177, z: 0}
+    - {x: 0, y: 0.82286066, z: 0}
+    - {x: 0, y: 1.8113256, z: 0}
+    - {x: 0, y: -1.3807817, z: 0}
+    - {x: 0, y: 0.15754199, z: 0}
+    - {x: 0, y: -1.3334217, z: 0}
+    - {x: 0, y: 1.8871136, z: 0}
+    - {x: 0, y: -0.65923667, z: 0}
+    - {x: 0, y: 1.0026541, z: 0}
+    - {x: 0, y: -0.0055143833, z: 0}
+    - {x: 0, y: 1.340446, z: 0}
+    - {x: 0, y: -0.12681508, z: 0}
+    - {x: 0, y: 1.8975396, z: 0}
+    - {x: 0, y: 1.11025, z: 0}
+    - {x: 0, y: -0.73832345, z: 0}
+    - {x: 0, y: 0.07838082, z: 0}
+    - {x: 0, y: -0.082695246, z: 0}
+    - {x: 0, y: 0.3177297, z: 0}
+    - {x: 0, y: 0.7032928, z: 0}
+    - {x: 0, y: -0.60371137, z: 0}
+    - {x: 0, y: -1.0678239, z: 0}
+    - {x: 0, y: 0.3821671, z: 0}
+    - {x: 0, y: 0.43449855, z: 0}
+    - {x: 0, y: -0.8294194, z: 0}
+    - {x: 0, y: 1.9930091, z: 0}
+    - {x: 0, y: -0.74966025, z: 0}
+    - {x: 0, y: -0.10233331, z: 0}
+    - {x: 0, y: -0.13042998, z: 0}
+    - {x: 0, y: 0.46452165, z: 0}
+    - {x: 0, y: -0.6187055, z: 0}
+    - {x: 0, y: -0.6574538, z: 0}
+    - {x: 0, y: 1.0681529, z: 0}
+    - {x: 0, y: 0.79483694, z: 0}
+    - {x: 0, y: 1.2712483, z: 0}
+    - {x: 0, y: 1.717999, z: 0}
+    - {x: 0, y: -1.4721146, z: 0}
+    - {x: 0, y: -1.5911832, z: 0}
+    - {x: 0, y: 0.80417866, z: 0}
+    - {x: 0, y: 0.3080547, z: 0}
+    - {x: 0, y: 0.5116562, z: 0}
+    - {x: 0, y: 1.4232082, z: 0}
+    - {x: 0, y: 1.4194007, z: 0}
+    - {x: 0, y: 0.12132096, z: 0}
+    - {x: 0, y: 0.14883828, z: 0}
+    - {x: 0, y: 0.013145685, z: 0}
+    - {x: 0, y: -1.4216938, z: 0}
+    - {x: 0, y: 1.9844322, z: 0}
+    - {x: 0, y: 1.144299, z: 0}
+    - {x: 0, y: -1.4843345, z: 0}
+    - {x: 0, y: 1.9068184, z: 0}
+    - {x: 0, y: -0.78000045, z: 0}
+    - {x: 0, y: -1.3516731, z: 0}
+    - {x: 0, y: -0.20295787, z: 0}
+    - {x: 0, y: 0.49207377, z: 0}
+    - {x: 0, y: -1.9712453, z: 0}
+    - {x: 0, y: 1.3145275, z: 0}
+    - {x: 0, y: 0.21468663, z: 0}
+    - {x: 0, y: -1.71697, z: 0}
+    unused: 1
+  - extraVarIndexSeed: 12345
+    extraRandomSeed: 12345
+    globalSpacingSeed: 12345
+    sizeXZSeed: 12345
+    shiftXZSeed: 12345
+    heightSeed: 12345
+    smallRotSeed: 12345
+    quantRotSeed: 12345
+    chanceMissingSeed: 12345
+    layer: 3
+    rExtraVarIndex:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    - 0.3577371
+    - 0.68815356
+    - 0.70598894
+    - 0.3060967
+    - 0.7862921
+    - 0.09407474
+    - 0.6775246
+    - 0.5678198
+    - 0.8545059
+    - 0.016142013
+    - 0.12999631
+    - 0.24791494
+    - 0.01733351
+    - 0.45087117
+    - 0.14708246
+    - 0.46378583
+    - 0.89568067
+    - 0.84958994
+    - 0.075815566
+    - 0.15634371
+    - 0.47397476
+    - 0.46406943
+    - 0.5231753
+    - 0.47961634
+    - 0.19948497
+    - 0.9490601
+    - 0.87998927
+    - 0.14684857
+    - 0.6821771
+    - 0.06939603
+    - 0.3574951
+    - 0.5175285
+    - 0.11334254
+    - 0.15332343
+    - 0.6282669
+    - 0.50456995
+    - 0.093905345
+    - 0.48779446
+    - 0.90970767
+    - 0.97203076
+    - 0.0894934
+    - 0.66230303
+    - 0.7004985
+    - 0.37440673
+    - 0.4768986
+    - 0.9563192
+    - 0.66968864
+    - 0.5305093
+    - 0.6331466
+    - 0.023707632
+    - 0.48803538
+    - 0.044043902
+    - 0.30257264
+    - 0.46652097
+    - 0.27986673
+    - 0.4818278
+    - 0.88587177
+    - 0.89429045
+    - 0.13632716
+    - 0.85021377
+    - 0.5080083
+    - 0.1961185
+    - 0.4270814
+    - 0.3355992
+    - 0.29181138
+    - 0.43967777
+    - 0.6821341
+    - 0.7145805
+    - 0.37349
+    - 0.15543689
+    - 0.11433722
+    - 0.53750175
+    - 0.1280594
+    - 0.94885886
+    - 0.14461555
+    - 0.44641668
+    - 0.31991735
+    - 0.5896788
+    - 0.71016985
+    - 0.028628472
+    - 0.7429523
+    - 0.09109951
+    - 0.41796035
+    - 0.494412
+    rExtraRandom:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    - 0.3577371
+    - 0.68815356
+    - 0.70598894
+    - 0.3060967
+    - 0.7862921
+    - 0.09407474
+    - 0.6775246
+    - 0.5678198
+    - 0.8545059
+    - 0.016142013
+    - 0.12999631
+    - 0.24791494
+    - 0.01733351
+    - 0.45087117
+    - 0.14708246
+    - 0.46378583
+    - 0.89568067
+    - 0.84958994
+    - 0.075815566
+    - 0.15634371
+    - 0.47397476
+    - 0.46406943
+    - 0.5231753
+    - 0.47961634
+    - 0.19948497
+    - 0.9490601
+    - 0.87998927
+    - 0.14684857
+    - 0.6821771
+    - 0.06939603
+    - 0.3574951
+    - 0.5175285
+    - 0.11334254
+    - 0.15332343
+    - 0.6282669
+    - 0.50456995
+    - 0.093905345
+    - 0.48779446
+    - 0.90970767
+    - 0.97203076
+    - 0.0894934
+    - 0.66230303
+    - 0.7004985
+    - 0.37440673
+    - 0.4768986
+    - 0.9563192
+    - 0.66968864
+    - 0.5305093
+    - 0.6331466
+    - 0.023707632
+    - 0.48803538
+    - 0.044043902
+    - 0.30257264
+    - 0.46652097
+    - 0.27986673
+    - 0.4818278
+    - 0.88587177
+    - 0.89429045
+    - 0.13632716
+    - 0.85021377
+    - 0.5080083
+    - 0.1961185
+    - 0.4270814
+    - 0.3355992
+    - 0.29181138
+    - 0.43967777
+    - 0.6821341
+    - 0.7145805
+    - 0.37349
+    - 0.15543689
+    - 0.11433722
+    - 0.53750175
+    - 0.1280594
+    - 0.94885886
+    - 0.14461555
+    - 0.44641668
+    - 0.31991735
+    - 0.5896788
+    - 0.71016985
+    - 0.028628472
+    - 0.7429523
+    - 0.09109951
+    - 0.41796035
+    - 0.494412
+    rSizeX: []
+    rSizeZ: []
+    rShiftX: []
+    rShiftZ: []
+    rSmallRot: []
+    unused: 1
+  postName: BrickSquare_Post
+  usePosts: 1
+  postSize: {x: 1, y: 0.7, z: 1}
+  postRotation: {x: 0, y: 0, z: 0}
+  mainPostSizeBoost: {x: 1, y: 1, z: 1}
+  allowPostHeightVariation: 0
+  minPostHeightVar: 0.95
+  maxPostHeightVar: 1.05
+  allowRandPostRotationVariation: 0
+  smallRandRotationAmountPost: {x: 0, y: 0, z: 0}
+  quantizeRotAnglePost: 90
+  allowQuantizedRandomPostRotation: 0
+  chanceOfMissingPost: 0
+  allowPostXZShift: 0
+  allowPostSizeVariation: 0
+  minPostXZShift: -0.1
+  maxPostXZShift: 0.1
+  minPostSizeVar: 0.8
+  maxPostSizeVar: 1.2
+  allowPostRandomization: 1
+  postSurfaceNormalAmount: 0
+  stretchPostWidthAtMitreJoint: 0
+  postQuantizeRotAxis: 1
+  postQuantizeRotProb: 0
+  allFollowPostRaiseLower: 0
+  usePostVariations: 0
+  postVariants:
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  userSequencePost:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  usePostSequencer: 0
+  numUserSeqStepsPost: 5
+  numPostVariants: 2
+  useMainRails: 1
+  railAName: CurveGround_Panel
+  numStackedRailsA: 1
+  railASpread: 0.33
+  spreadModeRailA: 0
+  railAPositionOffset: {x: 0, y: -0.01, z: 0}
+  railASize: {x: 1, y: 0.1, z: 1}
+  railARotation: {x: 0, y: 0, z: 0}
+  railAKeepGrounded: 0
+  rotateFromBaseRailA: 0
+  overlapAtCorners: 1
+  autoHideBuriedRails: 0
+  slopeModeRailA: 2
+  jointStyleRailA: 2
+  railARandomScope: 0
+  allowRailAHeightVariation: 0
+  minRailAHeightVar: 0.9874673
+  maxRailAHeightVar: 1.0125327
+  allowRandRailARotationVariation: 0
+  smallRotationAmountRailA: {x: 0, y: 2, z: 0}
+  chanceOfMissingRailA: 0
+  quantizeRotAngleRailA: -180
+  allowQuantizedRandomRailARotation: 0
+  quantizeRotAxisRailA: 1
+  quantizeRotProbRailA: 0
+  railAVariants:
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 6714021997769046883, guid: 860b71e4565e8fe418a3b0a6c1cbf93d, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1420609950205542, guid: 3689291738df84363b062e1fcbf34e9e, type: 3}
+  useRailAVariations: 0
+  scaleVariationHeightToMainHeightA: 0
+  allowIndependentSubmeshVariationA: 0
+  variationModeRailA: 2
+  userSequenceRailA:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  numUserSeqStepsRailA: 5
+  optimalSequenceRailA:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 1
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  railBName: Brick_Wall-LowT_Panel
+  useSecondaryRails: 1
+  numStackedRailsB: 1
+  railBSpread: 0.2
+  spreadModeRailB: 0
+  railBPositionOffset: {x: 0, y: 0.15, z: 0}
+  railBSize: {x: 1, y: 1.21, z: 2}
+  railBRotation: {x: 0, y: 0, z: 0}
+  railBKeepGrounded: 1
+  rotateFromBaseRailB: 0
+  slopeModeRailB: 2
+  jointStyleRailB: 1
+  railBRandomScope: 2
+  allowRailBHeightVariation: 0
+  minRailBHeightVar: 0.97
+  maxRailBHeightVar: 1.03
+  allowRandRailBRotationVariation: 0
+  smallRotationAmountRailB: {x: 0.03, y: 0.03, z: 0.03}
+  chanceOfMissingRailB: 0
+  quantizeRotAngleRailB: 90
+  allowQuantizedRandomRailBRotation: 0
+  quantizeRotAxisRailB: 1
+  quantizeRotProbRailB: 0
+  useRailBVariations: 0
+  scaleVariationHeightToMainHeightB: 0
+  allowIndependentSubmeshVariationB: 0
+  variationModeRailB: 2
+  railBVariants:
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1788059024140150, guid: 3dad50798347443d69f49d192fe56702, type: 3}
+  userSequenceRailB:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  numUserSeqStepsRailB: 5
+  optimalSequenceRailB:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 1
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  railBRandRec:
+    sequenceShuffle: 0
+    heightVariation: 0
+    smallRotVariation: 0
+    quantRotVariation: 0
+  useRailBSequencer: 1
+  useRailSequencer: 0001
+  numRailVariants: 0200000002000000
+  allowRailRandomization: 0100
+  extendRailEnds: 0000
+  endExtensionLength:
+  - 0.2
+  - 0.2
+  allowMirroring_X_Rail: 0000
+  subpostName: ConcreteOldSquare_Post
+  useSubPosts: 1
+  subsFixedOrProportionalSpacing: 0
+  subSpacing: 2
+  subPositionOffset: {x: 0, y: 0, z: 0}
+  subSize: {x: 1, y: 0.58, z: 1}
+  subRotation: {x: 0, y: 0, z: 0}
+  forceSubsToGroundContour: 0
+  keepSubsAboveGround: 0
+  useWave: 0
+  useSubJoiners: 0
+  frequency: 1
+  amplitude: 0.066
+  wavePosition: 1.571
+  subPostSpread: 0
+  allowSubPostHeightVariation: 0
+  minSubPostHeightVar: 0.95
+  maxSubPostHeightVar: 1.05
+  allowRandSubPostRotationVariation: 0
+  chanceOfMissingSubPost: 0
+  smallRotationAmountSubpost: {x: 0, y: 0, z: 0}
+  allowQuantizedRandomSubPostRotation: 0
+  quantizeRotAngleSubpost: 90
+  allowSubpostRandomization: 1
+  quantizeRotProbSubpost: 0
+  useSubpostVariations: 0
+  subpostVariants:
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 0
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    svPositionOffset: {x: 0, y: 0, z: 0}
+    svSize: {x: 1, y: 1, z: 1}
+    svRotation: {x: 0, y: 0, z: 0}
+    svInvert: 0
+    svBackToFront: 0
+    svMirrorZ: 0
+    goName: 
+    go: {fileID: 1044328883482698, guid: e7e7569509217e649a26a900b8d8a6ae, type: 3}
+  userSequenceSubpost:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  numUserSeqStepsSubpost: 5
+  subpostRandRec:
+    sequenceShuffle: 0
+    heightVariation: 0
+    smallRotVariation: 0
+    quantRotVariation: 0
+  useExtraGameObject: 0
+  extraName: CylindricalMetal_Rail
+  relativeMovement: 0
+  relativeScaling: 0
+  extraPositionOffset: {x: 0, y: 0.7, z: 0}
+  extraSize: {x: 1, y: 1, z: 1}
+  extraRotation: {x: 0, y: 90, z: 0}
+  extraFrequency: 4
+  makeMultiArray: 0
+  numExtras: 1
+  extrasGap: 1
+  raiseExtraByPostHeight: 0
+  extrasFollowIncline: 0
+  extrasMode: 1
+  extraSpawnAreaWidth: 0.8
+  numScatterColumns: 1
+  numScatterRows: 1
+  scatterExtraRandPos: {x: 0, y: 0, z: 0}
+  scatterExtraRandScale: {x: 0, y: 0, z: 0}
+  scatterExtraRandRot: {x: 0, y: 0, z: 0}
+  scatterRandomStrength: 1
+  randomScaleMode: 0
+  flipXProb: 0
+  flipYProb: 0
+  flipZProb: 0
+  flipMode: 1
+  extraFrequencyMode: 0
+  excludeExtraVarXZRotations: 1
+  extraVarsStruct:
+    varNames:
+    - CylindricalMetal_Rail
+    - ABasicConcrete_Post
+    - ABasicConcrete_Post
+    varProbs:
+    - 0
+    - 0
+    - 0
+    varScales:
+    - {x: 1, y: 1, z: 1}
+    - {x: 1, y: 1, z: 1}
+    - {x: 1, y: 1, z: 1}
+  enableChoosePrefabs: 0
+  finalPostMode: 0
+  pivotPosition: 1
+  postHeightOffset: 0
+  interpolate: 1
+  interPostDist: 2.5
+  smooth: 1
+  tension: 0
+  roundingDistance: 3.9999998
+  removeIfLessThanAngle: 4.5
+  stripTooClose: 0.35
+  globalScale: {x: 1, y: 1, z: 1}
+  scaleInterpolationAlso: 1
+  snapMainPosts: 0
+  snapSize: 1
+  hideInterpolated: 0
+  lerpPostRotationAtCorners: 1
+  postSpacingVariation: 0
+  railAColliderMode: 0
+  postColliderMode: 0

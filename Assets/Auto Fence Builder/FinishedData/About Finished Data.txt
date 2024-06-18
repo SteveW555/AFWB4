@@ -1,0 +1,2 @@
+﻿Stores data relating to Finished fences so that they can be resurrected as live autofences again.
+

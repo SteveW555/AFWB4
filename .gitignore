@@ -1,0 +1,64 @@
+# Unity generated files
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/Assets/AssetStoreTools*
+
+# Visual Studio files
+ExportedObj/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vs/
+
+# Packed Addressable Assets
+/AddressableAssetsData/*/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/AddressableAssetsData/*/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.json
+/AddressableAssetsData/*/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.txt
+/AddressableAssetsData/*/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/AddressableAssetsData/*/[Aa]ssets/[Ss]tream*
+
+# PNG files
+*.png
+
+# tif files
+*.tif
+
+# jpg files
+*.jpg
+
+# psd files
+*.psd
+
+# unity scene files
+*.unity
+
+# Log files
+Logs/*.log
+
+# Ignore Package Manager packages
+# To avoid ignoring everything in /Packages, which would break Package Manager
+# Create exceptions for the most important files and directories
+/Packages/*
+!/Packages/manifest.json
+!/Packages/packages-lock.json
+/UserSettings/Layouts/default-2021.dwlt
+

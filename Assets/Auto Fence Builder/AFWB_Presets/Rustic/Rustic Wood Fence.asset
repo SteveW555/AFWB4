@@ -1,0 +1,2033 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f413cba91fa148029d24f8978014515, type: 3}
+  m_Name: Rustic Wood Fence
+  m_EditorClassIdentifier: 
+  categoryName: Rustic
+  railASeeds:
+    af: {fileID: 0}
+    heightSeed: 12345
+    rHeight:
+    - 0.994789
+    - 0.9760264
+    - 0.998049
+    - 0.97507083
+    - 1.0145359
+    - 1.0044961
+    - 1.0029403
+    - 0.99904656
+    - 1.0087795
+    - 1.024023
+    - 0.99538577
+    - 0.9972737
+    - 1.0206097
+    - 1.0209053
+    - 0.98021436
+    - 0.9939712
+    - 1.0126314
+    - 1.0225449
+    - 1.0288479
+    - 1.0062224
+    - 1.021418
+    - 1.0219944
+    - 1.0085357
+    - 0.98871076
+    - 0.9876406
+    - 1.0116342
+    - 0.98282254
+    - 1.0243555
+    - 0.98934853
+    - 0.9959308
+    - 0.9787297
+    - 1.0290315
+    - 1.0222002
+    - 1.015125
+    - 1.02896
+    - 1.0029477
+    - 1.021175
+    - 1.0021728
+    - 0.97625923
+    - 0.97902465
+    - 1.0254511
+    - 1.0206194
+    smallRotSeed: 12345
+    rSmallRot:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    quantRotSeed: 12345
+    rQuantRot:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    - 0.3577371
+    - 0.68815356
+    - 0.70598894
+    - 0.3060967
+    - 0.7862921
+    - 0.09407474
+    - 0.6775246
+    - 0.5678198
+    - 0.8545059
+    - 0.016142013
+    - 0.12999631
+    - 0.24791494
+    - 0.01733351
+    - 0.45087117
+    - 0.14708246
+    - 0.46378583
+    - 0.89568067
+    - 0.84958994
+    - 0.075815566
+    - 0.15634371
+    chanceMissingSeed: 12345
+    rChanceMissing:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    - 0.3577371
+    - 0.68815356
+    - 0.70598894
+    - 0.3060967
+    - 0.7862921
+    - 0.09407474
+    - 0.6775246
+    - 0.5678198
+    - 0.8545059
+    - 0.016142013
+    - 0.12999631
+    - 0.24791494
+    - 0.01733351
+    - 0.45087117
+    - 0.14708246
+    - 0.46378583
+    - 0.89568067
+    - 0.84958994
+    - 0.075815566
+    - 0.15634371
+    globalSpacingSeed: 12345
+    postSizeXZSeed: 12345
+    rPostSizeX: []
+    rPostSizeZ: []
+    postShiftXZSeed: 12345
+    rPostShiftX: []
+    rPostShiftZ: []
+    extraVarIndexSeed: 12345
+    rExtraVarIndex: 
+    scatterPosSeed: 12345
+    scatterScaleSeed: 12345
+    scatterRotSeed: 12345
+    rScatterPos: []
+    rScatterScale: []
+    rScatterRot: []
+    layer: 0
+    unused: 1
+  railBSeeds:
+    af: {fileID: 0}
+    heightSeed: 12345
+    rHeight:
+    - 0.994789
+    - 0.9760264
+    - 0.998049
+    - 0.97507083
+    - 1.0145359
+    - 1.0044961
+    - 1.0029403
+    - 0.99904656
+    - 1.0087795
+    - 1.024023
+    - 0.99538577
+    - 0.9972737
+    - 1.0206097
+    - 1.0209053
+    - 0.98021436
+    - 0.9939712
+    - 1.0126314
+    - 1.0225449
+    - 1.0288479
+    - 1.0062224
+    - 1.021418
+    - 1.0219944
+    - 1.0085357
+    - 0.98871076
+    - 0.9876406
+    - 1.0116342
+    - 0.98282254
+    - 1.0243555
+    - 0.98934853
+    - 0.9959308
+    - 0.9787297
+    - 1.0290315
+    - 1.0222002
+    - 1.015125
+    - 1.02896
+    - 1.0029477
+    - 1.021175
+    - 1.0021728
+    - 0.97625923
+    - 0.97902465
+    - 1.0254511
+    - 1.0206194
+    smallRotSeed: 12345
+    rSmallRot:
+    - {x: -0.0052110422, y: -0.023973634, z: -0.0019509848}
+    - {x: -0.024929145, y: 0.014535962, z: 0.004496144}
+    - {x: 0.0029402617, y: -0.0009534247, z: 0.008779549}
+    - {x: 0.02402305, y: -0.004614232, z: -0.002726322}
+    - {x: 0.02060978, y: 0.020905236, z: -0.019785674}
+    - {x: -0.0060288003, y: 0.012631487, z: 0.022544859}
+    - {x: 0.028847916, y: 0.0062223645, z: 0.021417966}
+    - {x: 0.021994328, y: 0.008535774, z: -0.011289214}
+    - {x: -0.012359337, y: 0.011634198, z: -0.017177524}
+    - {x: 0.024355516, y: -0.010651478, z: -0.004069186}
+    - {x: -0.021270353, y: 0.02903148, z: 0.022200221}
+    - {x: 0.015125104, y: 0.028959988, z: 0.00294773}
+    - {x: 0.021175051, y: 0.002172851, z: -0.02374084}
+    - {x: -0.020975396, y: 0.025451066, z: 0.020619377}
+    - {x: 0.0015615141, y: 0.0021558348, z: -0.0013905186}
+    - {x: 0.0012230203, y: 0.018030902, z: -0.026943604}
+    - {x: -0.022799356, y: 0.021189084, z: -0.010930627}
+    - {x: 0.025836239, y: 0.008550295, z: -0.001051709}
+    - {x: 0.023199448, y: 0.020800594, z: -0.007696012}
+    - {x: -0.00027419627, y: 0.02436568, z: 0.00073233247}
+    - {x: -0.024582459, y: -0.028321845, z: 0.024630396}
+    - {x: -0.009738182, y: -0.01202991, z: 0.0075355964}
+    - {x: 0.0013860827, y: -0.027379153, z: -0.010181318}
+    - {x: -0.0018305574, y: -0.007988795, z: 0.028577542}
+    - {x: 0.0007178765, y: 0.027357364, z: 0.011845642}
+    - {x: 0.0020087417, y: 0.013207996, z: 0.0010903329}
+    - {x: -0.023152305, y: -0.023657426, z: 0.02182037}
+    - {x: -0.021012826, y: -0.00048049726, z: 0.01823289}
+    - {x: 0.004375116, y: 0.009864048, z: 0.0124913175}
+    - {x: 0.0036193337, y: -0.010928045, z: -0.012874829}
+    - {x: 0.0075906003, y: 0.020673787, z: 0.023139765}
+    - {x: -0.0022501042, y: 0.022316435, z: -0.02693153}
+    - {x: 0.021323068, y: 0.003214999, z: 0.01080496}
+    - {x: -0.005380729, y: -0.0126101915, z: 0.02828229}
+    - {x: -0.014577137, y: 0.02453403, z: 0.0049223797}
+    - {x: 0.00033527985, y: -0.02654959, z: 0.027921429}
+    - {x: -0.010343539, y: 0.0016041938, z: 0.01233773}
+    - {x: -0.028728755, y: 0.0297471, z: -0.0044770474}
+    - {x: -0.013990863, y: -0.008423026, z: -0.029700099}
+    - {x: 0.028883712, y: 0.0034395475, z: -0.009431158}
+    - {x: 0.0016738456, y: -0.022815472, z: 0.0069909487}
+    - {x: 0.0009662714, y: -0.026021352, z: -0.01145968}
+    quantRotSeed: 12345
+    rQuantRot:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    - 0.3577371
+    - 0.68815356
+    - 0.70598894
+    - 0.3060967
+    - 0.7862921
+    - 0.09407474
+    - 0.6775246
+    - 0.5678198
+    - 0.8545059
+    - 0.016142013
+    - 0.12999631
+    - 0.24791494
+    - 0.01733351
+    - 0.45087117
+    - 0.14708246
+    - 0.46378583
+    - 0.89568067
+    - 0.84958994
+    - 0.075815566
+    - 0.15634371
+    chanceMissingSeed: 12345
+    rChanceMissing:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    - 0.3577371
+    - 0.68815356
+    - 0.70598894
+    - 0.3060967
+    - 0.7862921
+    - 0.09407474
+    - 0.6775246
+    - 0.5678198
+    - 0.8545059
+    - 0.016142013
+    - 0.12999631
+    - 0.24791494
+    - 0.01733351
+    - 0.45087117
+    - 0.14708246
+    - 0.46378583
+    - 0.89568067
+    - 0.84958994
+    - 0.075815566
+    - 0.15634371
+    globalSpacingSeed: 12345
+    postSizeXZSeed: 12345
+    rPostSizeX: []
+    rPostSizeZ: []
+    postShiftXZSeed: 12345
+    rPostShiftX: []
+    rPostShiftZ: []
+    extraVarIndexSeed: 12345
+    rExtraVarIndex: 
+    scatterPosSeed: 12345
+    scatterScaleSeed: 12345
+    scatterRotSeed: 12345
+    rScatterPos: []
+    rScatterScale: []
+    rScatterRot: []
+    layer: 1
+    unused: 1
+  postAndGlobalSeeds:
+    af: {fileID: 0}
+    heightSeed: 12345
+    rHeight: []
+    smallRotSeed: 12345
+    rSmallRot: []
+    quantRotSeed: 12345
+    rQuantRot: []
+    chanceMissingSeed: 12345
+    rChanceMissing: []
+    globalSpacingSeed: 12345
+    postSizeXZSeed: 12345
+    rPostSizeX: []
+    rPostSizeZ: []
+    postShiftXZSeed: 12345
+    rPostShiftX: []
+    rPostShiftZ: []
+    extraVarIndexSeed: 12345
+    rExtraVarIndex: 
+    scatterPosSeed: 12345
+    scatterScaleSeed: 12345
+    scatterRotSeed: 12345
+    rScatterPos: []
+    rScatterScale: []
+    rScatterRot: []
+    layer: 2
+    unused: 1
+  extraSeeds:
+    af: {fileID: 0}
+    heightSeed: 12345
+    rHeight:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    smallRotSeed: 12345
+    rSmallRot:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    quantRotSeed: 12345
+    rQuantRot:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    chanceMissingSeed: 12345
+    rChanceMissing:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    - 0.13342787
+    globalSpacingSeed: 12345
+    postSizeXZSeed: 12345
+    rPostSizeX: []
+    rPostSizeZ: []
+    postShiftXZSeed: 12345
+    rPostShiftX: []
+    rPostShiftZ: []
+    extraVarIndexSeed: 12345
+    rExtraVarIndex: 0100000001000000020000000100000002000000020000000200000001000000010000000100000001000000020000000100000001000000020000000200000001000000010000000200000001000000
+    scatterPosSeed: 12345
+    scatterScaleSeed: 527429615
+    scatterRotSeed: 12345
+    rScatterPos:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    rScatterScale:
+    - {x: 1.0083358, y: 1.0125359, z: 1.004669}
+    - {x: 1.0189618, y: 1.0031145, z: 1.013347}
+    - {x: 1.0017798, y: 1.00752, z: 1.0020378}
+    - {x: 1.0063696, y: 1.0071144, z: 1.0116605}
+    - {x: 1.0176748, y: 1.0056757, z: 1.0029935}
+    - {x: 1.0170909, y: 1.0151979, z: 1.0042113}
+    - {x: 1.0172337, y: 1.0168445, z: 1.0054305}
+    - {x: 1.0083201, y: 1.0037401, z: 1.0118403}
+    - {x: 1.019085, y: 1.0010616, z: 1.0146297}
+    - {x: 1.0061852, y: 1.0156716, z: 1.0186888}
+    - {x: 1.0009959, y: 1.0176059, z: 1.0014149}
+    - {x: 1.0020378, y: 1.0179914, z: 1.0058547}
+    - {x: 1.0055358, y: 1.0013789, z: 1.0132173}
+    - {x: 1.0117884, y: 1.0075381, z: 1.0089353}
+    - {x: 1.0066354, y: 1.0016996, z: 1.0148863}
+    - {x: 1.0144508, y: 1.0168109, z: 1.009238}
+    - {x: 1.0069957, y: 1.0066241, z: 1.0128665}
+    - {x: 1.0170827, y: 1.0114089, z: 1.0174985}
+    - {x: 1.0075591, y: 1.0086567, z: 1.0029175}
+    - {x: 1.0104531, y: 1.003217, z: 1.0016637}
+    - {x: 1.0014668, y: 1.0139183, z: 1.0017618}
+    - {x: 1.0096312, y: 1.0127633, z: 1.0116701}
+    rScatterRot:
+    - {x: 0, y: -1.8539611, z: 0}
+    - {x: 0, y: 1.1241145, z: 0}
+    - {x: 0, y: -0.07373166, z: 0}
+    - {x: 0, y: -0.35683393, z: 0}
+    - {x: 0, y: 1.6166716, z: 0}
+    - {x: 0, y: 0.97683495, z: 0}
+    - {x: 0, y: 0.48119617, z: 0}
+    - {x: 0, y: 0.6600999, z: 0}
+    - {x: 0, y: 0.8997113, z: 0}
+    - {x: 0, y: -0.82371426, z: 0}
+    - {x: 0, y: 2.2451012, z: 0}
+    - {x: 0, y: 2.2395723, z: 0}
+    - {x: 0, y: 0.16803384, z: 0}
+    - {x: 0, y: 1.9682157, z: 0}
+    - {x: 0, y: 0.16671777, z: 0}
+    - {x: 0, y: 1.3943897, z: 0}
+    - {x: 0, y: 1.6386225, z: 0}
+    - {x: 0, y: 0.6612228, z: 0}
+    - {x: 0, y: 1.6085794, z: 0}
+    - {x: 0, y: 1.8842791, z: 0}
+    - {x: 0, y: -2.1902225, z: 0}
+    - {x: 0, y: -0.9303131, z: 0}
+    layer: 3
+    unused: 1
+  subpostSeeds:
+    af: {fileID: 0}
+    heightSeed: 12345
+    rHeight:
+    - 0.98718345
+    - 0.95903957
+    - 0.99207354
+    - 0.9576063
+    - 1.016804
+    - 1.0017442
+    - 0.9994104
+    - 0.99356985
+    - 1.0081694
+    - 1.0310346
+    - 0.9880786
+    - 0.99091053
+    - 1.0259147
+    - 1.0263579
+    - 0.9653215
+    - 0.9859568
+    - 1.0139472
+    - 1.0288173
+    - 1.0382718
+    - 1.0043335
+    - 1.0271269
+    smallRotSeed: 12345
+    rSmallRot:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    quantRotSeed: 12345
+    rQuantRot:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    chanceMissingSeed: 12345
+    rChanceMissing:
+    - 0.5868507
+    - 0.8995606
+    - 0.5325164
+    - 0.91548574
+    - 0.25773397
+    - 0.42506427
+    - 0.45099562
+    - 0.5158904
+    - 0.3536742
+    - 0.09961583
+    - 0.5769039
+    - 0.5454387
+    - 0.15650369
+    - 0.1515794
+    - 0.82976127
+    - 0.60048
+    - 0.28947523
+    - 0.124252334
+    - 0.0192014
+    - 0.39629394
+    - 0.14303388
+    globalSpacingSeed: 12345
+    postSizeXZSeed: 12345
+    rPostSizeX: []
+    rPostSizeZ: []
+    postShiftXZSeed: 12345
+    rPostShiftX: []
+    rPostShiftZ: []
+    extraVarIndexSeed: 12345
+    rExtraVarIndex: 
+    scatterPosSeed: 12345
+    scatterScaleSeed: 12345
+    scatterRotSeed: 12345
+    rScatterPos: []
+    rScatterScale: []
+    rScatterRot: []
+    layer: 4
+    unused: 1
+  postName: Wood_Wonky_Post
+  usePosts: 1
+  postSize: {x: 1, y: 0.8, z: 1}
+  postRotation: {x: 0, y: 0, z: 0}
+  mainPostsSizeBoost: {x: 1, y: 0.8, z: 1}
+  endPostsSizeBoost: {x: 1, y: 1, z: 1}
+  allFollowPostRaiseLower: 0
+  allowNodePostsPrefabOverride: 1
+  nodePostsOverridePrefabIndex: 40
+  allowEndPostsPrefabOverride: 1
+  endPostsOverridePrefabIndex: 40
+  allowPostRandomization: 1
+  allowPostHeightVariation: 1
+  minPostHeightVar: 0.95
+  maxPostHeightVar: 1.05
+  allowRandPostRotationVariation: 1
+  smallRandRotationAmountPost: {x: 0, y: 0, z: 0}
+  quantizeRotAnglePost: -1
+  allowQuantizedRandomPostRotation: 1
+  chanceOfMissingPost: 0
+  allowPostXZShift: 1
+  allowPostSizeVariation: 1
+  minPostXZShift: -0.1
+  maxPostXZShift: 0.1
+  minPostSizeVar: 0.9299127
+  maxPostSizeVar: 1.0853713
+  postSurfaceNormalAmount: 0
+  stretchPostWidthAtMitreJoint: 0
+  postQuantizeRotAxis: 1
+  postQuantizeRotProb: 0.1
+  usePostVariations: 0
+  postVariants:
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Wood_Wonky_Post
+    go: {fileID: 7008972822347393351, guid: 85c2299d2d6160042a7b4ef3fd11da0c, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: BrickSquare_Post
+    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+  userSequencePost:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  usePostSequencer: 0
+  numUserSeqStepsPost: 20
+  numPostVariants: 2
+  useRailsA: 1
+  railAName: RusticFenceB_Rail
+  numStackedRailsA: 1
+  railASpread: 0.381
+  spreadModeRailA: 0
+  railAPositionOffset: {x: 0, y: 0, z: 0}
+  railASize: {x: 0.97, y: 0.9, z: 0.6}
+  railARotation: {x: 0, y: 0, z: 0}
+  railAKeepGrounded: 0
+  rotateFromBaseRailA: 0
+  overlapAtCorners: 1
+  autoHideBuriedRails: 0
+  slopeModeRailA: 2
+  jointStyleRailA: 1
+  railARandomScope: 0
+  allowRailAHeightVariation: 0
+  minRailAHeightVar: 0.97
+  maxRailAHeightVar: 1.03
+  allowRandRailARotationVariation: 0
+  smallRotationAmountRailA: {x: 0, y: 0, z: 0}
+  chanceOfMissingRailA: 0
+  quantizeRotAngleRailA: 90
+  allowQuantizedRandomRailARotation: 0
+  quantizeRotAxisRailA: 1
+  quantizeRotProbRailA: 0
+  railAVariants:
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: RusticFenceB_Rail
+    go: {fileID: 7270039614922257830, guid: 1405924cfbc0a504b9675cb5264312eb, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
+  useRailAVariations: 0
+  scaleVariationHeightToMainHeightA: 0
+  allowIndependentSubmeshVariationA: 0
+  variationModeRailA: 2
+  userSequenceRailA:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  numUserSeqStepsRailA: 20
+  optimalSequenceRailA:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  railBName: Wood_Old_CylRand_Rail
+  useRailsB: 1
+  numStackedRailsB: 2
+  railBSpread: 1
+  spreadModeRailB: 0
+  railBPositionOffset: {x: 0, y: 0.12, z: 0}
+  railBSize: {x: 1, y: 1, z: 1}
+  railBRotation: {x: 0, y: 0, z: 0}
+  railBKeepGrounded: 0
+  rotateFromBaseRailB: 0
+  slopeModeRailB: 2
+  jointStyleRailB: 0
+  railBRandomScope: 0
+  allowRailBHeightVariation: 0
+  minRailBHeightVar: 0.97
+  maxRailBHeightVar: 1.03
+  allowRandRailBRotationVariation: 0
+  smallRotationAmountRailB: {x: 0.03, y: 0.03, z: 0.03}
+  chanceOfMissingRailB: 0
+  quantizeRotAngleRailB: 90
+  allowQuantizedRandomRailBRotation: 0
+  quantizeRotAxisRailB: 1
+  quantizeRotProbRailB: 0
+  useRailBVariations: 0
+  scaleVariationHeightToMainHeightB: 0
+  allowIndependentSubmeshVariationB: 0
+  variationModeRailB: 2
+  railBVariants:
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Wood_Old_CylRand_Rail
+    go: {fileID: 9116941161353214315, guid: cefdcfb9f7aa496429fe5a246f22a357, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  - enabled: 1
+    inUse: 1
+    probability: 0.5
+    goName: Concrete_Topper5_Panel
+    go: {fileID: 1245966361482334, guid: 66b0071722f474305bf27a8be57b0dd5, type: 3}
+  userSequenceRailB:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  numUserSeqStepsRailB: 20
+  optimalSequenceRailB:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  railBRandRec:
+    sequenceShuffle: 0
+    heightVariation: 0
+    smallRotVariation: 0
+    quantRotVariation: 0
+  useRailBSequencer: 1
+  useRailSequencer: 0000
+  numRailVariants: 0200000002000000
+  allowRailRandomization: 0000
+  extendRailEnds: 0000
+  endExtensionLength:
+  - 0.2
+  - 0.2
+  allowMirroring_X_Rail: 0000
+  subpostName: Conc_OldSquare_Post
+  useSubposts: 0
+  subsFixedOrProportionalSpacing: 0
+  subSpacing: 1
+  subPositionOffset: {x: 0, y: 0.09, z: 0}
+  subSize: {x: 2.28, y: 1.79, z: 2.8}
+  subRotation: {x: 0, y: 0, z: 0}
+  forceSubsToGroundContour: 0
+  keepSubsAboveGround: 0
+  useWave: 0
+  useSubJoiners: 0
+  frequency: 1
+  amplitude: 0.066
+  wavePosition: 1.571
+  subPostSpread: 0
+  allowSubPostHeightVariation: 0
+  minSubPostHeightVar: 0.95
+  maxSubPostHeightVar: 1.05
+  allowRandSubPostRotationVariation: 0
+  chanceOfMissingSubPost: 0
+  smallRotationAmountSubpost: {x: 0, y: 0, z: 0}
+  allowQuantizedRandomSubPostRotation: 0
+  quantizeRotAngleSubpost: 90
+  allowSubpostRandomization: 1
+  quantizeRotProbSubpost: 0
+  useSubpostVariations: 0
+  subpostVariants:
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  - enabled: 1
+    inUse: 1
+    probability: 0.51
+    goName: 
+    go: {fileID: 0}
+  userSequenceSubpost:
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  - sourceVariantIndex: 0
+    unavailableIndex: 0
+    pos: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    rot: {x: 0, y: 0, z: 0}
+    invert: 0
+    backToFront: 0
+    mirrorZ: 0
+    stepEnabled: 1
+    probability: 1
+    layer: 6
+  numUserSeqStepsSubpost: 5
+  useExtras: 0
+  extraName: GravelPathA_Panel
+  relativeMovement: 0
+  relativeScaling: 0
+  extraPositionOffset: {x: -0.05, y: 0.01, z: -0.55}
+  extraSize: {x: 0.72, y: 1, z: 1}
+  extraRotation: {x: 0, y: 90, z: 0}
+  extraFrequency: 1
+  makeMultiArray: 0
+  numExtras: 2
+  extrasGap: 0.75
+  raiseExtraByPostHeight: 1
+  extrasFollowIncline: 0
+  extrasMode: 1
+  extraSpawnAreaWidth: 1
+  numScatterColumns: 1
+  numScatterRows: 1
+  scatterExtraRandPos: {x: 0, y: 0, z: 0}
+  scatterExtraRandScale: {x: 1.02, y: 1.02, z: 1.02}
+  scatterExtraRandRot: {x: 0, y: 2.32, z: 0}
+  scatterRandomStrength: 1
+  randomScaleMode: 0
+  flipXProb: 0
+  flipYProb: 0
+  flipZProb: 0
+  extraRandomFlipMode: 0
+  extraFrequencyMode: 0
+  excludeExtraVarXZRotations: 1
+  extraVarsStruct:
+    varNames:
+    - GravelPathA_Panel
+    - ABasicConc_Post
+    - ABasicConc_Post
+    varProbs:
+    - 0
+    - 0
+    - 0
+    varScales:
+    - {x: 1, y: 1, z: 1}
+    - {x: 1, y: 1, z: 1}
+    - {x: 1, y: 1, z: 1}
+  enableChoosePrefabs: 0
+  finalPostMode: 0
+  pivotPosition: 1
+  postHeightOffset: 0
+  interpolate: 1
+  interPostDist: 1.7999998
+  smooth: 0
+  tension: 0
+  roundingDistance: 2
+  removeIfLessThanAngle: 4.5
+  stripTooClose: 0.35
+  globalScale: {x: 1, y: 1, z: 1}
+  scaleInterpolationAlso: 1
+  snapMainPosts: 0
+  snapSize: 1
+  hideInterpolated: 0
+  lerpPostRotationAtCorners: 1
+  postSpacingVariation: 0
+  railAColliderMode: 0
+  postColliderMode: 0
+  notes: 

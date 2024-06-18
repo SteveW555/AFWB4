@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec71cdb659e34642a3d3ab2f04c60d2, type: 3}
+  m_Name: ClickPoints-[AF] All  Post   RailA   RailB   Subpost   Extra-154733
+  m_EditorClassIdentifier: 
+  clickPoints:
+  - {x: 863.4202, y: 0, z: 710.55676}
+  - {x: 864.91003, y: 0, z: 720.52637}
+  - {x: 853.8284, y: 0, z: 725.05615}
+  - {x: 845.15063, y: 0, z: 715.9799}
+  - {x: 846.38434, y: 0.00000047683716, z: 704.7904}
+  - {x: 840.9424, y: 0, z: 701.2253}
+  - {x: 838.3824, y: 0, z: 700.0918}
+  - {x: 835.19684, y: 0, z: 702.7327}
+  - {x: 836.1973, y: 0, z: 709.2731}
+  gapPoints: []

@@ -1,0 +1,445 @@
+
+//==========================================
+//                      Next (2024-05-22 12:02:13)
+//==========================================
+File operation failed after 5 retries: Sharing violation on path C:\Users\steve\AppData\Local\Unity\Editor\Editor.log
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+LogFileUtility:RetryFileOperation (System.Action) (at Assets/Auto Fence Builder/Editor/ConsoleLogToTextFile.cs:142)
+LogFileUtility:RestoreLogFile (string,string) (at Assets/Auto Fence Builder/Editor/ConsoleLogToTextFile.cs:118)
+LogFileUtility:BackupClearAndCopyConsoleToTextFile () (at Assets/Auto Fence Builder/Editor/ConsoleLogToTextFile.cs:40)
+
+(Filename: Assets/Auto Fence Builder/Editor/ConsoleLogToTextFile.cs Line: 142)
+
+[Worker0] Number of updated assets reloaded before import = 0
+[Worker0] Start importing Assets/ConsoleOutput.txt using Guid(f144087db022a1f4f9e88b339155219f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) 
+[Worker0]  -> (artifact id: 'e7c178b6b62eb6f9cbb08761af8f14f3') in 0.016398 seconds 
+Asset Pipeline Refresh: Total: 0.008 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Registering precompiled user dll's ...
+Registered in 0.001522 seconds.
+Start importing Assets/Auto Fence Builder/Editor/ConsoleLogToTextFile.cs using Guid(f50a7a7df279e074283d79b121560d83) Importer(-1,00000000000000000000000000000000)  -> (artifact id: 'e9d5e7c20635b05eaf60e8a3e0b6eb20') in 0.004774 seconds 
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+AssetDatabase: script compilation time: 0.049695s
+[Licensing::Client] Successfully resolved entitlements
+Starting: C:\Program Files\Unity\Hub\Editor\2021.3.32f1\Editor\Data\bee_backend.exe --profile="Library/Bee/backend_profiler0.traceevents" --stdin-canary --dagfile="Library/Bee/1900b0aEDbg.dag" --continue-on-failure ScriptAssemblies
+WorkingDir: C:/Unity Projects M2/AFWB 4-0   U21-3  May 20
+ExitCode: 0 Duration: 0s512ms
+[269/272    0s] Csc Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.dll (+2 others)
+Assets\Auto Fence Builder\Editor\FBXExportAFWB.cs(35,16): warning CS0219: The variable 'meshPath' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\FBXExportAFWB.cs(42,20): warning CS0219: The variable 'meshGO' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\FBXExportAFWB.cs(42,35): warning CS0219: The variable 'exportedModel' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SaveRailMeshes.cs(32,56): warning CS0219: The variable 'createdFolder' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(642,71): warning CS0219: The variable 'fenceName' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(425,24): warning CS0219: The variable 'debugString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(349,18): warning CS0219: The variable 'print' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(351,20): warning CS0219: The variable 'varName' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(223,13): warning CS0219: The variable 'varMenuIdx' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(223,30): warning CS0219: The variable 'varPrefabIdx' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\ResourceUtilities.cs(685,18): warning CS0219: The variable 'material' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(252,22): warning CS0219: The variable 'allEnableStateChanged' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(252,53): warning CS0219: The variable 'allEnableState' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(332,22): warning CS0219: The variable 'goWasChanged' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\RandomizationEditor.cs(195,14): warning CS0219: The variable 'rebuildPosts' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\ExtraEditor.cs(351,46): warning CS0219: The variable 'extraFreqModeHelpString2' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\ResourceUtilities.cs(1100,14): warning CS0219: The variable 'foundMesh' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\ResourceUtilities.cs(1141,46): warning CS0219: The variable 'meshNames' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(1408,14): warning CS0219: The variable 'rebuildAfterRailBPrefabChange' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(3697,28): warning CS0219: The variable 'layerStr' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\EditorUtilitiesAF.cs(700,13): warning CS0219: The variable 'lineHeight' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\ScenViewInteractionAF.cs(43,24): warning CS0219: The variable 'variationString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\ScenViewInteractionAF.cs(211,24): warning CS0219: The variable 'variationString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\ScenViewInteractionAF.cs(25,35): warning CS0219: The variable 'matchStr' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(147,31): warning CS0414: The field 'AutoFenceEditor.optimaToUserSeq' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(136,9): warning CS0414: The field 'AutoFenceEditor.varASeqPopup' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(51,15): warning CS0414: The field 'SequenceEditor.variantPrefabIndex' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(17,52): warning CS0414: The field 'PresetsAFWB.kSubpostLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(45,20): warning CS0414: The field 'SinglesEditor.PrefabTypeAFWB' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(17,14): warning CS0414: The field 'PresetsAFWB.kExtraLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(24,14): warning CS0414: The field 'AutoFenceEditor.kPostLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(59,17): warning CS0414: The field 'SequenceEditor.autoAssignMenuIndex' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(54,60): warning CS0414: The field 'SinglesEditor.optimalToUserSeqString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(19,14): warning CS0414: The field 'SinglesEditor.kSubpostLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(24,14): warning CS0414: The field 'VariationsEditor.kExtraLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(26,10): warning CS0414: The field 'BakeRotationsWindow.x90minus' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(33,19): warning CS0414: The field 'SinglesEditor.SeqItemList' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(37,17): warning CS0414: The field 'VariationsEditor.autoAssignMenuIndex' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(23,14): warning CS0414: The field 'VariationsEditor.kSubpostLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(148,12): warning CS0414: The field 'AutoFenceEditor.randomizeUserSeqString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(25,10): warning CS0414: The field 'BakeRotationsWindow.x90' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(44,10): warning CS0414: The field 'SequenceEditor.needsRebuild' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(54,12): warning CS0414: The field 'SinglesEditor.randomizeUserSeqString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\RailEditor.cs(24,12): warning CS0414: The field 'RailEditor.postsStr' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(60,18): warning CS0414: The field 'SinglesEditor.updateSequenceAlso' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(59,42): warning CS0414: The field 'SequenceEditor.autoAssignToolbarValue' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\EditorHelperAFWB.cs(28,9): warning CS0414: The field 'EditorHelperAFWB.randTableSize' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(26,46): warning CS0414: The field 'BakeRotationsWindow.z90minus' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(50,15): warning CS0414: The field 'SinglesEditor.varPrefabIndex' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(148,60): warning CS0414: The field 'AutoFenceEditor.optimalToUserSeqString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(59,17): warning CS0414: The field 'SinglesEditor.autoAssignMenuIndex' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(32,13): warning CS0414: The field 'SinglesEditor.currSeqStepVariant' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(133,19): warning CS0414: The field 'AutoFenceEditor.sp' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(101,9): warning CS0414: The field 'AutoFenceEditor.selGridInt' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(55,12): warning CS0414: The field 'SinglesEditor.randomToUserSeqString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(41,10): warning CS0414: The field 'SinglesEditor.showSourcePrefabs' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(99,36): warning CS0414: The field 'AutoFenceEditor.showRefreshAndUnloadHelp' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(47,17): warning CS0414: The field 'SinglesEditor.maxNumVariations' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(40,10): warning CS0414: The field 'SinglesEditor.foundEnabledObject' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\FinishWindow.cs(11,12): warning CS0414: The field 'FinishWindow.parentFolder' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(104,19): warning CS0414: The field 'AutoFenceEditor.railATooltipString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(42,10): warning CS0414: The field 'SinglesEditor.needsRebuild' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(25,36): warning CS0414: The field 'BakeRotationsWindow.z90' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(61,9): warning CS0414: The field 'SinglesEditor.autoAssignToolbarValue' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(19,10): warning CS0414: The field 'VariationsEditor.showSourcePrefabs' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(53,12): warning CS0414: The field 'SinglesEditor.layerWord' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\FinishWindow.cs(8,9): warning CS0414: The field 'FinishWindow.fenceName' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\FinishWindow.cs(10,19): warning CS0414: The field 'FinishWindow.afb' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(16,52): warning CS0414: The field 'PresetsAFWB.kRailBLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\PostEditor.cs(17,32): warning CS0414: The field 'PostEditor.postsHelpStr' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(147,9): warning CS0414: The field 'AutoFenceEditor.randomizeUserSeq' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(16,90): warning CS0414: The field 'PresetsAFWB.kPostLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(53,12): warning CS0414: The field 'SequenceEditor.displayVariationGOsStr' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(26,28): warning CS0414: The field 'BakeRotationsWindow.y90minus' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(25,14): warning CS0414: The field 'AutoFenceEditor.kExtraLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(55,12): warning CS0414: The field 'SequenceEditor.randomToUserSeqString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(149,12): warning CS0414: The field 'AutoFenceEditor.randomToUserSeqString' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(36,22): warning CS0414: The field 'SinglesEditor.displayVariationGOs' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\RailEditor.cs(24,32): warning CS0414: The field 'RailEditor.postsHelpStr' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(136,27): warning CS0414: The field 'AutoFenceEditor.varBSeqPopup' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(43,10): warning CS0414: The field 'SequenceEditor.showSourcePrefabs' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(26,14): warning CS0414: The field 'AutoFenceEditor.kSubpostLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(49,17): warning CS0414: The field 'SequenceEditor.maxNumVariations' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(156,9): warning CS0414: The field 'AutoFenceEditor.variationDisplayChoice' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(27,14): warning CS0414: The field 'AutoFenceEditor.kAllLayer' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(25,23): warning CS0414: The field 'BakeRotationsWindow.y90' is assigned but its value is never used
+
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(52,12): warning CS0414: The field 'SinglesEditor.displayVariationGOsStr' is assigned but its value is never used
+[270/272    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[271/272    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (0.48 seconds), 3 items updated, 272 evaluated
+Assets\Auto Fence Builder\Editor\FBXExportAFWB.cs(35,16): warning CS0219: The variable 'meshPath' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\FBXExportAFWB.cs(42,20): warning CS0219: The variable 'meshGO' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\FBXExportAFWB.cs(42,35): warning CS0219: The variable 'exportedModel' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SaveRailMeshes.cs(32,56): warning CS0219: The variable 'createdFolder' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(642,71): warning CS0219: The variable 'fenceName' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(425,24): warning CS0219: The variable 'debugString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(349,18): warning CS0219: The variable 'print' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(351,20): warning CS0219: The variable 'varName' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(223,13): warning CS0219: The variable 'varMenuIdx' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(223,30): warning CS0219: The variable 'varPrefabIdx' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\ResourceUtilities.cs(685,18): warning CS0219: The variable 'material' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(252,22): warning CS0219: The variable 'allEnableStateChanged' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(252,53): warning CS0219: The variable 'allEnableState' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(332,22): warning CS0219: The variable 'goWasChanged' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\RandomizationEditor.cs(195,14): warning CS0219: The variable 'rebuildPosts' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\ExtraEditor.cs(351,46): warning CS0219: The variable 'extraFreqModeHelpString2' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\ResourceUtilities.cs(1100,14): warning CS0219: The variable 'foundMesh' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\ResourceUtilities.cs(1141,46): warning CS0219: The variable 'meshNames' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(1408,14): warning CS0219: The variable 'rebuildAfterRailBPrefabChange' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(3697,28): warning CS0219: The variable 'layerStr' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\EditorUtilitiesAF.cs(700,13): warning CS0219: The variable 'lineHeight' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\ScenViewInteractionAF.cs(43,24): warning CS0219: The variable 'variationString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\ScenViewInteractionAF.cs(211,24): warning CS0219: The variable 'variationString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\ScenViewInteractionAF.cs(25,35): warning CS0219: The variable 'matchStr' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(147,31): warning CS0414: The field 'AutoFenceEditor.optimaToUserSeq' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(136,9): warning CS0414: The field 'AutoFenceEditor.varASeqPopup' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(51,15): warning CS0414: The field 'SequenceEditor.variantPrefabIndex' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(17,52): warning CS0414: The field 'PresetsAFWB.kSubpostLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(45,20): warning CS0414: The field 'SinglesEditor.PrefabTypeAFWB' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(17,14): warning CS0414: The field 'PresetsAFWB.kExtraLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(24,14): warning CS0414: The field 'AutoFenceEditor.kPostLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(59,17): warning CS0414: The field 'SequenceEditor.autoAssignMenuIndex' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(54,60): warning CS0414: The field 'SinglesEditor.optimalToUserSeqString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(19,14): warning CS0414: The field 'SinglesEditor.kSubpostLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(24,14): warning CS0414: The field 'VariationsEditor.kExtraLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(26,10): warning CS0414: The field 'BakeRotationsWindow.x90minus' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(33,19): warning CS0414: The field 'SinglesEditor.SeqItemList' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(37,17): warning CS0414: The field 'VariationsEditor.autoAssignMenuIndex' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(23,14): warning CS0414: The field 'VariationsEditor.kSubpostLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(148,12): warning CS0414: The field 'AutoFenceEditor.randomizeUserSeqString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(25,10): warning CS0414: The field 'BakeRotationsWindow.x90' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(44,10): warning CS0414: The field 'SequenceEditor.needsRebuild' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(54,12): warning CS0414: The field 'SinglesEditor.randomizeUserSeqString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\RailEditor.cs(24,12): warning CS0414: The field 'RailEditor.postsStr' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(60,18): warning CS0414: The field 'SinglesEditor.updateSequenceAlso' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(59,42): warning CS0414: The field 'SequenceEditor.autoAssignToolbarValue' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\EditorHelperAFWB.cs(28,9): warning CS0414: The field 'EditorHelperAFWB.randTableSize' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(26,46): warning CS0414: The field 'BakeRotationsWindow.z90minus' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(50,15): warning CS0414: The field 'SinglesEditor.varPrefabIndex' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(148,60): warning CS0414: The field 'AutoFenceEditor.optimalToUserSeqString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(59,17): warning CS0414: The field 'SinglesEditor.autoAssignMenuIndex' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(32,13): warning CS0414: The field 'SinglesEditor.currSeqStepVariant' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(133,19): warning CS0414: The field 'AutoFenceEditor.sp' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(101,9): warning CS0414: The field 'AutoFenceEditor.selGridInt' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(55,12): warning CS0414: The field 'SinglesEditor.randomToUserSeqString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(41,10): warning CS0414: The field 'SinglesEditor.showSourcePrefabs' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(99,36): warning CS0414: The field 'AutoFenceEditor.showRefreshAndUnloadHelp' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(47,17): warning CS0414: The field 'SinglesEditor.maxNumVariations' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(40,10): warning CS0414: The field 'SinglesEditor.foundEnabledObject' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\FinishWindow.cs(11,12): warning CS0414: The field 'FinishWindow.parentFolder' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(104,19): warning CS0414: The field 'AutoFenceEditor.railATooltipString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(42,10): warning CS0414: The field 'SinglesEditor.needsRebuild' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(25,36): warning CS0414: The field 'BakeRotationsWindow.z90' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(61,9): warning CS0414: The field 'SinglesEditor.autoAssignToolbarValue' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\VariationsEditor.cs(19,10): warning CS0414: The field 'VariationsEditor.showSourcePrefabs' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(53,12): warning CS0414: The field 'SinglesEditor.layerWord' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\FinishWindow.cs(8,9): warning CS0414: The field 'FinishWindow.fenceName' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\FinishWindow.cs(10,19): warning CS0414: The field 'FinishWindow.afb' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(16,52): warning CS0414: The field 'PresetsAFWB.kRailBLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\PostEditor.cs(17,32): warning CS0414: The field 'PostEditor.postsHelpStr' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(147,9): warning CS0414: The field 'AutoFenceEditor.randomizeUserSeq' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\PresetsAFWB.cs(16,90): warning CS0414: The field 'PresetsAFWB.kPostLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(53,12): warning CS0414: The field 'SequenceEditor.displayVariationGOsStr' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(26,28): warning CS0414: The field 'BakeRotationsWindow.y90minus' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(25,14): warning CS0414: The field 'AutoFenceEditor.kExtraLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(55,12): warning CS0414: The field 'SequenceEditor.randomToUserSeqString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(149,12): warning CS0414: The field 'AutoFenceEditor.randomToUserSeqString' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(36,22): warning CS0414: The field 'SinglesEditor.displayVariationGOs' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\RailEditor.cs(24,32): warning CS0414: The field 'RailEditor.postsHelpStr' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(136,27): warning CS0414: The field 'AutoFenceEditor.varBSeqPopup' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(43,10): warning CS0414: The field 'SequenceEditor.showSourcePrefabs' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(26,14): warning CS0414: The field 'AutoFenceEditor.kSubpostLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SequenceEditor.cs(49,17): warning CS0414: The field 'SequenceEditor.maxNumVariations' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(156,9): warning CS0414: The field 'AutoFenceEditor.variationDisplayChoice' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\AutoFenceEditor.cs(27,14): warning CS0414: The field 'AutoFenceEditor.kAllLayer' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\BakeRotationsWindow.cs(25,23): warning CS0414: The field 'BakeRotationsWindow.y90' is assigned but its value is never used
+Assets\Auto Fence Builder\Editor\SinglesEditor.cs(52,12): warning CS0414: The field 'SinglesEditor.displayVariationGOsStr' is assigned but its value is never used
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.54 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-AFWB 4.0 alpha
+Mono: successfully reloaded assembly
+- Completed reload, in  1.936 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1936ms)
+		BeginReloadAssembly (497ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (38ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (1ms)
+			CreateAndSetChildDomain (182ms)
+		EndReloadAssembly (1340ms)
+			LoadAssemblies (131ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (101ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (34ms)
+			SetupLoadedEditorAssemblies (327ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (9ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (2ms)
+				BeforeProcessingInitializeOnLoad (143ms)
+				ProcessInitializeOnLoadAttributes (91ms)
+				ProcessInitializeOnLoadMethodAttributes (57ms)
+				AfterProcessingInitializeOnLoad (25ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (334ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.001689 seconds.
+Refreshing native plugins compatible for Editor in 1.32 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh: Total: 3.064 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=154 ms
+		Asset DB Callback time: managed=46 ms, native=10 ms
+		Scripting: domain reloads=1, domain reload time=1961 ms, compile time=890 ms, other=0 ms
+		Project Asset Count: scripts=3569, non-scripts=8171
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeBeforeRefreshCallbacks: 1.708ms
+	ApplyChangesToAssetFolders: 0.051ms
+	Scan: 4.998ms
+	OnSourceAssetsModified: 0.064ms
+	InitializeImportedAssetsSnapshot: 22.407ms
+	GetAllGuidsForCategorization: 1.342ms
+	CategorizeAssets: 77.490ms
+	ImportOutOfDateAssets: 2883.801ms (1966.744ms without children)
+		ImportManagerImport: 20.421ms (15.270ms without children)
+			ImportInProcess: 5.130ms
+			UpdateCategorizedAssets: 0.021ms
+		CompileScripts: 890.481ms
+		ReloadImportedAssets: 0.856ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 2.890ms
+		InitializingProgressBar: 0.005ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 1.330ms
+		OnDemandSchedulerStart: 1.074ms
+	ReloadSourceAssets: 3.695ms
+	UnloadImportedAssets: 1.137ms
+	PostProcessAllAssets: 48.570ms
+	Hotreload: 6.622ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.707ms
+	UnloadStreamsBegin: 0.033ms
+	LoadedImportedAssetsSnapshotReleaseGCHandles: 1.181ms
+	GetLoadedSourceAssetsIDs: 1.641ms
+	GetLoadedSourceAssetsSnapshot: 3.343ms
+	PersistCurrentRevisions: 0.519ms
+	UnloadStreamsEnd: 0.034ms
+	GenerateScriptTypeHashes: 1.348ms
+	Untracked: 52.740ms
+[Worker1] Number of updated assets reloaded before import = 0
+[Worker1] Start importing Assets/ConsoleOutput.txt using Guid(f144087db022a1f4f9e88b339155219f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) 
+[Worker1]  -> (artifact id: '3a616e7aa46fce65d9146fc40ac0172a') in 0.031692 seconds 
+Registering precompiled user dll's ...
+Registered in 0.001560 seconds.
+Refreshing native plugins compatible for Editor in 1.35 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh: Total: 0.245 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh: Total: 0.010 seconds - Initiated by RefreshV2(ForceSynchronousImport)
+[Worker0] Number of updated assets reloaded before import = 0
+[Worker0] Start importing Assets/ConsoleOutput.txt using Guid(f144087db022a1f4f9e88b339155219f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) 
+[Worker0]  -> (artifact id: 'da53f42f59bed23a84962292b4791cb7') in 0.019309 seconds 
+Asset Pipeline Refresh: Total: 0.009 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Asset Pipeline Refresh: Total: 0.006 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Couldn't find mesh in GetRailMeshesFromPrefabs() in ChainlinkFenceHalf_Panel (UnityEngine.GameObject)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+AFWB.AutoFenceCreator:BackupPrefabMeshes (System.Collections.Generic.List`1<UnityEngine.GameObject>,System.Collections.Generic.List`1<System.Collections.Generic.List`1<UnityEngine.Mesh>>) (at Assets/Auto Fence Builder/Scripts/AutoFenceUtilities.cs:355)
+AutoFenceEditor:LoadAndCheckPrefabsAreValid () (at Assets/Auto Fence Builder/Editor/EditorUtilitiesAF.cs:347)
+AutoFenceEditor:SetupEditor () (at Assets/Auto Fence Builder/Editor/AutoFenceEditor.cs:331)
+AutoFenceEditor:OnEnable () (at Assets/Auto Fence Builder/Editor/AutoFenceEditor.cs:292)
+
+(Filename: Assets/Auto Fence Builder/Scripts/AutoFenceUtilities.cs Line: 355)
+
+Couldn't find mesh in GetRailMeshesFromPrefabs() in ChainLinkFence_Panel (UnityEngine.GameObject)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+AFWB.AutoFenceCreator:BackupPrefabMeshes (System.Collections.Generic.List`1<UnityEngine.GameObject>,System.Collections.Generic.List`1<System.Collections.Generic.List`1<UnityEngine.Mesh>>) (at Assets/Auto Fence Builder/Scripts/AutoFenceUtilities.cs:355)
+AutoFenceEditor:LoadAndCheckPrefabsAreValid () (at Assets/Auto Fence Builder/Editor/EditorUtilitiesAF.cs:347)
+AutoFenceEditor:SetupEditor () (at Assets/Auto Fence Builder/Editor/AutoFenceEditor.cs:331)
+AutoFenceEditor:OnEnable () (at Assets/Auto Fence Builder/Editor/AutoFenceEditor.cs:292)
+
+(Filename: Assets/Auto Fence Builder/Scripts/AutoFenceUtilities.cs Line: 355)
+
+postDirectionVectors.Count (0) < allPostPositions.Count() (12   in CheckPostDirectionVectors().   OnEnable
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+AFWB.AutoFenceCreator:CheckPostDirectionVectors (bool,string) (at Assets/Auto Fence Builder/Scripts/AutoFenceCreator.cs:1148)
+AutoFenceEditor:OnEnable () (at Assets/Auto Fence Builder/Editor/AutoFenceEditor.cs:295)
+
+(Filename: Assets/Auto Fence Builder/Scripts/AutoFenceCreator.cs Line: 1148)
+
+<RI> Initialized touch support.
+
+<RI> Initialized touch support.
+
+postDirectionVectors.Count (0) < allPostPositions.Count() (12   in CheckPostDirectionVectors().   OnEnable
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+AFWB.AutoFenceCreator:CheckPostDirectionVectors (bool,string) (at Assets/Auto Fence Builder/Scripts/AutoFenceCreator.cs:1148)
+AutoFenceEditor:OnEnable () (at Assets/Auto Fence Builder/Editor/AutoFenceEditor.cs:295)
+
+(Filename: Assets/Auto Fence Builder/Scripts/AutoFenceCreator.cs Line: 1148)
+
+Asset Pipeline Refresh: Total: 0.005 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Asset Pipeline Refresh: Total: 0.005 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Asset Pipeline Refresh: Total: 0.005 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Asset Pipeline Refresh: Total: 0.005 seconds - Initiated by RefreshV2(AllowForceSynchronousImport)
+Registering precompiled user dll's ...
+Registered in 0.001408 seconds.
+[Licensing::Client] Successfully resolved entitlements
+Refreshing native plugins compatible for Editor in 1.35 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh: Total: 0.174 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh: Total: 0.008 seconds - Initiated by RefreshV2(ForceSynchronousImport)

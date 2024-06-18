@@ -1,0 +1,11 @@
+﻿Presets
+---------
+User's saved Presets go in to the main Preset library, and a copy will go here with the [User] prefix.
+This makes it possible to locate all User Presets copied into one Sub-menu in the Preset Menu
+
+
+
+Naming Convention For User Meshes:
+
+[Pure] = Copy of User's original unmodified mesh. 
+[Prep] = Copy Prepared & Optimized for AFWB

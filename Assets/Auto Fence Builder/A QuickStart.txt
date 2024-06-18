@@ -1,0 +1,56 @@
+﻿Auto Fence & Wall Builder March 2019
+
+Load Demo Scene ( or create your a new one with either a terrain or a plane to act as the ground)
+
+Add Auto Fence Builder from the Game Object menu, or press shift-alt-F.
+
+With Auto FenceBuilder selected, shift-click 2 or more times in the scene view (in editor mode). You should now see your fence.
+
+Select any style of fence from 'Choose Preset' popupmenu.
+
+You can now adjust any of the parameters of the fence.
+
+For better visual quality, enable Anti-Aliasing in the Edit Menu/Project Settings/Quality
+
+See the manual for more details.
+
+twoclicktools@gmail.com
+
+Happy Fencing!
+
+_________________________________________________________________________________________________
+
+Troubleshooting:
+
+Shift-Clicking does nothing:
+	Ensure Auto Fence Builder is selected in the Hierarchy when trying to build
+	
+	Ensure Unity Gizmos are enabled in the top-right of the Scene window
+    (Not the menu, the Gizmo button  which changes color only very slightly when disabled, so it's easy to miss)
+
+	Ensure you're clicking on a terrain, ir a GameObject that has a collider.
+
+	It's possible that Unity can get stuck on the hand tool, 
+	it's known issue with Unity after using some mouse & control key combos Try:
+	* Clicking one of the scene view options such as 2D or lighting	
+	* Clicking on one of the other tools (move, scale, rotate etc)
+	* Enter and exit Play mode
+
+	You might have more than one instance of Auto Fence Builder in your hierarchy.
+	This isn't necessary. Use 'Finish & Start New' instead.
+	Delete one of them and also check that there aren't duplicate 'Current Fences Folders'
+
+Strctures Look Foobar
+	[Clean & Rebuild] at top of AFWB Inspector
+
+Custom User Objects:
+	Objects disappear in Play mode: ensure that Read/Write Enabled is on in your mesh import settings for your custom object,
+	then in Auto Fence: Globals->Refresh_Prefabs
+
+HDRP:
+	To use with the HD Render Pipeline, please delete the following two folders 
+	Auto Fence Builder/AFWB_Materials
+	Auto Fence Builder/FencePrefabs_AFWB
+	Then import the 'AFWB HDRP Prefabs & Materials' unitypackage
+
+
