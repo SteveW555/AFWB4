@@ -1,3 +1,15 @@
+# Ignore everything
+*
+
+# Allow .gitignore itself
+!.gitignore
+
+# Allow directories
+!*/
+
+# Allow all files in the specific directory
+!Assets/Auto\ Fence\ Builder/**
+
 # Unity generated files
 /[Ll]ibrary/
 /[Tt]emp/
@@ -44,10 +56,6 @@ Thumbs.db
 
 # jpg files
 *.jpg
-*.jpeg
-
-# exr files
-*.exr
 
 # psd files
 *.psd
@@ -75,8 +83,6 @@ Thumbs.db
 
 # Log files
 Logs/*.log
-
-
 
 # Ignore Package Manager packages
 # To avoid ignoring everything in /Packages, which would break Package Manager
