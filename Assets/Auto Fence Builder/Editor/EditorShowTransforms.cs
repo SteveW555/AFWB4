@@ -21,7 +21,7 @@ namespace AFWB
             EditorGUILayout.BeginHorizontal();
             Vector3 oldYPos = Vector3.zero;
             string helpStr = "Offset the relative postion of all " + layerStr;
-            if (layer != LayerSet.postLayerSet)//because there is no Post offset property
+            if (layer != LayerSet.postLayer)//because there is no Post offset property
             {
                 oldYPos = posProp.vector3Value;
                 EditorGUILayout.LabelField(new GUIContent(layerStr + " Position Offset", helpStr), GUILayout.Width(labelWidth));
@@ -33,8 +33,8 @@ namespace AFWB
                 {
                     posProp.vector3Value = Vector3.zero;
                 }
-                if (posProp.vector3Value.y != oldYPos.y && (layer == LayerSet.railALayerSet && ed.af.keepRailGrounded[AutoFenceCreator.kRailALayerInt] == true ||
-                    layer == LayerSet.railBLayerSet && ed.af.keepRailGrounded[AutoFenceCreator.kRailBLayerInt] == true))
+                if (posProp.vector3Value.y != oldYPos.y && (layer == LayerSet.railALayer && ed.af.keepRailGrounded[AutoFenceCreator.kRailALayerInt] == true ||
+                    layer == LayerSet.railBLayer && ed.af.keepRailGrounded[AutoFenceCreator.kRailBLayerInt] == true))
                 {
                     posProp.vector3Value = oldYPos;
                     Debug.LogWarning("The Rail vertical position is locked to the ground height. Select [Locked to Ground] to enable editing \n");
@@ -50,7 +50,7 @@ namespace AFWB
             GUILayout.Space(2);
             EditorGUILayout.BeginHorizontal();
             helpStr = "Scale the individual dimensions of all " + layerStr;
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 helpStr += "\n\n Note: X will scale the visual length of a Rail but does not affect their spacing or the layout of other fence elements." +
                     "\nIf you want to scale a Rail from e.g. 3m to 5m, and want the layout to change, you need to also " +
                     "change the 'Post-Rail Spacing' to 5m in the Master Settings above.\n\n However you can create the effect of overlaps or gaps by scaling Rail X alone " +
@@ -84,7 +84,7 @@ namespace AFWB
             //================================================
             //          Main & End  Post Scale Boost
             //================================================      
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 GUILayout.Space(4);
                 //if (ed.af.allowNodePostsPrefabOverride)
@@ -111,7 +111,7 @@ namespace AFWB
         //--------------------------------
         public static void MainPostsScaleBoost(AutoFenceEditor ed, int labelWidth, int controlWidth, int toggleWidth, int preResetSpace)
         {
-            SerializedProperty scaleProp = EdUtils.GetLayerScaleProperty(LayerSet.postLayerSet, ed);
+            SerializedProperty scaleProp = EdUtils.GetLayerScaleProperty(LayerSet.postLayer, ed);
             EditorGUILayout.LabelField(new GUIContent(" - Node Posts Boost Scale", "Boost the relative scale of the Main (ClickPoint Nodes) Posts"), 
                 ed.lilacUnityStyle, GUILayout.Width(labelWidth-2));
             EditorGUILayout.PropertyField(ed.mainPostsSizeBoostProp, new GUIContent("", "Boost the relative scale of the Main (ClickPoint Nodes) Posts"), 
@@ -125,7 +125,7 @@ namespace AFWB
 
         public static void EndPostsScaleBoost(AutoFenceEditor ed, int labelWidth, int controlWidth, int toggleWidth, int preResetSpace)
         {
-            SerializedProperty scaleProp = EdUtils.GetLayerScaleProperty(LayerSet.postLayerSet, ed);
+            SerializedProperty scaleProp = EdUtils.GetLayerScaleProperty(LayerSet.postLayer, ed);
             EditorGUILayout.LabelField(new GUIContent(" - Ends Post Boost Scale", "Boost the relative scale of the First and Last Posts"),
                 ed.lilacUnityStyle, GUILayout.Width(labelWidth-2));
             EditorGUILayout.PropertyField(ed.endPostsSizeBoostProp, new GUIContent("", "Boost the relative scale of the Main (ClickPoint Nodes) Posts"),
@@ -144,62 +144,62 @@ namespace AFWB
     {
         public static SerializedProperty GetLayerPositionProperty(LayerSet layer, AutoFenceEditor ed)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 return null;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 return ed.railAPositionOffsetProp;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return ed.railBPositionOffsetProp;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return ed.subpostPositionOffsetProp;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return ed.extraPositionOffsetProp;
             return null;
         }
 
         public static SerializedProperty GetLayerScaleProperty(LayerSet layer, AutoFenceEditor ed)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 return ed.postSizeProp;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 return ed.railASizeProp;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return ed.railBSizeProp;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return ed.subpostScaleProp;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return ed.extraSizeProp;
             return null;
         }
 
         public static SerializedProperty GetLayerRotationProperty(LayerSet layer, AutoFenceEditor ed)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 return ed.postRotationProp;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 return ed.railARotationProp;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return ed.railBRotationProp;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return ed.subpostRotationProp;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return ed.extraRotationProp;
             return null;
         }
 
         public static string GetLayerString(LayerSet layer, bool noSpace = false, bool lowerCaseFirst = false)
         {
-            string layerStr = "layer";
+            string layerStr = "sourceLayerList";
 
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 layerStr = "Post";
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 layerStr = "Rail A";
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 layerStr = "Rail B";
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 layerStr = "Subposts";
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 layerStr = "Extras";
 
             if (noSpace == true)

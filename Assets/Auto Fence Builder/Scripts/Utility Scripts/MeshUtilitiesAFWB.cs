@@ -235,7 +235,7 @@ namespace MeshUtils
 
             totalHeight = meshHeight * localScale.y * af.globalScale.y;
 
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 totalHeight *= af.mainPostsSizeBoost.y;
                 totalHeight *= af.endPostsSizeBoost.y;
@@ -2241,13 +2241,13 @@ namespace MeshUtils
 
 
         //--------------------------------
-        public static Mesh GetFirstMeshInGameObject(GameObject inGO, LayerSet layer = LayerSet.allLayerSet)
+        public static Mesh GetFirstMeshInGameObject(GameObject inGO, LayerSet layer = LayerSet.allLayer)
         {
             Mesh firstMesh = null;
             if (inGO == null)
             {
                 string msg = "GO is null in GetFirstMeshInGameObject() \n";
-                if (layer != LayerSet.allLayerSet)
+                if (layer != LayerSet.allLayer)
                     msg = $"GO is null in GetFirstMeshInGameObject() for layer {layer} \n";
                 Debug.LogWarning(msg);
                 return null;

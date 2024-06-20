@@ -57,10 +57,10 @@ public class SceneViewDebugDisplay
                 Vector3 prevClickPointPos = af.clickPoints[0];
                 for (int i = 0; i < af.allPostPositions.Count; i++)
                 {
-                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.postLayerSet, i, strip: true) + " [Post]";
+                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.postLayer, i, strip: true) + " [Post]";
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
 
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.postLayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.postLayer, i);
                     screenPosition.x -= labelSize.x / 3;
 
                     Handles.BeginGUI();
@@ -76,10 +76,10 @@ public class SceneViewDebugDisplay
                 for (int i = 0; i < af.railABuiltCount; i++)
                 {
                     string goName = i.ToString();
-                    goName += " " + GetGoNameForSection(LayerSet.railALayerSet, i, strip: true) + " [RailA]";
+                    goName += " " + GetGoNameForSection(LayerSet.railALayer, i, strip: true) + " [RailA]";
                     Vector2 labelSize = railLabelStyle.CalcSize(new GUIContent(goName));
 
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.railALayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.railALayer, i);
                     screenPosition.x -= labelSize.x / 2;
 
                     Handles.BeginGUI();
@@ -97,7 +97,7 @@ public class SceneViewDebugDisplay
                     labelPosition.x += af.actualInterPostDistance / 4;
                     labelPosition.y += 0.4f;
                     labelPosition.y += (i % 2) * 0.35f; //offset every other for clarity
-                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.railBLayerSet, i, strip: true) + " [RailB]";
+                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.railBLayer, i, strip: true) + " [RailB]";
                     Vector2 screenPosition = HandleUtility.WorldToGUIPoint(labelPosition);
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
                     Handles.BeginGUI();
@@ -115,7 +115,7 @@ public class SceneViewDebugDisplay
                     labelPosition.x += af.actualInterPostDistance / 4;
                     labelPosition.y += 0.4f;
                     labelPosition.y += (i % 2) * 0.35f; //offset every other for clarity
-                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.extraLayerSet, i, strip: true) + " [Extra]";
+                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.extraLayer, i, strip: true) + " [Extra]";
                     Vector2 screenPosition = HandleUtility.WorldToGUIPoint(labelPosition);
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
                     Handles.BeginGUI();
@@ -131,10 +131,10 @@ public class SceneViewDebugDisplay
                 int numSubposts = af.subpostsBuiltCount;
                 for (int i = 0; i < numSubposts; i++)
                 {
-                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.subpostLayerSet, i, strip: true) + " [Subpost]";
+                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.subpostLayer, i, strip: true) + " [Subpost]";
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
 
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.subpostLayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.subpostLayer, i);
                     screenPosition.x -= labelSize.x / 3;
 
                     Handles.BeginGUI();
@@ -158,7 +158,7 @@ public class SceneViewDebugDisplay
                     List<Transform> markers = af.GetNodeMarkers();
                 for (int i = 0; i < af.clickPoints.Count; i++)
                 {
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.markerLayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.markerLayer, i);
                     screenPosition.x -= 20;
                     Vector2 markerPos2D =  markers[i].localPosition.To2D();
                     string markerStr = $"{i.ToString()}   {markerPos2D.ToString("F1")}";
@@ -195,10 +195,10 @@ public class SceneViewDebugDisplay
                 Vector3 prevClickPointPos = af.clickPoints[0];
                 for (int i = 0; i < af.allPostPositions.Count; i++)
                 {
-                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.postLayerSet, i, strip: true) + " [Post]  " + af.allPostPositions[i];
+                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.postLayer, i, strip: true) + " [Post]  " + af.allPostPositions[i];
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
 
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.postLayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.postLayer, i);
                     screenPosition.x -= labelSize.x / 3;
 
                     Handles.BeginGUI();
@@ -214,10 +214,10 @@ public class SceneViewDebugDisplay
                 int numSubposts = af.subpostsBuiltCount;
                 /*for (int i = 0; i < numSubposts; i++)
                 {
-                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.subpostLayerSet, i, strip: true) + " [Subpost]  " + af.subpostsPool[i].localPosition;
+                    string goName = i.ToString() + " " + GetGoNameForSection(LayerSet.subpostLayer, i, strip: true) + " [Subpost]  " + af.subpostsPool[i].localPosition;
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
 
-                    Vector2 screenPosition = ed.GetCentreScreenPositionForGO(LayerSet.subpostLayerSet, i);
+                    Vector2 screenPosition = ed.GetCentreScreenPositionForGO(LayerSet.subpostLayer, i);
                     screenPosition.x -= labelSize.x / 3;
 
                     Handles.BeginGUI();
@@ -253,7 +253,7 @@ public class SceneViewDebugDisplay
                 {
                     string goName = "Sec " + i.ToString();
                     Vector2 labelSize = railLabelStyle.CalcSize(new GUIContent(goName));
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.railALayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.railALayer, i);
                     screenPosition.x -= labelSize.x / 2;
                     screenPosition.y -= 35;
                     //Handles.BeginGUI(); //should already be on
@@ -404,9 +404,9 @@ public class SceneViewDebugDisplay
                 Color boxlColor = new Color(0f, 0f, .1f, 0.48f);
                 for (int i = 0; i < af.allPostPositions.Count; i++)
                 {
-                    string goName = i.ToString() + " " + sceneDebug.GetGoNameForSection(LayerSet.postLayerSet, i, strip: false);
+                    string goName = i.ToString() + " " + sceneDebug.GetGoNameForSection(LayerSet.postLayer, i, strip: false);
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.postLayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.postLayer, i);
                     screenPosition.x -= labelSize.x / 3;
                     Handles.BeginGUI();
                     Handles.DrawSolidRectangleWithOutline(new Rect(screenPosition.x - 2, screenPosition.y - 3, labelSize.x + 4, labelSize.y + 2), boxlColor, boxlColor);
@@ -419,10 +419,10 @@ public class SceneViewDebugDisplay
                 Color boxlColor = new Color(.0f, 0.03f, .0f, 0.68f);
                 for (int i = 0; i < af.allPostPositions.Count - 1; i++)
                 {
-                    int stepNum = i % af.GetNumSeqStepsForLayer(LayerSet.railALayerSet);
+                    int stepNum = i % af.GetNumSeqStepsForLayer(LayerSet.railALayer);
                     string stepNumStr = "Step " + stepNum.ToString();
                     Vector2 labelSize = new Vector2(38, 16);
-                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.railALayerSet, i);
+                    Vector2 screenPosition = GetCentreScreenPositionForGO(LayerSet.railALayer, i);
                     screenPosition.x -= labelSize.x / 2;
                     screenPosition.y -= 18;
                     Handles.BeginGUI();
@@ -440,7 +440,7 @@ public class SceneViewDebugDisplay
                     labelPosition.x += af.actualInterPostDistance / 4;
                     labelPosition.y += 0.4f;
                     labelPosition.y += (i % 2) * 0.35f; //offset every other for clarity
-                    string goName = i.ToString() + " " + sceneDebug.GetGoNameForSection(LayerSet.railBLayerSet, i, strip: true);
+                    string goName = i.ToString() + " " + sceneDebug.GetGoNameForSection(LayerSet.railBLayer, i, strip: true);
                     Vector2 screenPosition = HandleUtility.WorldToGUIPoint(labelPosition);
                     Vector2 labelSize = postLabelStyle.CalcSize(new GUIContent(goName));
                     Handles.BeginGUI();
@@ -458,7 +458,7 @@ public class SceneViewDebugDisplay
         for (int i = 0; i < Enum.GetNames(typeof(LayerSet)).Length; i++)
         {
             LayerSet layer = (LayerSet)i;
-            if ((layer >= LayerSet.markerLayerSet)) //-- Non-Fence layers
+            if ((layer >= LayerSet.markerLayer)) //-- Non-Fence layers
                 continue;
             int currPrefabIndex = af.GetCurrentPrefabIndexForLayer(layer);
             GameObject go = af.GetPrefabAtIndexForLayer(currPrefabIndex, layer);
@@ -474,13 +474,13 @@ public class SceneViewDebugDisplay
         for (int i = 0; i < Enum.GetNames(typeof(LayerSet)).Length; i++)
         {
             LayerSet layer = (LayerSet)i;
-            if ((layer >= LayerSet.markerLayerSet)) //-- Non-Fence layers
+            if ((layer >= LayerSet.markerLayer)) //-- Non-Fence layers
                 continue;
 
             int poolCount = af.GetPoolCountForLayer(layer);
             GUI.Label(new Rect(xpt, panelYPos, 270, 20), $"{layer.String()}  Pool Size = {poolCount}", style);
             panelYPos += rowHeight;
-            //af.ValidatePoolForLayer(layer);
+            //af.ValidatePoolForLayer(sourceLayerList);
         }
         return panelYPos;
     }
@@ -506,7 +506,7 @@ public class SceneViewDebugDisplay
         if (af.showSceneDebugInfoPanel == false)
             return;
 
-        if ((layer >= LayerSet.markerLayerSet)) //-- Non-Fence layers
+        if ((layer >= LayerSet.markerLayer)) //-- Non-Fence layers
             return;
 
         int colWidth = 215, rowHeight = 16;
@@ -613,7 +613,7 @@ public class SceneViewDebugDisplay
         string goName = "null";
         int variantIndex = 0;
         GameObject thisGo = null;
-        if (layer != LayerSet.extraLayerSet && layer != LayerSet.subpostLayerSet)
+        if (layer != LayerSet.extraLayer && layer != LayerSet.subpostLayer)
         {
             int numSeqSteps = af.GetSequencerForLayer(layer).Length();
             int seqStep = sectionNum % numSeqSteps;
@@ -720,17 +720,17 @@ public class SceneViewDebugDisplay
     {
         int adjustedSectionNum = sectionNum;
 
-        if (layer == LayerSet.railALayerSet && af.numStackedRails[0] > 1)
+        if (layer == LayerSet.railALayer && af.numStackedRails[0] > 1)
         {
             adjustedSectionNum = (int)((float)sectionNum / af.numStackedRails[0]);
         }
-        else if (layer == LayerSet.railBLayerSet && af.numStackedRails[1] > 1)
+        else if (layer == LayerSet.railBLayer && af.numStackedRails[1] > 1)
         {
             adjustedSectionNum = (int)((float)sectionNum / af.numStackedRails[1]);
         }
 
         Vector3 endX = Vector3.zero, midpoint = Vector3.zero, startX = af.allPostPositions[adjustedSectionNum];
-        if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
         {
             if (sectionNum < af.allPostPositions.Count - 1)
                 endX = af.allPostPositions[adjustedSectionNum + 1]; // use instead of goPositiions to get a better center point and deal with problem of last section
@@ -738,16 +738,16 @@ public class SceneViewDebugDisplay
                 endX = startX;
             midpoint = (startX + endX) / 2;
         }
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             midpoint = startX;
-        else if (layer == LayerSet.subpostLayerSet)
+        else if (layer == LayerSet.subpostLayer)
         {
             startX = af.subpostsPool[sectionNum].localPosition;
             midpoint = startX;
             midpoint.y -= 0.3f; // lower the subpost labels a little to avoid the post labels
         }
 
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
         {
             midpoint.y = af.railsAPool[adjustedSectionNum].localPosition.y;
             if (af.numStackedRails[0] > 1 && sectionNum >= af.allPostPositions.Count)
@@ -755,7 +755,7 @@ public class SceneViewDebugDisplay
                 midpoint.y += 20;
             }
         }
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
         {
             midpoint.y = af.railsBPool[sectionNum].localPosition.y;
             if (af.numStackedRails[1] > 1 && sectionNum >= af.allPostPositions.Count)
@@ -763,7 +763,7 @@ public class SceneViewDebugDisplay
                 midpoint.y += 20;
             }
         }
-        else if (layer == LayerSet.markerLayerSet)
+        else if (layer == LayerSet.markerLayer)
         {
             List<Transform> markers = af.GetNodeMarkers();
             midpoint = markers[sectionNum].localPosition;

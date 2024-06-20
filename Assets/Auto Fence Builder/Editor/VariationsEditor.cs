@@ -13,11 +13,11 @@ public class VariationsEditor
     private AutoFenceEditor ed;
 
     private bool showSourcePrefabs = true;
-    private LayerSet kRailALayer = LayerSet.railALayerSet; // to save a lot of typing
-    private LayerSet kRailBLayer = LayerSet.railBLayerSet;
-    private LayerSet kPostLayer = LayerSet.postLayerSet;
-    private LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
-    private LayerSet kExtraLayer = LayerSet.postLayerSet;
+    private LayerSet kRailALayer = LayerSet.railALayer; // to save a lot of typing
+    private LayerSet kRailBLayer = LayerSet.railBLayer;
+    private LayerSet kPostLayer = LayerSet.postLayer;
+    private LayerSet kSubpostLayer = LayerSet.subpostLayer;
+    private LayerSet kExtraLayer = LayerSet.postLayer;
 
     private LayerSet layer;
     private string layerNameString = "";
@@ -60,7 +60,7 @@ public class VariationsEditor
         sourceVariantPrefabIndices = af.GetSourceVariantMenuIndicesListForLayer(layer);
         //List<int> indices = af.railASourceVariant_MenuIndices;
 
-        //-- These are the menu indices for the sourceVariants of this layer
+        //-- These are the menu indices for the sourceVariants of this sourceLayerList
         /*SerializedProperty currSourceVariant_PrefabMenuIndex_ForRowProp0 = sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(0);
         SerializedProperty currSourceVariant_PrefabMenuIndex_ForRowProp1 = sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(1);
         SerializedProperty currSourceVariant_PrefabMenuIndex_ForRowProp2 = sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(2);
@@ -69,7 +69,7 @@ public class VariationsEditor
         int b = currSourceVariant_PrefabMenuIndex_ForRowProp1.intValue;
         int c = currSourceVariant_PrefabMenuIndex_ForRowProp2.intValue;*/
 
-        //int prefabIndex = af.GetCurrentPrefabIndexForLayer(layer);
+        //int prefabIndex = af.GetCurrentPrefabIndexForLayer(sourceLayerList);
 
         layerPrefabMenuNames = af.GetPrefabMenuNamesForLayer(layer);
 
@@ -110,8 +110,8 @@ public class VariationsEditor
             numSourceVariantsInUse = numSourceVariantsInUseProp.intValue;
         }
 
-        //seqListProperty = ed.GetSequencerListForLayerProp(layer);
-        //seqNumStepsProp = ed.serializedObject.FindProperty("seqNumSteps").GetArrayElementAtIndex((int)layer);
+        //seqListProperty = ed.GetSequencerListForLayerProp(sourceLayerList);
+        //seqNumStepsProp = ed.serializedObject.FindProperty("seqNumSteps").GetArrayElementAtIndex((int)sourceLayerList);
 
         layerNameString = af.GetLayerNameAsString(layer);
 
@@ -263,7 +263,7 @@ public class VariationsEditor
             }
             //if (updateSequenceAlso)
             //{
-            //    SeqItem.AssignAllDifferentObjectIndicesInSequence(seqList, af.GetSequencerForLayer(layer).Length(), sourceVariants);
+            //    SeqItem.AssignAllDifferentObjectIndicesInSequence(seqList, af.GetSequencerForLayer(sourceLayerList).Length(), sourceVariants);
             //}
             changedVariantChoices = true;
         }
@@ -326,7 +326,7 @@ public class VariationsEditor
         EditorGUILayout.Space(1);
         //-- make a copy of the layerPrefabMenuNames list using short names
         List<string> shortPrefabMenuNames = af.GetShortPrefabMenuNamesForLayer(layer);
-        /*layerPrefabMenuNames = af.GetPrefabMenuNamesForLayer(layer);
+        /*layerPrefabMenuNames = af.GetPrefabMenuNamesForLayer(sourceLayerList);
         List<string> shortPrefabMenuNames = new List<string>();
         for (int i = 0; i < layerPrefabMenuNames.Count; i++)
         {
@@ -425,7 +425,7 @@ public class VariationsEditor
                 /*for (int j = 0; j < numSourceVariantsInUse; j++)
                 {
                     int index = sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(j).intValue;
-                    debugString += $"{j}:{index},  {af.GetPrefabAtIndexForLayer(index, layer).name}     ";
+                    debugString += $"{j}:{index},  {af.GetPrefabAtIndexForLayer(index, sourceLayerList).name}     ";
                 }
                 Debug.Log($"{debugString} \n");*/
 
@@ -435,7 +435,7 @@ public class VariationsEditor
                 af.UpdateSourceVariantMenuIndexForLayerFromPrefabIndex(newGo, i, layer);
 
                 //-- Update Sequencer step menus to show the new SourceVariant GOs
-                //ed.seqEd.UpdateSequenceAfterSourceVariantsChanged(layer);
+                //ed.seqEd.UpdateSequenceAfterSourceVariantsChanged(sourceLayerList);
 
                 List<SourceVariant> sourceVariants = af.GetSourceVariantsForLayer(layer);
                 //Debug.Log($"EndChangeCheck SourceVariant {i}: {sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(i).intValue}  {sourceVariants[i].Go.name} \n");
@@ -450,23 +450,23 @@ public class VariationsEditor
         //=================================
         if (changedVariantChoices)
         {
-            //List<SourceVariant> sourceVariants = af.GetSourceVariantsForLayer(layer);
+            //List<SourceVariant> sourceVariants = af.GetSourceVariantsForLayer(sourceLayerList);
             //Debug.Log($"Commit SourceVariant {1}: {sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(1).intValue}  {sourceVariants[1].Go.name} \n");
             //Debug.Log($"Commit SourceVariant {2}: {sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(2).intValue}  {sourceVariants[2].Go.name} \n");
 
             //ed.serializedObject.ApplyModifiedProperties();
 
             //-- Update SourceVariant GOs from the new menu choices
-            //af.UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(layer);
-            //sourceVariants = af.GetSourceVariantsForLayer(layer);
+            //af.UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(sourceLayerList);
+            //sourceVariants = af.GetSourceVariantsForLayer(sourceLayerList);
 
             //-- Update Sequencer step menus to show the new SourceVariant GOs
-            //ed.seqEd.UpdateSequenceAfterSourceVariantsChanged(layer);
+            //ed.seqEd.UpdateSequenceAfterSourceVariantsChanged(sourceLayerList);
 
             af.ResetPoolForLayer(layer);
             af.ForceRebuildFromClickPoints();
 
-            //af.PrintSourceVariantGOsForLayer(layer, activeOnly:true);
+            //af.PrintSourceVariantGOsForLayer(sourceLayerList, activeOnly:true);
         }
         GUILayout.Space(2);
     }
@@ -474,11 +474,11 @@ public class VariationsEditor
     //===================================================================================
     //-- In the loop above, we have chosen the menu indices, so now we need to update the
     //-- sourceVariant List with the prefabs that correspond to those menu choices
-    /*private void SyncSourceVariantsFromMenuIndices(LayerSet layer)
+    /*private void SyncSourceVariantsFromMenuIndices(LayerSet sourceLayerList)
     {
-        List<int> sourceVariant_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(layer);
-        List<SourceVariant> sourceVariants = af.GetSourceVariantsForLayer(layer);
-        SerializedProperty svMenuListProp = ed.edUtils.GetSourceVariantMenuListForLayer(layer);
+        List<int> sourceVariant_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(sourceLayerList);
+        List<SourceVariant> sourceVariants = af.GetSourceVariantsForLayer(sourceLayerList);
+        SerializedProperty svMenuListProp = ed.edUtils.GetSourceVariantMenuListForLayer(sourceLayerList);
 
         for (int i = 1; i < numSourceVariantsInUse + 1; i++)
         {
@@ -492,7 +492,7 @@ public class VariationsEditor
 
             //Update the sourceVariants list with the new prefabs
             SourceVariant sourceVariant = sourceVariants[i];
-            sourceVariant.Go = af.GetPrefabAtIndexForLayer(prefabIndex, layer);
+            sourceVariant.Go = af.GetPrefabAtIndexForLayer(prefabIndex, sourceLayerList);
         }
     }*/
 
@@ -512,21 +512,21 @@ public class VariationsEditor
     //------------------
     /*void ReApplyModifiedEditorParameters()
     {
-        if (layer == kPostLayer)
+        if (sourceLayerList == kPostLayer)
         {
             //currSelectedStepIndex = currSeqStepIndex;
         }
-        else if (layer == kRailALayer)
+        else if (sourceLayerList == kRailALayer)
         {
             //ed.currSeqAStepIndex = currSeqStepIndex;
         }
-        else if (layer == kRailBLayer)
+        else if (sourceLayerList == kRailBLayer)
         {
             //ed.currSeqAStepIndex = currSeqStepIndex;
         }
     }*/
     //-------------------------
-    /*public void SyncControlsDisplayFromVariant(SourceVariant sourceVariant, int variantIndex, LayerSet layer, bool fillNullsWithMain = true)
+    /*public void SyncControlsDisplayFromVariant(SourceVariant sourceVariant, int variantIndex, LayerSet sourceLayerList, bool fillNullsWithMain = true)
     {
         int i = variantIndex;
 
@@ -534,8 +534,8 @@ public class VariationsEditor
         {
             af.currentRail_PrefabMenuIndex[0] = af.ConvertRailPrefabIndexToMenuIndex(af.currentRail_PrefabIndex[0]);
         }
-        List<int> sourceVariant_PrefabIndices_ForLayer = af.CreateSourceVariantPrefabIndicesListForLayer(layer);
-        if (layer == kRailALayer)
+        List<int> sourceVariant_PrefabIndices_ForLayer = af.CreateSourceVariantPrefabIndicesListForLayer(sourceLayerList);
+        if (sourceLayerList == kRailALayer)
         {
             if (i == 0)
             {
@@ -559,7 +559,7 @@ public class VariationsEditor
             af.varRailAInvertBools[i] = System.Convert.ToBoolean(sourceVariant.svInvert);
             af.varRailAProbs[i] = sourceVariant.probability;
         }
-        else if (layer == kRailBLayer)
+        else if (sourceLayerList == kRailBLayer)
         {
             if (i == 0)
             {
@@ -583,7 +583,7 @@ public class VariationsEditor
             af.varRailBInvertBools[i] = System.Convert.ToBoolean(sourceVariant.svInvert);
             af.varRailBProbs[i] = sourceVariant.probability;
         }
-        else if (layer == kPostLayer)
+        else if (sourceLayerList == kPostLayer)
         {
             if (i == 0)
             {
@@ -614,7 +614,7 @@ public class VariationsEditor
     //------------------
     /*public void FillEmptyVariantsWithMain()
     {
-        string goName = af.GetSourceVariantGONameAtIndexForLayer(0, layer);
+        string goName = af.GetSourceVariantGONameAtIndexForLayer(0, sourceLayerList);
 
         int prefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, goName);
         int mainMenuIndexA = af.ConvertRailPrefabIndexToMenuIndex(prefabIndex);

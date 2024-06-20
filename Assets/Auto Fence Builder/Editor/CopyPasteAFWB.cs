@@ -15,13 +15,13 @@ public class CopyPasteAFWB
     public static void CopyComponentParametersFromScriptablePreset(ScriptablePresetAFWB sourcePreset, AFWB.LayerSet layer)
     {
         string componentCopyName = "presetCopy_RailA";
-        if (layer == AFWB.LayerSet.railBLayerSet)
+        if (layer == AFWB.LayerSet.railBLayer)
             componentCopyName = "presetCopy_RailB";
-        if (layer == AFWB.LayerSet.postLayerSet)
+        if (layer == AFWB.LayerSet.postLayer)
             componentCopyName = "presetCopy_Post";
-        if (layer == AFWB.LayerSet.subpostLayerSet)
+        if (layer == AFWB.LayerSet.subpostLayer)
             componentCopyName = "presetCopy_Subpost";
-        if (layer == AFWB.LayerSet.extraLayerSet)
+        if (layer == AFWB.LayerSet.extraLayer)
             componentCopyName = "presetCopy_Extra";
 
         string pathBase = "Assets/Auto Fence Builder/UserAssets_AFWB/PresetCopies/";

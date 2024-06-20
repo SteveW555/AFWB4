@@ -77,7 +77,7 @@ public class AFWBCustomDemo : MonoBehaviour
         //Example 1:
         autoFence.globalHeight = 3.0f;
         autoFence.SetPostPrefab(5, false);
-        autoFence.SetRailPrefab(43, LayerSet.railALayerSet, false);
+        autoFence.SetRailPrefab(43, LayerSet.railALayer, false);
         autoFence.railAPositionOffset = new Vector3(0, 0.5f, 0);
         autoFence.interpolate = true;
         autoFence.interPostDist = 4.0f;

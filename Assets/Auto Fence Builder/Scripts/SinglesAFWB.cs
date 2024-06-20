@@ -209,22 +209,22 @@ public class SinglesContainer
     //-------------------------------------
     public void ResetAllSinglesForLayer(LayerSet layerSet, AutoFenceCreator af)
     {
-        if (layerSet == LayerSet.railALayerSet)
+        if (layerSet == LayerSet.railALayer)
             ResetAllRailSinglesA(af);
-        else if (layerSet == LayerSet.railBLayerSet)
+        else if (layerSet == LayerSet.railBLayer)
             ResetAllRailSinglesB(af);
-        else if (layerSet == LayerSet.postLayerSet)
+        else if (layerSet == LayerSet.postLayer)
             ResetAllPostSingles(af);
     }
 
     //-------------------------------------
     public void ClearAllSinglesForLayer(LayerSet layerSet, AutoFenceCreator af)
     {
-        if (layerSet == LayerSet.railALayerSet)
+        if (layerSet == LayerSet.railALayer)
             ClearAllRailSinglesA(af);
-        else if (layerSet == LayerSet.railBLayerSet)
+        else if (layerSet == LayerSet.railBLayer)
             ClearAllRailSinglesB(af);
-        else if (layerSet == LayerSet.postLayerSet)
+        else if (layerSet == LayerSet.postLayer)
             ClearAllPostSingles(af);
     }
 
@@ -279,11 +279,11 @@ public class SinglesContainer
         if (af.useRailSingles == null)
             Debug.Log("af.useRailSingles is null");
 
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             return af.useRailSingles[0];
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
             return af.useRailSingles[1];
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             return af.usePostSingles;
 
         return false;
@@ -297,15 +297,15 @@ public class SinglesContainer
             return null;
         }
 
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
         {
             if (af.railSinglesContainer == null)
                 Debug.Log("railSinglesContainer is null");
             return af.railSinglesContainer[0];
         }
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
             return af.railSinglesContainer[1];
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
         {
             if (af.postSinglesContainer == null)
                 Debug.Log("postSinglesContainer is null");
@@ -320,11 +320,11 @@ public class SinglesContainer
         //This List should be kNumSourceVariants long (usually 8+1)
         List<SinglesItem> SinglesItems = null;
 
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             SinglesItems = af.railSinglesContainer[0].singleVariants;
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
             SinglesItems = af.railSinglesContainer[1].singleVariants;
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             SinglesItems = af.postSinglesContainer.singleVariants;
 
         if (warning)

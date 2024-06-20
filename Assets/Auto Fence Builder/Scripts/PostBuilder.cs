@@ -40,7 +40,7 @@ namespace AFWB
             PostVector postVector = PostVector.GetPostVectorAtIndex(n);
             PostBuildInfo postBuildInfo = postVector.postBuildInfo;
             //List<SeqItem> postSeqList = postSequencer.SeqList;
-            LayerSet layer = LayerSet.postLayerSet;
+            LayerSet layer = LayerSet.postLayer;
 
             int clickpointIndex = -1;
             bool isClickPoint = false;
@@ -219,7 +219,7 @@ namespace AFWB
                 //             Colliders  
                 //====================================
                 Vector3 centreColliderPos = thisPost.transform.localPosition;
-                Collider collider = CreateColliderForLayer(thisPost, centreColliderPos, LayerSet.postLayerSet);
+                Collider collider = CreateColliderForLayer(thisPost, centreColliderPos, LayerSet.postLayer);
 
 
             }

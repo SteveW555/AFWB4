@@ -39,26 +39,26 @@ public class LoadUtilitiesAFWB
         }
         Mesh origMesh = MeshUtilitiesAFWB.DuplicateMesh(origGo);
 
-        if (layer == LayerSet.postLayerSet)
+        if (layer == LayerSet.postLayer)
         {
             //-- replace the mesh on the current prefab
             GameObject currPrefab = af.postPrefabs[af.currentPost_PrefabIndex];
             currPrefab.GetComponent<MeshFilter>().sharedMesh = origMesh;
             af.postPrefabs[af.currentPost_PrefabIndex] = currPrefab;
         }
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
         {
             GameObject currPrefab = af.railPrefabs[af.currentRail_PrefabIndex[0]];
             currPrefab.GetComponent<MeshFilter>().sharedMesh = origMesh;
             af.railPrefabs[af.currentRail_PrefabIndex[0]] = currPrefab;
         }
-        if (layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railBLayer)
         {
             GameObject currPrefab = af.railPrefabs[af.currentRail_PrefabIndex[1]];
             currPrefab.GetComponent<MeshFilter>().sharedMesh = origMesh;
             af.railPrefabs[af.currentRail_PrefabIndex[1]] = currPrefab;
         }
-        if (layer == LayerSet.extraLayerSet)
+        if (layer == LayerSet.extraLayer)
         {
             GameObject currPrefab = af.extraPrefabs[af.currentExtra_PrefabIndex];
             currPrefab.GetComponent<MeshFilter>().sharedMesh = origMesh;

@@ -86,8 +86,8 @@ public partial class PrefabAssignEditor
             if (savedUserPrefab != null)
             {
                 //-- remove any transform scaling and set it to the Layer controls transdfor box instead
-                //af.SetPositionTransformForLayer(savedUserPrefab.transform.localPosition, layer);
-                //af.SetRotationTransformForLayer(savedUserPrefab.transform.rotation.eulerAngles, layer);
+                //af.SetPositionTransformForLayer(savedUserPrefab.transform.localPosition, sourceLayerList);
+                //af.SetRotationTransformForLayer(savedUserPrefab.transform.rotation.eulerAngles, sourceLayerList);
                 af.SetScaleTransformForLayer(savedUserPrefab.transform.localScale, layer);
                 savedUserPrefab.transform.localScale = Vector3.one;
                 //savedUserPrefab.transform.localPosition = Vector3.zero;
@@ -175,7 +175,7 @@ public partial class PrefabAssignEditor
     /// Automatically rotates an imported mesh based on its prefab type, bakes the transform scale, adjusts the pivot for posts and rails, and returns its effective size.
     /// </summary>
     /// <param name="go">The GameObject containing the mesh.</param>
-    /// <param name="layer">The layer set to determine the prefab type.</param>
+    /// <param name="layer">The sourceLayerList set to determine the prefab type.</param>
     /// <param name="af">The AutoFenceCreator instance.</param>
     /// <param name="incChildren">Whether to include children in the size calculation.</param>
     /// <returns>The effective size of the GameObject after rotation.</returns>
@@ -355,27 +355,27 @@ public partial class PrefabAssignEditor
         // Also save a copy of the pure userOrigRail with unique duplicated mesh in case it's needed at any point after rotating the mesh
         (GameObject pureClone, string pureClonePath) = SaveGameObjectDuplicate(userOrigPrefab, prefabType, af, "[Pure]");
 
-        if (layer == LayerSet.postLayerSet)
+        if (layer == LayerSet.postLayer)
         {
             af.userPrefabPost = savedCleanedUserCopy;
             af.userBackupPathPost = pureClonePath;
         }
-        if (layer == LayerSet.railALayerSet || layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer || layer == LayerSet.railALayer)
         {
             af.userPrefabRail[layerIndex] = savedCleanedUserCopy;
             af.userBackupPathRail[layerIndex] = pureClonePath;
         }
-        /*if (layer == LayerSet.railALayerSet)
+        /*if (sourceLayerList == LayerSet.railALayer)
         {
             af.userPrefabRail[kRailALayerInt] = savedCleanedUserCopy;
             af.userBackupPathRailA = pureClonePath;
         }
-        if (layer == LayerSet.railBLayerSet)
+        if (sourceLayerList == LayerSet.railBLayer)
         {
             af.userPrefabRail[kRailBLayerInt] = savedCleanedUserCopy;
             af.userBackupPathRailB = pureClonePath;
         }*/
-        if (layer == LayerSet.extraLayerSet)
+        if (layer == LayerSet.extraLayer)
         {
             af.userPrefabExtra = savedCleanedUserCopy;
             af.userBackupPathExtra = pureClonePath;
@@ -413,19 +413,19 @@ public partial class PrefabAssignEditor
     {
         int layerIndex = (int)layerSet;
 
-        if (layerSet == LayerSet.postLayerSet)
+        if (layerSet == LayerSet.postLayer)
         {
             if (willUse)
                 af.useCustomPost = true;
             af.userPrefabPost = savedAndPreparedPrefab;
         }
-        else if (layerSet == LayerSet.railALayerSet || layerSet == LayerSet.railBLayerSet)
+        else if (layerSet == LayerSet.railALayer || layerSet == LayerSet.railBLayer)
         {
             if (willUse)
                 af.useCustomRail[layerIndex] = true;
             af.userPrefabRail[layerIndex] = savedAndPreparedPrefab;
         }
-        else if (layerSet == LayerSet.extraLayerSet)
+        else if (layerSet == LayerSet.extraLayer)
         {
             if (willUse)
                 af.useCustomPost = true;

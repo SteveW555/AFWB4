@@ -35,7 +35,7 @@ public class EditorContextInfo
     {
         this.editor = editor;
         flag = 0;
-        layer = LayerSet.noneLayerSet;
+        layer = LayerSet.None;
         variantIndex = 0;
         resetSection = false;
     }
@@ -70,7 +70,7 @@ namespace AFWB
                 Debug.LogWarning($"Added Prefab as Post: {prefab.name}\n");
             LayerSet layer = info.layer;
 
-            ed.prefabAssignEd.HandleImportedCustomPrefab(prefab, LayerSet.postLayerSet);
+            ed.prefabAssignEd.HandleImportedCustomPrefab(prefab, LayerSet.postLayer);
             af.ForceRebuildFromClickPoints();
 
         }
@@ -79,7 +79,7 @@ namespace AFWB
         {
             EditorContextInfo info = (EditorContextInfo)obj;
             LayerSet layer = info.layer;
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 AutoFenceEditor.CreateClickPointAtPostPosition(info.transform.localPosition, af);
             }
@@ -88,7 +88,7 @@ namespace AFWB
         {
             EditorContextInfo info = (EditorContextInfo)obj;
             LayerSet layer = info.layer;
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 af.DeleteClickPoint(info.sectionIndex);
             }
@@ -131,11 +131,11 @@ namespace AFWB
             EditorContextInfo info = (EditorContextInfo)obj;
             LayerSet layer = info.layer;
             af.ToggleUseSequencerForLayer(layer);
-            /*if(af.GetUseSequencerForLayer(layer) == true)
+            /*if(af.GetUseSequencerForLayer(sourceLayerList) == true)
             {
-                if(af.GetUseSinglesForLayer(layer) == false)
+                if(af.GetUseSinglesForLayer(sourceLayerList) == false)
                 {
-                    af.ToggleUseSinglesForLayer(layer);
+                    af.ToggleUseSinglesForLayer(sourceLayerList);
                 }
             }*/
 
@@ -173,14 +173,14 @@ namespace AFWB
             if (menuIndex == -1)
                 return;
 
-            //LayerSet layerA = LayerSet.railALayerSet;
-            LayerSet layerB = LayerSet.railBLayerSet;
-            LayerSet layerPost = LayerSet.postLayerSet;
+            //LayerSet layerA = LayerSet.railALayer;
+            LayerSet layerB = LayerSet.railBLayer;
+            LayerSet layerPost = LayerSet.postLayer;
 
             //===========================================
             //       Convert Post to ClickPoint
             //===========================================
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 if (menuIndex == 200)
                 {
@@ -193,7 +193,7 @@ namespace AFWB
                     {
                         ed.af.DeleteClickPoint(index);
                     }
-                    //ed.af.ResetPoolForLayer(LayerSet.postLayerSet)();
+                    //ed.af.ResetPoolForLayer(LayerSet.postLayer)();
                     ed.af.ForceRebuildFromClickPoints();
                 }
 
@@ -204,7 +204,7 @@ namespace AFWB
             //===========================================
             if (menuIndex == 100 && info.resetSection == true)
             {
-                if (layer == LayerSet.railALayerSet) // Rail A
+                if (layer == LayerSet.railALayer) // Rail A
                 {
                     if (info.sectionIndex != -1)
                     {
@@ -227,7 +227,7 @@ namespace AFWB
                     }
                     ed.af.ResetPoolForLayer(layer);
                 }
-                if (layer == LayerSet.railBLayerSet)//Rail B
+                if (layer == LayerSet.railBLayer)//Rail B
                 {
                     if (info.sectionIndex != -1)
                     {
@@ -250,7 +250,7 @@ namespace AFWB
                     }
                     ed.af.ResetPoolForLayer(layer);
                 }
-                if (layer == LayerSet.postLayerSet) // Post
+                if (layer == LayerSet.postLayer) // Post
                 {
                     if (info.sectionIndex != -1)
                     {
@@ -272,7 +272,7 @@ namespace AFWB
                         //ed.varEd.SetSequenceVariantFromDisplaySettings(layerPost, ref ed.currSeqPostStepVariant, ed.currSeqPostStepIndex);
                         Debug.Log("Resetting Section");
                     }
-                    ed.af.ResetPoolForLayer(LayerSet.postLayerSet);
+                    ed.af.ResetPoolForLayer(LayerSet.postLayer);
                 }
                 ed.af.ForceRebuildFromClickPoints();
                 ed.Repaint();
@@ -280,7 +280,7 @@ namespace AFWB
             }
 
             // It's a RailA and we're using RailA Variations
-            if (layer == LayerSet.railALayerSet && ed.af.useRailVariations[kRailAIndex] == true && menuIndex < 100)
+            if (layer == LayerSet.railALayer && ed.af.useRailVariations[kRailAIndex] == true && menuIndex < 100)
             {
                 int variantIndex = menuIndex;
                 if (info.flag == 2) // Not in Sequencer Mode
@@ -309,7 +309,7 @@ namespace AFWB
                 ed.af.ResetPoolForLayer(layer);
                 ed.af.ForceRebuildFromClickPoints();
             }
-            if (layer == LayerSet.railBLayerSet && ed.af.useRailVariations[kRailBIndex] == true && menuIndex < 100)//Rail B
+            if (layer == LayerSet.railBLayer && ed.af.useRailVariations[kRailBIndex] == true && menuIndex < 100)//Rail B
             {
                 if (info.flag == 2) // Not in Sequencer Mode
                 {
@@ -345,7 +345,7 @@ namespace AFWB
                 ed.af.ForceRebuildFromClickPoints();
             }
             //-- Post
-            if (layer == LayerSet.postLayerSet && ed.af.usePostVariations == true && menuIndex < 100)
+            if (layer == LayerSet.postLayer && ed.af.usePostVariations == true && menuIndex < 100)
             {
                 if (info.flag == 2) // Not in Sequencer Mode
                 {
@@ -378,7 +378,7 @@ namespace AFWB
                         }
                     }
                 }
-                ed.af.ResetPoolForLayer(LayerSet.postLayerSet);
+                ed.af.ResetPoolForLayer(LayerSet.postLayer);
                 ed.af.ForceRebuildFromClickPoints();
             }
 

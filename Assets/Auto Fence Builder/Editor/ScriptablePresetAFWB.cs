@@ -17,7 +17,7 @@ public class ScriptablePresetAFWB : ScriptableObject
     public string categoryName = "";
 
     /// <summary>
-    /// There is a RandomSeededValuesAF for each layer
+    /// There is a RandomSeededValuesAF for each sourceLayerList
     /// </summary>
 
     public RandomSeededValuesAF railASeeds;
@@ -268,7 +268,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         int numFixes = PresetCheckFixEd.CheckAndRepairSourceVariantsList(sourceList, layer, preset, af, mainGoForPreset);
         if (numFixes > 0)
         {
-            Debug.Log($"Fixed {numFixes}  SourceVariants in preset:   {preset.categoryName}/ {preset.name}    for layer:   {layer.ToString()} \n");
+            Debug.Log($"Fixed {numFixes}  SourceVariants in preset:   {preset.categoryName}/ {preset.name}    for sourceLayerList:   {layer.ToString()} \n");
             preset.minPostHeightVar = 0.7777f;
             string filePath = ScriptablePresetAFWB.CreateSaveString(af, preset.name, preset.categoryName);
             //bool saved = ScriptablePresetAFWB.SaveScriptablePreset(af, preset, filePath, false, true);
@@ -504,12 +504,12 @@ public class ScriptablePresetAFWB : ScriptableObject
         preset.allowRailRandomization[kRailBLayerInt] = af.allowRailRandomization[kRailBLayerInt];
 
         //-- Rail A Sequencer
-        preset.useRailSequencer[kRailALayerInt] = af.GetUseSequencerForLayer(LayerSet.railALayerSet);
+        preset.useRailSequencer[kRailALayerInt] = af.GetUseSequencerForLayer(LayerSet.railALayer);
         preset.userSequenceRailA = CopySequenceList(af.railASequencer.seqList, false, AutoFenceCreator.kMaxNumSeqSteps);
         preset.numUserSeqStepsRailA = af.railASequencer.Length();
         preset.optimalSequenceRailA = CopySequenceList(af.optimalSequenceRailA, false, 1);
         //-- Rail B Sequencer
-        preset.useRailSequencer[kRailBLayerInt] = af.GetUseSequencerForLayer(LayerSet.railBLayerSet);
+        preset.useRailSequencer[kRailBLayerInt] = af.GetUseSequencerForLayer(LayerSet.railBLayer);
         preset.userSequenceRailB = CopySequenceList(af.railBSequencer.seqList, false, AutoFenceCreator.kMaxNumSeqSteps);
         preset.numUserSeqStepsRailB = af.railBSequencer.Length();
         preset.optimalSequenceRailB = CopySequenceList(af.optimalSequenceRailB, false, 1);
@@ -594,10 +594,10 @@ public class ScriptablePresetAFWB : ScriptableObject
 
         //===  Copy the SourceVariants List to the Preset  ===
         // Do this at end to make sure the rest of the preset is correctly configured
-        preset.postVariants = CopySourceVariantList(af.postSourceVariants, LayerSet.postLayerSet, af, preset);// false means don't copy go, copy searchName only
-        preset.railAVariants = CopySourceVariantList(af.railSourceVariants[kRailALayerInt], LayerSet.railALayerSet, af, preset);
-        preset.railBVariants = CopySourceVariantList(af.railSourceVariants[kRailBLayerInt], LayerSet.railBLayerSet, af, preset);
-        preset.subpostVariants = CopySourceVariantList(af.subpostSourceVariants, LayerSet.postLayerSet, af, preset);// false means don't copy go, copy searchName only
+        preset.postVariants = CopySourceVariantList(af.postSourceVariants, LayerSet.postLayer, af, preset);// false means don't copy go, copy searchName only
+        preset.railAVariants = CopySourceVariantList(af.railSourceVariants[kRailALayerInt], LayerSet.railALayer, af, preset);
+        preset.railBVariants = CopySourceVariantList(af.railSourceVariants[kRailBLayerInt], LayerSet.railBLayer, af, preset);
+        preset.subpostVariants = CopySourceVariantList(af.subpostSourceVariants, LayerSet.postLayer, af, preset);// false means don't copy go, copy searchName only
         preset.notes = af.presetNotes;
         return preset;
     }
@@ -663,7 +663,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.allowPostRandomization = allowPostRandomization;
         af.quantizeRotAxisPost = postQuantizeRotAxis;
         af.quantizeRotProbPost = postQuantizeRotProb;
-        af.SetSeededValuesForLayer(LayerSet.postLayerSet, postAndGlobalSeeds);
+        af.SetSeededValuesForLayer(LayerSet.postLayer, postAndGlobalSeeds);
         af.postRandomScope = RandomScope.all;
 
         //-- Posts Variation
@@ -680,7 +680,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         //==  Rails A  ==
         af.currentRail_PrefabIndex[0] = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, railAName, $"ScriptablePreset.BuildFromPreset({categoryName}//{name})  railA Name ");
         af.useRailLayer[0] = useRailsA;
-        af.SetRailPrefab(af.currentRail_PrefabIndex[0], LayerSet.railALayerSet, false, false);
+        af.SetRailPrefab(af.currentRail_PrefabIndex[0], LayerSet.railALayer, false, false);
         af.numStackedRails[kRailALayerInt] = numStackedRailsA;
         af.railSpread[kRailALayerInt] = railASpread;
         af.railSpreadMode[kRailALayerInt] = (RailSpreadMode)spreadModeRailA;
@@ -711,7 +711,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.allowMirroring_X_Rail[kRailALayerInt] = allowMirroring_X_Rail[kRailALayerInt];
         af.allowMirroring_X_Rail[kRailBLayerInt] = allowMirroring_X_Rail[kRailBLayerInt];
 
-        af.SetSeededValuesForLayer(LayerSet.railALayerSet, railASeeds);
+        af.SetSeededValuesForLayer(LayerSet.railALayer, railASeeds);
 
         //-- Rail A Variation
         af.useRailVariations[kRailALayerInt] = useRailAVariations;
@@ -719,7 +719,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.allowIndependentSubmeshVariationA = allowIndependentSubmeshVariationA;
         af.variationModeRailA = variationModeRailA;
         //-- Rail A Sequencer
-        af.SetUseSequencerForLayer(LayerSet.railALayerSet, useRailSequencer[kRailALayerInt]);
+        af.SetUseSequencerForLayer(LayerSet.railALayer, useRailSequencer[kRailALayerInt]);
         af.railASequencer.seqList = CopySequenceList(userSequenceRailA, false, AutoFenceCreator.kMaxNumSeqSteps);
         //af.seqNumSteps[kRailALayerInt] = numUserSeqStepsRailA;
         af.optimalSequenceRailA = CopySequenceList(optimalSequenceRailA, false, 1);
@@ -728,7 +728,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         //==  Rails B  ==
         af.currentRail_PrefabIndex[1] = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, railBName, $"ScriptablePreset.BuildFromPreset({categoryName}/{name})  railB Name ");
         af.useRailLayer[1] = useRailsB;
-        af.SetRailPrefab(af.currentRail_PrefabIndex[1], LayerSet.railBLayerSet, false, false);
+        af.SetRailPrefab(af.currentRail_PrefabIndex[1], LayerSet.railBLayer, false, false);
         af.numStackedRails[kRailBLayerInt] = numStackedRailsB;
         af.railSpread[kRailBLayerInt] = railBSpread;
         af.railSpreadMode[kRailBLayerInt] = (RailSpreadMode)spreadModeRailB;
@@ -758,7 +758,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.quantizeRotProbRailB = quantizeRotProbRailB;
 
         af.allowRailRandomization[kRailBLayerInt] = allowRailRandomization[kRailBLayerInt];
-        af.SetSeededValuesForLayer(LayerSet.railBLayerSet, railBSeeds);
+        af.SetSeededValuesForLayer(LayerSet.railBLayer, railBSeeds);
 
         //-- Rail B Variation
         af.useRailVariations[kRailBLayerInt] = useRailBVariations;
@@ -766,7 +766,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.allowIndependentSubmeshVariationB = allowIndependentSubmeshVariationB;
         af.variationModeRailB = variationModeRailB;
         af.railBSequencer.seqList = CopySequenceList(userSequenceRailB, false, AutoFenceCreator.kMaxNumSeqSteps);
-        af.SetUseSequencerForLayer(LayerSet.railBLayerSet, useRailSequencer[kRailBLayerInt]);
+        af.SetUseSequencerForLayer(LayerSet.railBLayer, useRailSequencer[kRailBLayerInt]);
         //af.seqNumSteps[kRailBLayerInt] = numUserSeqStepsRailB;
         af.optimalSequenceRailB = CopySequenceList(optimalSequenceRailB, false, 1);
         //af.railBRandRec = railBRandRec;
@@ -810,7 +810,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.ex.enablePrefabVars = enableChoosePrefabs;
         af.ex.finalPostMode = finalPostMode;
         af.ex.pivotPosition = pivotPosition;
-        af.SetSeededValuesForLayer(LayerSet.extraLayerSet, extraSeeds);
+        af.SetSeededValuesForLayer(LayerSet.extraLayer, extraSeeds);
 
         //==  SubPosts  ==
         af.currentSubpost_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, subpostName, $"ScriptablePreset.BuildFromPreset({categoryName}/{name})  subpostName ");
@@ -842,14 +842,14 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.allowQuantizedRandomSubpostRotation = allowQuantizedRandomSubPostRotation;
         af.chanceOfMissingSubpost = chanceOfMissingSubPost;
         af.allowSubpostRandomization = allowSubpostRandomization;
-        af.SetSeededValuesForLayer(LayerSet.subpostLayerSet, subpostSeeds);
+        af.SetSeededValuesForLayer(LayerSet.subpostLayer, subpostSeeds);
 
         //===  Copy the SourceVariants List to the Preset  ===
         // Do this at end to make sure the rest of the preset is correctly configured
-        af.postSourceVariants = UpdateSourceVariantList(postVariants, LayerSet.postLayerSet, af, this);// true means copy go, or reinstate from presetName
-        af.railSourceVariants[kRailALayerInt] = UpdateSourceVariantList(railAVariants, LayerSet.railALayerSet, af, this);// true means copy go, or reinstate from presetName
-        af.railSourceVariants[kRailBLayerInt] = UpdateSourceVariantList(railBVariants, LayerSet.railBLayerSet, af, this);
-        af.subpostSourceVariants = UpdateSourceVariantList(subpostVariants, LayerSet.subpostLayerSet, af, this);// true means copy go, or reinstate from presetName
+        af.postSourceVariants = UpdateSourceVariantList(postVariants, LayerSet.postLayer, af, this);// true means copy go, or reinstate from presetName
+        af.railSourceVariants[kRailALayerInt] = UpdateSourceVariantList(railAVariants, LayerSet.railALayer, af, this);// true means copy go, or reinstate from presetName
+        af.railSourceVariants[kRailBLayerInt] = UpdateSourceVariantList(railBVariants, LayerSet.railBLayer, af, this);
+        af.subpostSourceVariants = UpdateSourceVariantList(subpostVariants, LayerSet.subpostLayer, af, this);// true means copy go, or reinstate from presetName
 
         af.presetNotes = notes;
 
@@ -1022,14 +1022,14 @@ public class ScriptablePresetAFWB : ScriptableObject
         return savePath;
     }
     //----------------------------------------
-    /// <summary>Update the presetName of the main prefab for this layer</summary>
+    /// <summary>Update the presetName of the main prefab for this sourceLayerList</summary>
     /// <returns>true if updated, false if wasn't necessary</returns>
     //-- It's a bit of a mess because there could be unknown edge-case naming errors in presets
     public bool ReplaceMainGoNameForLayer(string searchName, string newName, LayerSet layer, AutoFenceCreator af)
     {
         string mainPresetPrefabName = GetMainPresetGoNameForLayer(layer);
 
-        if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
         {
 
             //-- All this is because we don't know the rail suffixes, so we have to check for them
@@ -1073,22 +1073,22 @@ public class ScriptablePresetAFWB : ScriptableObject
                 {
                     string newNameStripped = AutoFenceCreator.StripLayerTypeFromNameStatic(newName);
                     string newNameFixed = newNameStripped + "_Panel";
-                    SetMainPresetGoNameForLayer(newNameFixed, layer);
+                    SetMainPresetGoNameForLayer(newNameFixed, sourceLayerList);
                     return true;
                 }
 
             }*/
         }
 
-        else if (layer == LayerSet.postLayerSet && mainPresetPrefabName == searchName)
+        else if (layer == LayerSet.postLayer && mainPresetPrefabName == searchName)
         {
             if (searchName.EndsWith("_Post") && mainPresetPrefabName.EndsWith("_Post"))
-                SetMainPresetGoNameForLayer(newName, LayerSet.postLayerSet);
+                SetMainPresetGoNameForLayer(newName, LayerSet.postLayer);
             return true;
         }
-        else if (layer == LayerSet.extraLayerSet && mainPresetPrefabName == searchName)
+        else if (layer == LayerSet.extraLayer && mainPresetPrefabName == searchName)
         {
-            SetMainPresetGoNameForLayer(newName, LayerSet.extraLayerSet);
+            SetMainPresetGoNameForLayer(newName, LayerSet.extraLayer);
             return true;
         }
         return false;
@@ -1096,35 +1096,35 @@ public class ScriptablePresetAFWB : ScriptableObject
     //----------------------------------------
     public string GetMainPresetGoNameForLayer(LayerSet layer)
     {
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             return railAName;
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
             return railBName;
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             return postName;
-        else if (layer == LayerSet.subpostLayerSet)
+        else if (layer == LayerSet.subpostLayer)
             return subpostName;
-        else if (layer == LayerSet.extraLayerSet)
+        else if (layer == LayerSet.extraLayer)
             return extraName;
         return "";
     }
     //----------------------------------------
     public void SetMainPresetGoNameForLayer(string name, LayerSet layer)
     {
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             railAName = name;
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
             railBName = name;
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             postName = name;
-        else if (layer == LayerSet.subpostLayerSet)
+        else if (layer == LayerSet.subpostLayer)
             subpostName = name;
-        else if (layer == LayerSet.extraLayerSet)
+        else if (layer == LayerSet.extraLayer)
             extraName = name;
 
     }
     /// <summary>
-    /// Replaces GameObjects that match 'searchName' in the source variants for this layer.
+    /// Replaces GameObjects that match 'searchName' in the source variants for this sourceLayerList.
     /// </summary>
     /// <param presetName="oldName">The presetName of the GameObject to be replaced.</param>
     /// <param presetName="newGo">The new GameObject to replace with.</param>
@@ -1143,7 +1143,7 @@ public class ScriptablePresetAFWB : ScriptableObject
 
             if (sv.Go.name == oldName)
             {
-                Debug.Log($"Found {oldName} in SourceVariants for layer {layer} at index {i}");
+                Debug.Log($"Found {oldName} in SourceVariants for sourceLayerList {layer} at index {i}");
                 sv.Go = newGo;
                 replaced.Add(true);
                 isDirty = true;
@@ -1156,7 +1156,7 @@ public class ScriptablePresetAFWB : ScriptableObject
 
         // ABasicConcrete_Post
         //-- Extras use a different system, so update here also
-        if (layer == LayerSet.extraLayerSet)
+        if (layer == LayerSet.extraLayer)
         {
             if (newGo != null)
             {
@@ -1192,13 +1192,13 @@ public class ScriptablePresetAFWB : ScriptableObject
         List<SourceVariant> sourceVariants = new List<SourceVariant>();
 
 
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             sourceVariants = railAVariants;
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
             sourceVariants = railBVariants;
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             sourceVariants = postVariants;
-        else if (layer == LayerSet.subpostLayerSet)
+        else if (layer == LayerSet.subpostLayer)
             sourceVariants = subpostVariants;
 
         return sourceVariants;

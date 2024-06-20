@@ -19,12 +19,12 @@ using UnityEngine;
 [CustomEditor(typeof(AutoFenceCreator))]
 public partial class AutoFenceEditor : Editor
 {
-    LayerSet kRailALayer = LayerSet.railALayerSet; // to save a lot of typing
-    LayerSet kRailBLayer = LayerSet.railBLayerSet;
-    LayerSet kPostLayer = LayerSet.postLayerSet;
-    LayerSet kExtraLayer = LayerSet.extraLayerSet;
-    LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
-    LayerSet kAllLayer = LayerSet.allLayerSet;
+    LayerSet kRailALayer = LayerSet.railALayer; // to save a lot of typing
+    LayerSet kRailBLayer = LayerSet.railBLayer;
+    LayerSet kPostLayer = LayerSet.postLayer;
+    LayerSet kExtraLayer = LayerSet.extraLayer;
+    LayerSet kSubpostLayer = LayerSet.subpostLayer;
+    LayerSet kAllLayer = LayerSet.allLayer;
     public AutoFenceCreator af; // the main AutoFence script
     public SerializedProperty[] userPrefabRailProp = { null, null };
     public SerializedProperty userPrefabPostProp, userPrefabExtraProp, usePrefabProp;
@@ -102,7 +102,7 @@ public partial class AutoFenceEditor : Editor
     int selGridInt = 0;
     string[] variationModeToolbarStrings = { "Quick Optimal Variation", "Random Variation", "Sequenced" };
     string[] railSetToolbarStrings = { "Rails Main Layer A", "Rails Secondary Layer B" };
-    static string railATooltipString = "Show settings for main Rails layer. \n" +
+    static string railATooltipString = "Show settings for main Rails sourceLayerList. \n" +
         "Layer A can be toggled on/off while using Layer B, by Control-Clicking the Toolbar Button";
     static string railBTooltipString = "Use this when you want to add a secondary Rail design in conjunction with Rail Layer A. \n" +
         "Layer B can be toggled on/off while using Layer A, by Control-Clicking the Toolbar Button";
@@ -447,7 +447,7 @@ public partial class AutoFenceEditor : Editor
         af.CheckPostDirectionVectors(logMissing: true);
         af.ForceRebuildFromClickPoints();
 
-        //af.PrintSourceVariantGOsForLayer(LayerSet.railALayerSet);
+        //af.PrintSourceVariantGOsForLayer(LayerSet.railALayer);
         // This shouldn't be necessary if the List<SourceVariant> is serializable, but for some reason
         // after a re-compile, it can forget. It seems others who have used an array of a List of custom classes containing
         // GameObjects have seen this. Anyway for .001ms it takes, here we are
@@ -594,7 +594,7 @@ public partial class AutoFenceEditor : Editor
         assetFolderLinks = new LinksToAssetFolder(af, this);
         exProp = serializedObject.FindProperty("ex");
         randEd = new RandomizationEditor(af, this);
-        singlesEd = new SinglesEditor(af, this, LayerSet.railALayerSet);
+        singlesEd = new SinglesEditor(af, this, LayerSet.railALayer);
 
         presetsEd = new PresetFiles(af, this);
         sceneDebug = new SceneViewDebugDisplay(af, this);
@@ -897,8 +897,8 @@ public partial class AutoFenceEditor : Editor
         }
 
         // Check PostsPool Is Valid
-        //af.ValidatePoolForLayer(LayerSet.postLayerSet, rebuildBadPool: true);
-        //af.ValidatePoolForLayer(LayerSet.railALayerSet, rebuildBadPool: true);
+        //af.ValidatePoolForLayer(LayerSet.postLayer, rebuildBadPool: true);
+        //af.ValidatePoolForLayer(LayerSet.railALayer, rebuildBadPool: true);
 
 
         // Completely block use, if user has chosen to unload assets to optimize buildSize, or if FencePrefabs folder is missing
@@ -1522,7 +1522,7 @@ public partial class AutoFenceEditor : Editor
             //        Posts Randomization 
             //-------------------------------------
             GUILayout.Space(7);
-            bool randEnabled = randEd.SetupRandomization(LayerSet.postLayerSet);
+            bool randEnabled = randEd.SetupRandomization(LayerSet.postLayer);
 
 
             //         Posts Variation  
@@ -1539,7 +1539,7 @@ public partial class AutoFenceEditor : Editor
         //=================================================================
         if (af.componentToolbar == ComponentToolbar.railsA)
         {
-            railEd.ShowRailEditor(serializedObject, LayerSet.railALayerSet);
+            railEd.ShowRailEditor(serializedObject, LayerSet.railALayer);
 
             //        Rail A Randomization 
             //-------------------------------------   
@@ -1548,7 +1548,7 @@ public partial class AutoFenceEditor : Editor
 
             //         Rails A Variation  
             //-------------------------------------
-            railEd.ShowSetupVariationsSources(serializedObject, LayerSet.railALayerSet);
+            railEd.ShowSetupVariationsSources(serializedObject, LayerSet.railALayer);
         }
 
         //=================================================================
@@ -1558,7 +1558,7 @@ public partial class AutoFenceEditor : Editor
         //=================================================================
         if (af.componentToolbar == ComponentToolbar.railsB)
         {
-            railEd.ShowRailEditor(serializedObject, LayerSet.railBLayerSet);
+            railEd.ShowRailEditor(serializedObject, LayerSet.railBLayer);
 
             //        Rail B Randomization 
             //-------------------------------------   
@@ -1567,7 +1567,7 @@ public partial class AutoFenceEditor : Editor
 
             //         Rails B Variation  
             //-------------------------------------
-            railEd.ShowSetupVariationsSources(serializedObject, LayerSet.railBLayerSet);
+            railEd.ShowSetupVariationsSources(serializedObject, LayerSet.railBLayer);
         }
 
 
@@ -1891,10 +1891,10 @@ public partial class AutoFenceEditor : Editor
                 //Get List of all Unity layers
                 ArrayList layerNames = new ArrayList();
                 layerNames.Add("None");
-                for (int i = 0; i <= 31; i++) //user defined layers start with layer 8 and unity supports 31 layers
+                for (int i = 0; i <= 31; i++) //user defined layers start with sourceLayerList 8 and unity supports 31 layers
                 {
-                    string layerN = LayerMask.LayerToName(i); //get the name of the layer
-                    if (layerN.Length > 0) //only add the layer if it has been named (comment this line out if you want every layer)
+                    string layerN = LayerMask.LayerToName(i); //get the name of the sourceLayerList
+                    if (layerN.Length > 0) //only add the sourceLayerList if it has been named (comment this line out if you want every sourceLayerList)
                     {
                         layerNames.Add(layerN);
                         //Debug.Log(layerN);
@@ -1904,14 +1904,14 @@ public partial class AutoFenceEditor : Editor
                 // add checkbox for obeyUnityIgnoreRaycastLayer
                 /*GUILayout.Space(10);
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("obeyUnityIgnoreRaycastLayer"), new GUIContent("Obey Unity's 'Ignore Raycast' Layer", 
-                    "Posts or Click Points will not be laced on objects that have the 'Ignore Raycast' layer," +
+                    "Posts or Click Points will not be laced on objects that have the 'Ignore Raycast' sourceLayerList," +
                     "They will instead be placed on the first valid collider below that is not set to be ignored."));*/
 
                 // Create dropdown menu for layers
                 string[] layerNamesArray = (string[])layerNames.ToArray(typeof(string));
                 af.ignoreRaycastsLayerIndex = EditorGUILayout.Popup(new GUIContent("Ignore Colliders Layer",
-                "When placing Click Points (fence nodes), this layer will be ignored and AutoFence will look for the nextPos collider below for placement \n" +
-                "This is in addition to the standard Unity 'Ignore Raycast' layer. " +
+                "When placing Click Points (fence nodes), this sourceLayerList will be ignored and AutoFence will look for the nextPos collider below for placement \n" +
+                "This is in addition to the standard Unity 'Ignore Raycast' sourceLayerList. " +
                 "\nDefault = None"), af.ignoreRaycastsLayerIndex, layerNamesArray, GUILayout.Width(400));
                 //if (layerIndex != af.ignoreRaycastsLayerIndex)
                 {
@@ -1969,7 +1969,7 @@ public partial class AutoFenceEditor : Editor
                     int railClonePrefabIndex = -1;
                     for (int railLayerIndex = kRailALayerInt; railLayerIndex < kRailALayerInt; railLayerIndex++) //LayerSet rails A & B
                     {
-                        LayerSet layer = (LayerSet)railLayerIndex;
+                        LayerSet sourceLayerList = (LayerSet)railLayerIndex;
                         Transform firstRailsFolder = mainRailsFolder.transform.Find("RailsAGroupedFolder0");
                         if (railLayerIndex == kRailBLayerInt)
                             firstRailsFolder = mainRailsFolder.transform.Find("RailsBGroupedFolder0");
@@ -2000,11 +2000,11 @@ public partial class AutoFenceEditor : Editor
                             }
                             if (railClonePrefabIndex != -1)
                             {
-                                af.SetRailPrefab(af.currentRail_PrefabIndex[railLayerIndex], layer, false, false);
+                                af.SetRailPrefab(af.currentRail_PrefabIndex[railLayerIndex], sourceLayerList, false, false);
                                 int index = af.ConvertRailMenuIndexToPrefabIndex(railClonePrefabIndex);
                                 af.currentRail_PrefabIndex[railLayerIndex] = index;
-                                af.ResetPoolForLayer(layer);
-                                af.SetRailPrefab(index, layer, false, false);
+                                af.ResetPoolForLayer(sourceLayerList);
+                                af.SetRailPrefab(index, sourceLayerList, false, false);
                                 af.railSourceVariants[kRailALayerInt][0].go = af.railPrefabs[af.currentRail_PrefabIndex[0]];
                                 af.fenceToCopyFrom.SetActive(false);
                                 af.CopyLayoutFromOtherFence(false);
@@ -2638,11 +2638,11 @@ public partial class AutoFenceEditor : Editor
             //==================================================================================
             if (af.currGlobalsToolbarRow2 == 6)
             {
-                GameObject currPost = af.GetCurrentPrefabForLayer(LayerSet.postLayerSet);
-                GameObject currRailA = af.GetCurrentPrefabForLayer(LayerSet.railALayerSet);
-                GameObject currRailB = af.GetCurrentPrefabForLayer(LayerSet.railBLayerSet);
-                GameObject currExtra = af.GetCurrentPrefabForLayer(LayerSet.extraLayerSet);
-                GameObject currSubPost = af.GetCurrentPrefabForLayer(LayerSet.subpostLayerSet);
+                GameObject currPost = af.GetCurrentPrefabForLayer(LayerSet.postLayer);
+                GameObject currRailA = af.GetCurrentPrefabForLayer(LayerSet.railALayer);
+                GameObject currRailB = af.GetCurrentPrefabForLayer(LayerSet.railBLayer);
+                GameObject currExtra = af.GetCurrentPrefabForLayer(LayerSet.extraLayer);
+                GameObject currSubPost = af.GetCurrentPrefabForLayer(LayerSet.subpostLayer);
                 int rowGap = 7;
 
                 string[] prefabTypeNames = Enum.GetNames(typeof(PrefabTypeAFWB));
@@ -2658,20 +2658,26 @@ public partial class AutoFenceEditor : Editor
                 GUILayout.Space(10);
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(200);
+
+
+                //       Choose which Preefab Type to work on
+                //=================================================
                 modPrefabTypeIndex = EditorGUILayout.Popup("", modPrefabTypeIndex, prefabTypeNames, GUILayout.Width(100));
                 GUILayout.EndHorizontal();
                 GUILayout.Space(10);
                 GUI.backgroundColor = Color.white;
 
                 PrefabTypeAFWB prefabType = PrefabTypeAFWB.postPrefab;
-                LayerSet layer = LayerSet.postLayerSet;
+                GameObject mainPrefabOnCurrentlySelectedlayer = af.GetMainPrefabForLayer(currViewedLayer);
+                Material  mainMaterialOnCurrentlySelectedLayer = mainPrefabOnCurrentlySelectedlayer.GetComponent<Renderer>().sharedMaterial;
+                LayerSet layer = LayerSet.postLayer;
                 string oldName = currPost.name;
                 string prefabDir = "_Posts_AFWB";
                 string currPrefabName = currPost.name;
                 int currentPrefabIndex = af.currentPost_PrefabIndex;
                 if (modPrefabTypeIndex == 1)
                 {
-                    layer = LayerSet.railALayerSet;
+                    layer = LayerSet.railALayer;
                     prefabType = PrefabTypeAFWB.railPrefab;
                     oldName = currRailA.name;
                     prefabDir = "_Rails_AFWB";
@@ -2680,7 +2686,7 @@ public partial class AutoFenceEditor : Editor
                 }
                 else if (modPrefabTypeIndex == 2)
                 {
-                    layer = LayerSet.extraLayerSet;
+                    layer = LayerSet.extraLayer;
                     prefabType = PrefabTypeAFWB.extraPrefab;
                     oldName = currExtra.name;
                     prefabDir = "_Extras_AFWB";
@@ -2904,6 +2910,19 @@ public partial class AutoFenceEditor : Editor
                     }
                 }
 
+                //-- Find Prefabs Using material on current sourceLayerList
+                //==================================================
+                GUILayout.Space(rowGap);
+                if (GUILayout.Button(new GUIContent($"Find Prefabs Using material on current sourceLayerList {prefabTypeWord}", ""), 
+                    GUILayout.Width(450)))
+                {
+                    List<GameObject> prefabsWithMatName = Housekeeping.GetPrefabsUsingMaterial(mainMaterialOnCurrentlySelectedLayer);
+                    foreach (GameObject prefab in prefabsWithMatName)
+                    {
+                        Debug.Log(prefab.name + "\n");
+                    }
+                }
+
                 //-- Find Prefabs Using Texture name
                 //=====================================
                 GUILayout.Space(rowGap);
@@ -2935,17 +2954,7 @@ public partial class AutoFenceEditor : Editor
 
 
 
-                //-- Find Prefabs Using material
-                //===============================
-                GUILayout.Space(rowGap);
-                if (GUILayout.Button(new GUIContent($"Print Prefabs Using Material Name {prefabTypeWord}", ""), GUILayout.Width(250)))
-                {
-                    List<GameObject> prefabsWithMatName = Housekeeping.FindPrefabsUsingMaterialName("Brickwall_OldEnglish");
-                    foreach (GameObject prefab in prefabsWithMatName)
-                    {
-                        Debug.Log(prefab.name + "\n");
-                    }
-                }
+                
 
 
                 //-- Find Prefabs Using Mesh name
@@ -3072,7 +3081,7 @@ public partial class AutoFenceEditor : Editor
                 GUILayout.Space(2);
                 //----------------------------------------------------------------------------------------  
                 //Housekeeping.FixPanelRailNamesInPresets();
-                //Housekeeping.UpdatePresetComponentAssetName(LayerSet.railALayerSet, "Metal_TwoPlusOneGreen_Panel", "Metal_TwoPlusOneGreen_Rail", true);
+                //Housekeeping.UpdatePresetComponentAssetName(LayerSet.railALayer, "Metal_TwoPlusOneGreen_Panel", "Metal_TwoPlusOneGreen_Rail", true);
                 //====================================
                 //      Test 4 - Comment Out for Release
                 //======================================
@@ -3152,23 +3161,23 @@ public partial class AutoFenceEditor : Editor
     LayerSet GetLayerSetFromToolbarChoice()
     {
         //create a switch statment for all the values of ComponentToolbar
-        LayerSet layer = LayerSet.railALayerSet;
+        LayerSet layer = LayerSet.railALayer;
         switch (af.componentToolbar)
         {
             case ComponentToolbar.railsA:
-                layer = LayerSet.railALayerSet;
+                layer = LayerSet.railALayer;
                 break;
             case ComponentToolbar.railsB:
-                layer = LayerSet.railBLayerSet;
+                layer = LayerSet.railBLayer;
                 break;
             case ComponentToolbar.posts:
-                layer = LayerSet.postLayerSet;
+                layer = LayerSet.postLayer;
                 break;
             case ComponentToolbar.extras:
-                layer = LayerSet.extraLayerSet;
+                layer = LayerSet.extraLayer;
                 break;
             case ComponentToolbar.subposts:
-                layer = LayerSet.subpostLayerSet;
+                layer = LayerSet.subpostLayer;
                 break;
         }
         return layer;
@@ -3248,7 +3257,7 @@ public partial class AutoFenceEditor : Editor
         {
             originalUnityBgColor = ShowLowerDebugToolbar(boxTextYPos, firstButtonXPos: 102);
 
-            sceneDebug.ShowSceneViewDebugInfoPanel(LayerSet.railALayerSet);
+            sceneDebug.ShowSceneViewDebugInfoPanel(LayerSet.railALayer);
             sceneDebug.ShowFenceLabels();
             sceneDebug.ShowNodeDistances();
             sceneDebug.ShowStepNumbers();
@@ -3280,7 +3289,7 @@ public partial class AutoFenceEditor : Editor
         GameObject go = null;
         bool isClickPoint;
         int[] sectionIndexForLayers = { -1, -1, -1 }; //[0] = index of railA, [1] = index of railB, [2] = index of post. (in LayerSet enum order)
-        LayerSet hoveredLayer = LayerSet.noneLayerSet;
+        LayerSet hoveredLayer = LayerSet.None;
         RaycastHit hit;
 
         //    The Master Ray Position used by all other methods of OnSceneGUI
@@ -3623,25 +3632,25 @@ public partial class AutoFenceEditor : Editor
         {
             // Switch off all seq and singles in case there's a problem
             // and rebuild so we can get the inspector back
-            af.ToggleUseVariationsForLayer(LayerSet.railALayerSet);
-            af.ToggleUseVariationsForLayer(LayerSet.railBLayerSet);
-            af.ToggleUseVariationsForLayer(LayerSet.postLayerSet);
+            af.ToggleUseVariationsForLayer(LayerSet.railALayer);
+            af.ToggleUseVariationsForLayer(LayerSet.railBLayer);
+            af.ToggleUseVariationsForLayer(LayerSet.postLayer);
             af.ResetAllPools();
             af.ForceRebuildFromClickPoints();
         }
         if (GUILayoutExtensions.ButtonAutoWidth("Toggle Use Sequencer"))
         {
-            af.ToggleUseSequencerForLayer(LayerSet.railALayerSet);
-            af.ToggleUseVariationsForLayer(LayerSet.railBLayerSet);
-            af.ToggleUseVariationsForLayer(LayerSet.postLayerSet);
+            af.ToggleUseSequencerForLayer(LayerSet.railALayer);
+            af.ToggleUseVariationsForLayer(LayerSet.railBLayer);
+            af.ToggleUseVariationsForLayer(LayerSet.postLayer);
             af.ResetAllPools();
             af.ForceRebuildFromClickPoints();
         }
         if (GUILayoutExtensions.ButtonAutoWidth("Toggle Use Singles"))
         {
-            af.ToggleUseSinglesForLayer(LayerSet.railALayerSet);
-            af.ToggleUseSinglesForLayer(LayerSet.railBLayerSet);
-            af.ToggleUseSinglesForLayer(LayerSet.postLayerSet);
+            af.ToggleUseSinglesForLayer(LayerSet.railALayer);
+            af.ToggleUseSinglesForLayer(LayerSet.railBLayer);
+            af.ToggleUseSinglesForLayer(LayerSet.postLayer);
             af.ResetAllPools();
             af.ForceRebuildFromClickPoints();
         }
@@ -3797,7 +3806,7 @@ public partial class AutoFenceEditor : Editor
     {
         if (currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0 && currEvent.control == true)
         {
-            if (layer < LayerSet.markerLayerSet)
+            if (layer < LayerSet.markerLayer)
             {
                 assetFolderLinks.ShowPrefabInAssetsFolder(layer);
                 //Selection.activeObject = selectedObj;
@@ -3809,7 +3818,7 @@ public partial class AutoFenceEditor : Editor
     {
         if (currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
         {
-            if (layer <= LayerSet.markerLayerSet)
+            if (layer <= LayerSet.markerLayer)
             {
                 showControlsProp.boolValue = !showControlsProp.boolValue;
                 af.showControls = !af.showControls;
@@ -3824,7 +3833,7 @@ public partial class AutoFenceEditor : Editor
     private void UnlockMouse(Event currEvent, LayerSet layer)
     {
         //-- Return early if over fence, and cancel if already shown
-        if (layer != LayerSet.noneLayerSet)
+        if (layer != LayerSet.None)
         {
             showingUnlockMouseFromAFButton = false;
             dblClickScreenPoint = Vector2.zero;
@@ -3928,7 +3937,7 @@ public partial class AutoFenceEditor : Editor
     }
     //-----------------------------------------------------------
     /// <summary>
-    /// Gets all info about what we're hovering over, using InferLayerFromGoName() including the layer type, and if it's a clickNode.
+    /// Gets all info about what we're hovering over, using InferLayerFromGoName() including the sourceLayerList type, and if it's a clickNode.
     /// <para>Also displays a help box with info about the object.</para>
     /// </summary>
     /// <param name="helpBoxHeight"></param>
@@ -3948,7 +3957,7 @@ public partial class AutoFenceEditor : Editor
         //CurrentEventDebug(currEvent, EventType.MouseDown);
 
         int boxHeight = 75, boxWidth = 250;
-        hoveredLayer = LayerSet.postLayerSet;
+        hoveredLayer = LayerSet.postLayer;
         bool isPostPoint = true;
         isClickNode = false;
         GameObject go = null;
@@ -3959,12 +3968,12 @@ public partial class AutoFenceEditor : Editor
             go = hit.transform.gameObject;
             hoveredLayer = af.InferLayerFromGoName(go);
 
-            if (hoveredLayer != LayerSet.noneLayerSet && go != null)
+            if (hoveredLayer != LayerSet.None && go != null)
             {
                 //====================
                 //      Post
                 //====================
-                if (hoveredLayer == LayerSet.postLayerSet)
+                if (hoveredLayer == LayerSet.postLayer)
                 {
                     //      Determine Name, Position, Index, Post Status
                     //=========================================================
@@ -4034,7 +4043,7 @@ public partial class AutoFenceEditor : Editor
 
                 //      Hovering over Rail
                 //===============================
-                if (hoveredLayer == LayerSet.railALayerSet || hoveredLayer == LayerSet.railBLayerSet)
+                if (hoveredLayer == LayerSet.railALayer || hoveredLayer == LayerSet.railBLayer)
                 {
                     string layerStr = "";
                     boxHeight = 85;
@@ -4048,13 +4057,13 @@ public partial class AutoFenceEditor : Editor
 
                     bool isStep = false;
                     string seqString = go.name.Substring(go.name.Length - 2);
-                    if (hoveredLayer == LayerSet.railALayerSet)
+                    if (hoveredLayer == LayerSet.railALayer)
                     {
                         layerStr = "Rail A:  ";
                         isStep = int.TryParse(seqString, out currSeqRailStepIndex[0]);
 
                     }
-                    else if (hoveredLayer == LayerSet.railBLayerSet)
+                    else if (hoveredLayer == LayerSet.railBLayer)
                     {
                         layerStr = "Rail B:  ";
                         isStep = int.TryParse(seqString, out currSeqRailStepIndex[1]);
@@ -4080,12 +4089,12 @@ public partial class AutoFenceEditor : Editor
                     string name = go.name.Substring(0, startIndex);
                     string variationStr = "";
                     bool usingVariations = false;
-                    if (hoveredLayer == LayerSet.railALayerSet && af.useRailVariations[0])
+                    if (hoveredLayer == LayerSet.railALayer && af.useRailVariations[0])
                     {
                         variationStr = "Step " + (currSeqRailStepIndex[0] + 1) + " Variation. ";
                         usingVariations = true;
                     }
-                    else if (hoveredLayer == LayerSet.railALayerSet && af.useRailVariations[1])
+                    else if (hoveredLayer == LayerSet.railALayer && af.useRailVariations[1])
                     {
                         variationStr = "Step " + (currSeqRailStepIndex[1] + 1) + " Variation. ";
                         usingVariations = true;
@@ -4140,7 +4149,7 @@ public partial class AutoFenceEditor : Editor
             //Debug.Log(go.name);
         }
         else
-            hoveredLayer = LayerSet.noneLayerSet;
+            hoveredLayer = LayerSet.None;
 
         return go;
     }
@@ -4158,13 +4167,13 @@ public partial class AutoFenceEditor : Editor
         Physics.Raycast(rayPosition, out hit, 2000.0f);
 
 
-        // Create a layer mask of layers to ignore, and Invert it (~)
+        // Create a sourceLayerList mask of layers to ignore, and Invert it (~)
         int layerMask = ~LayerMask.GetMask("AF Test Layer", "AF Test Layer 2");
 
         if ((!currentEvent.control && currentEvent.shift && currentEvent.type == EventType.MouseDown && Event.current.button != 1) || shiftRightClickAddGap == 1)
         {
 
-            // Test if we were trying to click on a layer that's set to be ignored, note re-inversion of mask with ~
+            // Test if we were trying to click on a sourceLayerList that's set to be ignored, note re-inversion of mask with ~
             string warnIgnoreString = "";
             if (Physics.Raycast(rayPosition, out hit, 2000.0f, ~layerMask))
             {
@@ -4199,7 +4208,7 @@ public partial class AutoFenceEditor : Editor
 
                     //-- This willl ensure the pool is rebuilt with the new click points set to the override Mains prefab
                     if (af.allowNodePostsPrefabOverride)
-                        af.DestroyPoolForLayer(LayerSet.postLayerSet);
+                        af.DestroyPoolForLayer(LayerSet.postLayer);
                     af.ForceRebuildFromClickPoints();
                     //if (af.rotateY)
                     //af.ForceRebuildFromClickPoints();
@@ -4457,7 +4466,7 @@ public partial class AutoFenceEditor : Editor
 
         //    Post Layer
         //===================
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
         {
             int postLayer = (int)layer;
             if (go == null)
@@ -4480,15 +4489,15 @@ public partial class AutoFenceEditor : Editor
     {
         if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0 && currentEvent.shift == false && currentEvent.control == false)
         {
-            if (hoveredLayer == LayerSet.railALayerSet)
+            if (hoveredLayer == LayerSet.railALayer)
                 ShowRailAControls();
-            else if (hoveredLayer == LayerSet.railBLayerSet)
+            else if (hoveredLayer == LayerSet.railBLayer)
                 ShowRailBControls();
-            else if (hoveredLayer == LayerSet.postLayerSet)
+            else if (hoveredLayer == LayerSet.postLayer)
                 ShowPostControls();
-            else if (hoveredLayer == LayerSet.extraLayerSet)
+            else if (hoveredLayer == LayerSet.extraLayer)
                 ShowExtraControls();
-            else if (hoveredLayer == LayerSet.subpostLayerSet)
+            else if (hoveredLayer == LayerSet.subpostLayer)
                 ShowSubpostControls();
         }
     }
@@ -4497,19 +4506,19 @@ public partial class AutoFenceEditor : Editor
     {
         switch (layer)
         {
-            case LayerSet.railALayerSet:
+            case LayerSet.railALayer:
                 ShowRailAControls();
                 break;
-            case LayerSet.railBLayerSet:
+            case LayerSet.railBLayer:
                 ShowRailBControls();
                 break;
-            case LayerSet.postLayerSet:
+            case LayerSet.postLayer:
                 ShowPostControls();
                 break;
-            case LayerSet.extraLayerSet:
+            case LayerSet.extraLayer:
                 ShowExtraControls();
                 break;
-            case LayerSet.subpostLayerSet:
+            case LayerSet.subpostLayer:
                 ShowSubpostControls();
                 break;
             default:
@@ -4548,7 +4557,7 @@ public partial class AutoFenceEditor : Editor
     public static void CreateClickPointAtPostPosition(Vector3 position, AutoFenceCreator af, bool rebuild = true)
     {
         af.InsertPost(position);
-        af.ResetPoolForLayer(LayerSet.postLayerSet);
+        af.ResetPoolForLayer(LayerSet.postLayer);
         if (rebuild)
             af.ForceRebuildFromClickPoints();
     }
@@ -4567,7 +4576,7 @@ public partial class AutoFenceEditor : Editor
         int sectStart = go.name.IndexOf("_Rail[");
 
         //--  Post
-        if (FindLayerFromParentName(go) == LayerSet.postLayerSet)
+        if (FindLayerFromParentName(go) == LayerSet.postLayer)
             sectStart = go.name.IndexOf("_Post[");
 
         if (sectStart == -1)
@@ -4583,14 +4592,14 @@ public partial class AutoFenceEditor : Editor
     private static LayerSet FindLayerFromParentName(GameObject go)
     {
         GameObject parent = go.transform.parent.gameObject;
-        LayerSet layerSet = LayerSet.railALayerSet;
+        LayerSet layerSet = LayerSet.railALayer;
 
         if (parent.name.Contains("RailsAGrouped"))
-            layerSet = LayerSet.railALayerSet;
+            layerSet = LayerSet.railALayer;
         else if (parent.name.Contains("RailsBGrouped"))
-            layerSet = LayerSet.railBLayerSet;
+            layerSet = LayerSet.railBLayer;
         if (parent.name.Contains("PostsGrouped"))
-            layerSet = LayerSet.postLayerSet;
+            layerSet = LayerSet.postLayer;
 
         return layerSet;
     }

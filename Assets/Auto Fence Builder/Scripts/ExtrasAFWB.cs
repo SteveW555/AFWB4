@@ -225,7 +225,7 @@ public class ExtrasAFWB
     public void CheckExtraPrefabVariants()
     {
 
-        af.CheckPrefabAtIndexForLayer(af.currentExtra_PrefabIndex, LayerSet.extraLayerSet, false, "CheckExtraPrefabVariants()");
+        af.CheckPrefabAtIndexForLayer(af.currentExtra_PrefabIndex, LayerSet.extraLayer, false, "CheckExtraPrefabVariants()");
         GameObject mainExtraPrefab = af.extraPrefabs[af.currentExtra_PrefabIndex];
 
         bool rebuildVars = false;
@@ -316,8 +316,8 @@ public class ExtrasAFWB
         //usingCombinedPostsMode = false;
 
         //standardPostsList = af.postsPool;
-        numBuiltPosts = af.GetNumBuiltForLayer(LayerSet.postLayerSet);
-        //numBuiltSubposts = af.GetNumBuiltForLayer(LayerSet.subpostLayerSet);
+        numBuiltPosts = af.GetNumBuiltForLayer(LayerSet.postLayer);
+        //numBuiltSubposts = af.GetNumBuiltForLayer(LayerSet.subpostLayer);
 
         /*if (usingCombinedPostsMode)
         {
@@ -337,7 +337,7 @@ public class ExtrasAFWB
         /*else if (extrasMode == ExtrasMode.scatter && (flipXProb > 0 || flipYProb > 0 || flipZProb > 0)) //Scatter mode
         {
             // Destroy and rebuild Extras as they have had their meshes modified
-            af.ResetPoolForLayer(LayerSet.extraLayerSet);
+            af.ResetPoolForLayer(LayerSet.extraLayer);
             Debug.Log("Rebuilding Extras Due To Flip");
         }*/
 
@@ -1019,7 +1019,7 @@ public class ExtrasAFWB
         //        Set up Colliders
         //======================================
 
-        // af.CreateColliderForLayer(newCloneExtra, newCloneExtra.transform.localPosition, LayerSet.extraLayerSet);//do somewger else outside critical loop
+        // af.CreateColliderForLayer(newCloneExtra, newCloneExtra.transform.localPosition, LayerSet.extraLayer);//do somewger else outside critical loop
 
         /*newCloneExtra.isStatic = af.usingStaticBatching;
         newCloneExtra.hideFlags = HideFlags.None;
@@ -1075,7 +1075,7 @@ public class ExtrasAFWB
     private void GetRealWorldSizeAndMeshHeight(out Vector3 totalWorldExtraSize, out float halfMeshHeight)
     {
         GameObject exampleExtra = GetExtraFromPool(0);
-        totalWorldExtraSize = MeshUtilitiesAFWB.GetWorldSizeOfGameObject(exampleExtra, LayerSet.extraLayerSet, af);
+        totalWorldExtraSize = MeshUtilitiesAFWB.GetWorldSizeOfGameObject(exampleExtra, LayerSet.extraLayer, af);
         Mesh exampleMesh = MeshUtilitiesAFWB.GetMeshFromGameObject(exampleExtra);
         if (exampleMesh == null)
         {
@@ -1125,7 +1125,7 @@ public class ExtrasAFWB
 
         //        Set up Colliders
         //===============================
-        af.CreateColliderForLayer(thisExtra, thisExtra.transform.localPosition, LayerSet.extraLayerSet);
+        af.CreateColliderForLayer(thisExtra, thisExtra.transform.localPosition, LayerSet.extraLayer);
 
         //         Put In Folders
         //===============================
@@ -1229,7 +1229,7 @@ public class ExtrasAFWB
         if (i >= randCount)
             Debug.LogWarning($"Extra Scatter Rotation Seed Count {randCount} is less than the number of extras being built {i}\n");
 
-        af.ValidateSeedsForLayer(LayerSet.extraLayerSet);
+        af.ValidateSeedsForLayer(LayerSet.extraLayer);
 
         Vector3 randRot;
         try
@@ -2874,7 +2874,7 @@ public class ExtrasAFWB
 
         // Always build all to avoid compounding mesh rotations and scales
         //extrasPool.Clear();
-        af.DestroyPoolForLayer(LayerSet.extraLayerSet);
+        af.DestroyPoolForLayer(LayerSet.extraLayer);
 
         int currExtraType = af.currentExtra_PrefabIndex;
         CheckExtraPrefabVariants(); //check all have non-null prefabs assigned
@@ -2929,7 +2929,7 @@ public class ExtrasAFWB
             else if (af.ex.pivotPosition == PivotPosition.Center)
                 MeshUtilitiesAFWB.RecentreMesh(mainMesh);*/
         }
-        af.ValidateSeedsForLayer(LayerSet.extraLayerSet);
+        af.ValidateSeedsForLayer(LayerSet.extraLayer);
 
         int varIndex = 0, numCreated = 0, extraType = 0;
 

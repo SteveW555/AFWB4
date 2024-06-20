@@ -35,7 +35,7 @@ public partial class AutoFenceEditor
             //=========================================
             //           Posts Context Menus
             //=========================================
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 List<string> varNames = new List<string>();
                 GenericMenu menu = new GenericMenu();
@@ -43,7 +43,7 @@ public partial class AutoFenceEditor
                 //variationsEnabled = false;
 
                 contextInfo.seqStepNum = currSeqPostStepIndex;
-                contextInfo.layer = LayerSet.postLayerSet;
+                contextInfo.layer = LayerSet.postLayer;
 
                 //--------------------------
                 //   Convert To ClickPoint
@@ -124,14 +124,14 @@ public partial class AutoFenceEditor
                     /*if (isLayerA)
                     {
                         contextInfo.menuIndex = 500;
-                        if (af.GetUseSequencerForLayer(layer) == false)
+                        if (af.GetUseSequencerForLayer(sourceLayerList) == false)
                             menu.AddItem(new GUIContent("Enable Rail A Sequencer"), false, ContextMenuCallback, contextInfo);
                         else
                             menu.AddItem(new GUIContent("Disable Rail B Sequencer"), false, ContextMenuCallback, contextInfo);
                     }
                     menu.AddSeparator("");
 
-                    if (af.GetUseSequencerForLayer(layer) == true && variationMode == VariationMode.sequenced)
+                    if (af.GetUseSequencerForLayer(sourceLayerList) == true && variationMode == VariationMode.sequenced)
                     {
                         //=====  Info Labels  =====
                         if (isLayerA)
@@ -187,14 +187,14 @@ public partial class AutoFenceEditor
             //=========================================
             //        Rails Context Menus
             //=========================================
-            else if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
             {
                 railName = af.StripPanelRailFromName(go.name);
 
                 List<string> varNames = new List<string>();
                 GenericMenu menu = new GenericMenu();
 
-                if (layer == LayerSet.railALayerSet)
+                if (layer == LayerSet.railALayer)
                 {
                     contextInfo.seqStepNum = currSeqRailStepIndex[0];
                 }
@@ -219,7 +219,7 @@ public partial class AutoFenceEditor
                 //=====   Use Rail Sequencer    =====
                 contextInfo.layer = 0; //RailA
                 menu.AddSeparator("");
-                //if (layer == LayerSet.railALayerSet)
+                //if (sourceLayerList == LayerSet.railALayer)
                 {
                     bool useSeq = af.GetUseSequencerForLayer(layer);
                     string seqString = $"{(useSeq == false ? enableStr : disableStr)} {layerName} Sequencer";
@@ -271,7 +271,7 @@ public partial class AutoFenceEditor
                     //    Enable / Disable Sequence
                     //==================================
 
-                    /*if (af.GetUseSequencerForLayer(layer) == true && variationMode == VariationMode.sequenced)
+                    /*if (af.GetUseSequencerForLayer(sourceLayerList) == true && variationMode == VariationMode.sequenced)
                     {
                         //=====  Info Labels  =====
                         if (isLayerA)

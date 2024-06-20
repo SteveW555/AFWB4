@@ -17,17 +17,17 @@ public enum SeqShortcuts
 
 public class SequenceEditor
 {
-    private LayerSet kRailALayer = LayerSet.railALayerSet;
-    private LayerSet kRailBLayer = LayerSet.railBLayerSet;
-    private LayerSet kPostLayer = LayerSet.postLayerSet;
-    private LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
+    private LayerSet kRailALayer = LayerSet.railALayer;
+    private LayerSet kRailBLayer = LayerSet.railBLayer;
+    private LayerSet kPostLayer = LayerSet.postLayer;
+    private LayerSet kSubpostLayer = LayerSet.subpostLayer;
 
     private AutoFenceCreator af;
     private AutoFenceEditor ed;
 
     private SerializedProperty numSourceVariantsInUseProp, sequencerProp, useSequencerProp;
     private SerializedProperty seqOffset, seqSize, seqRot;
-    private SerializedProperty seqListProperty; // the list of seqItems for this layer
+    private SerializedProperty seqListProperty; // the list of seqItems for this sourceLayerList
 
     private SeqItem currSeqStepVariant = null;
     private List<SeqItem> seqList = null; // the list of SeqItem for all seq steps
@@ -60,7 +60,7 @@ public class SequenceEditor
     //private int seqNumSteps = 2;
     public SeqItem copySeqStepVariant = null; // a convenient place to store a copy ready for pasting
     Sequencer sequencer;
-    public SequenceEditor(AutoFenceCreator autoFenceCreator, AutoFenceEditor autoFenceEditor/*, LayerSet layer*/)
+    public SequenceEditor(AutoFenceCreator autoFenceCreator, AutoFenceEditor autoFenceEditor/*, LayerSet sourceLayerList*/)
     {
         af = autoFenceCreator;
         ed = autoFenceEditor;
@@ -74,10 +74,10 @@ public class SequenceEditor
         //      SerializedProperties
         //===============================
         seqListProperty = ed.GetSequencerListForLayerProp(layer);
-        //seqNumStepsProp = ed.GetSequencerNumStepsForLayerProp(layer);
+        //seqNumStepsProp = ed.GetSequencerNumStepsForLayerProp(sourceLayerList);
         numSourceVariantsInUseProp = ed.GetNumSourceVariantsInUseForLayerProp(layer);
 
-        //      AF and layer Variables
+        //      AF and sourceLayerList Variables
         //===============================
         seqList = GetSequencerListForLayer(layer);
         //seqNumSteps = seqNumStepsProp.intValue;
@@ -99,11 +99,11 @@ public class SequenceEditor
 
     private void GetSequencerPropForLayer()
     {
-        if (layer == LayerSet.postLayerSet)
+        if (layer == LayerSet.postLayer)
             sequencerProp = ed.serializedObject.FindProperty("postSequencer"); //-- Replace "sequencer" with the actual name of your Sequencer field
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             sequencerProp = ed.serializedObject.FindProperty("railASequencer");
-        else if (layer == LayerSet.railBLayerSet)
+        else if (layer == LayerSet.railBLayer)
             sequencerProp = ed.serializedObject.FindProperty("railBSequencer");
         useSequencerProp = sequencerProp.FindPropertyRelative("useSeq");
     }
@@ -111,14 +111,14 @@ public class SequenceEditor
     //--------------------------------
     /// <summary>
     /// Sets up the Variation Sequencer interface for the given LayerSet. The interface allows users to
-    /// configure and control the variations of each section in the sequence for the specified layer.
+    /// configure and control the variations of each section in the sequence for the specified sourceLayerList.
     /// </summary>
     /// <param name="layer">The LayerSet for which the Variation Sequencer interface is being set up.</param>
     public void SetupStepSeqVariations(LayerSet layer)
     {
         ed.CheckPrefabsExistForLayer(layer); //debug only
 
-        //bool useSequencer = GetUseSequencerForLayer(layer);
+        //bool useSequencer = GetUseSequencerForLayer(sourceLayerList);
 
         this.layer = layer;
         GetSequencerPropForLayer();
@@ -285,7 +285,7 @@ public class SequenceEditor
                         seqList[i].stepEnabled = true;
                     }
                     af.ClearConsole();
-                    // af.PrintSeqStepGOs(LayerSet.railALayerSet, false);
+                    // af.PrintSeqStepGOs(LayerSet.railALayer, false);
                     for (int i = 0; i < seqList.Count; i++)
                     {
                         List<int> sectionsUsingStep = GetSectionsUsingSeqStep(i, layer);
@@ -300,7 +300,7 @@ public class SequenceEditor
                 //============================
                 //     Limit No. Steps
                 //============================
-                //if (af.GetSequenceForLayer(this.layer).Count > numSectionsBuiltForLayer)
+                //if (af.GetSequenceForLayer(this.sourceLayerList).Count > numSectionsBuiltForLayer)
                 if (af.GetSequenceForLayer(this.layer).Count > numSectionsBuiltForLayer)
                 {
                     GUILayout.BeginHorizontal();
@@ -515,7 +515,7 @@ public class SequenceEditor
                                 //thisSize1.vector3Value = Vector3.one;
                                 //thisRotate1.vector3Value = Vector3.zero;
 
-                                //af.ResetPoolForLayer(layer);
+                                //af.ResetPoolForLayer(sourceLayerList);
                                 //af.ForceRebuildFromClickPoints();
                             }
 
@@ -565,8 +565,8 @@ public class SequenceEditor
                 {
                     /*if (goWasChanged == true)
                     {
-                        List<SeqItem> seq = af.GetSequenceForLayer(layer);
-                        List<SourceVariant> sourceVariants = af.GetSourceVariantsForLayer(layer);
+                        List<SeqItem> seq = af.GetSequenceForLayer(sourceLayerList);
+                        List<SourceVariant> sourceVariants = af.GetSourceVariantsForLayer(sourceLayerList);
                     }*/
 
                     ed.serializedObject.ApplyModifiedProperties();
@@ -574,7 +574,7 @@ public class SequenceEditor
                     //-- check the reals are upo to date with the Properties
                     if (this.seqList == null)
                     {
-                        Debug.LogError($"seqList is null for layer {layer} \n");
+                        Debug.LogError($"seqList is null for sourceLayerList {layer} \n");
                     }
                     for (int i = 0; i < AutoFenceCreator.kMaxNumSeqSteps; i++)
                     {
@@ -613,19 +613,19 @@ public class SequenceEditor
                 }
 
                 //-- Ensure seqList[i].sourceVariantIndex and seqList[i].go are updated. Can be neccesary after a recompile etc.
-                /*for (int i = 0; i < af.GetSequencerForLayer(layer).Length(); i++)
+                /*for (int i = 0; i < af.GetSequencerForLayer(sourceLayerList).Length(); i++)
                 {
-                    if (layer == kPostLayer)
+                    if (sourceLayerList == kPostLayer)
                     {
                         seqList[i].sourceVariantIndex = af.seqPostSourceVarIndex[i];
                         seqList[i].go = sourceVariants[seqList[i].sourceVariantIndex].go;
                     }
-                    else if (layer == kRailALayer)
+                    else if (sourceLayerList == kRailALayer)
                     {
                         seqList[i].sourceVariantIndex = af.seqRailASourceVarIndex[i];
                         seqList[i].go = sourceVariants[seqList[i].sourceVariantIndex].go;
                     }
-                    else if (layer == kRailBLayer)
+                    else if (sourceLayerList == kRailBLayer)
                     {
                         seqList[i].sourceVariantIndex = af.seqRailBSourceVarIndex[i];
                         seqList[i].go = sourceVariants[seqList[i].sourceVariantIndex].go;
@@ -661,9 +661,9 @@ public class SequenceEditor
                 {
                     currSeqStepVariant = new SeqItem(ed.copySeqStepVariant);
                     seqList[currSelectedStepIndex] = currSeqStepVariant;
-                    ed.varEd.SyncSequencerControlsDisplayFromSeqItem(layer, currSeqStepVariant, currSelectedStepIndex);
+                    ed.varEd.SyncSequencerControlsDisplayFromSeqItem(sourceLayerList, currSeqStepVariant, currSelectedStepIndex);
                     SetPrefabButtonSwitchesState(seqList[currSelectedStepIndex].sourceVariantIndex);
-                    af.ResetPoolForLayer(layer);
+                    af.ResetPoolForLayer(sourceLayerList);
                     af.ForceRebuildFromClickPoints();
                 }
                 EditorGUI.EndDisabledGroup();*/
@@ -673,9 +673,9 @@ public class SequenceEditor
                 EditorStyles.miniButton, GUILayout.Width(75)))
                 {
                     currSeqStepVariant.InitWithBaseVariant(sourceVariants);
-                    ed.varEd.SyncSequencerControlsDisplayFromSeqItem(layer, currSeqStepVariant, currSelectedStepIndex);
+                    ed.varEd.SyncSequencerControlsDisplayFromSeqItem(sourceLayerList, currSeqStepVariant, currSelectedStepIndex);
                     SetPrefabButtonSwitchesState(0);
-                    af.ResetPoolForLayer(layer);
+                    af.ResetPoolForLayer(sourceLayerList);
                     af.ForceRebuildFromClickPoints();
                 }*/
                 //=======================
@@ -689,9 +689,9 @@ public class SequenceEditor
                         seqList[s].InitWithBaseVariant(sourceVariants);
                         ed.seqEd.SyncSequencerControlsDisplayFromSeqItem(this.layer, seqList[s], s);
                     }
-                    //PrintSourceVariantIndicesForAllStepsForLayer(layer);
+                    //PrintSourceVariantIndicesForAllStepsForLayer(sourceLayerList);
                     SetPrefabButtonSwitchesState(0, layer);
-                    //af.ResetPoolForLayer(layer);
+                    //af.ResetPoolForLayer(sourceLayerList);
                     //af.ForceRebuildFromClickPoints();
                 }
                 //=======================
@@ -704,8 +704,8 @@ public class SequenceEditor
                     // Assigns to seqList(  e.g.  af.railASequencer.seqList )
                     SeqItem.AssignAllDifferentObjectIndicesInSequence(af, this.layer, seqList);
 
-                    //af.ResetPoolForLayer(layer);
-                    //af.ForceRebuildFromClickPoints(layer);
+                    //af.ResetPoolForLayer(sourceLayerList);
+                    //af.ForceRebuildFromClickPoints(sourceLayerList);
                 }
                 //=======================
                 //  Shuffle
@@ -747,18 +747,18 @@ public class SequenceEditor
                             af.optimiseRandomiseToolbarValueA = GUILayout.Toolbar(af.optimiseRandomiseToolbarValueA,
                                 optimiseRandomiseToolbarStrings, ed.smallButtonStyle7);
                             /*if (af.optimiseRandomiseToolbarValueA == 0)
-                                SetOptimise(layer, currSelectedStepIndex);
+                                SetOptimise(sourceLayerList, currSelectedStepIndex);
                             else if (af.optimiseRandomiseToolbarValueA == 1)
-                                SetRandomise(layer, currSelectedStepIndex);*/
+                                SetRandomise(sourceLayerList, currSelectedStepIndex);*/
                         }
                         if (this.layer == kRailBLayer)
                         {
                             af.optimiseRandomiseToolbarValueB = GUILayout.Toolbar(af.optimiseRandomiseToolbarValueB,
                                 optimiseRandomiseToolbarStrings, ed.smallButtonStyle7);
                             /*if (af.optimiseRandomiseToolbarValueB == 0)
-                                SetOptimise(layer, currSelectedStepIndex);
+                                SetOptimise(sourceLayerList, currSelectedStepIndex);
                             else if (af.optimiseRandomiseToolbarValueB == 1)
-                                SetRandomise(layer, currSelectedStepIndex);*/
+                                SetRandomise(sourceLayerList, currSelectedStepIndex);*/
                         }
                     }
                     //DrawUILine(ed.lineColor, 2, 3);
@@ -769,7 +769,7 @@ public class SequenceEditor
                 if (EditorGUI.EndChangeCheck())
                 {
                     //update menus adter changing the step prefab assignments programatically with the buttonss
-                    //List<int> seq_ShowPrebChoice_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(layer);
+                    //List<int> seq_ShowPrebChoice_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(sourceLayerList);
                     //for (int i = 0; i < numSourceVariantsInUse; i++)
                     //{
                     //    seq_ShowPrebChoice_MenuIndices[i] = seqList[i].sourceVariantIndex;
@@ -829,7 +829,7 @@ public class SequenceEditor
             //Debug.Log($"Step {i} : {seq[i].sourceVariantIndex} \n");
 
             //int sourceVariantIndexForStep = seqList[i].sourceVariantIndex;
-            //SourceVariant sourceVar = af.GetSourceVariantAtIndexForLayer(layer, sourceVariantIndexForStep);
+            //SourceVariant sourceVar = af.GetSourceVariantAtIndexForLayer(sourceLayerList, sourceVariantIndexForStep);
         }
 
         //-- Now update the popup menu that is avaialable for each seq step with real prefab names
@@ -848,10 +848,10 @@ public class SequenceEditor
         }
 
         //-- These are the kMaxNumSourceVariants menu indices of the SourceVariants
-        /*List<int> sourceVariant_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(layer);
+        /*List<int> sourceVariant_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(sourceLayerList);
 
-    // the Indices in to the MAIN PREFAB LIST for each(9) SourveVariants layer type
-    List<int> sourceVariantPrefabIndices = af.CreateSourceVariantPrefabIndicesListForLayer(layer);
+    // the Indices in to the MAIN PREFAB LIST for each(9) SourveVariants sourceLayerList type
+    List<int> sourceVariantPrefabIndices = af.CreateSourceVariantPrefabIndicesListForLayer(sourceLayerList);
 
     for (int i = 1; i < numSourceVariantsInUse + 1; i++)
     {
@@ -865,29 +865,29 @@ public class SequenceEditor
 
         //Update the sourceVariants list with the new prefabs
         //SourceVariant sourceVariant = sourceVariants[i];
-        //sourceVariant.Go = af.GetPrefabAtIndexForLayer(layer, prefabIndex);
+        //sourceVariant.Go = af.GetPrefabAtIndexForLayer(sourceLayerList, prefabIndex);
     }*/
 
-        /*SerializedProperty seqProp = edUtils.GetSequencerListForLayerProp(layer);
+        /*SerializedProperty seqProp = edUtils.GetSequencerListForLayerProp(sourceLayerList);
 
         for (int i = 0; i < seqNumSteps; i++)
         {
-            SerializedProperty seqStepProp = edUtils.GetSeqItemAtStepIndexProp(seqProp, layer, i);
+            SerializedProperty seqStepProp = edUtils.GetSeqItemAtStepIndexProp(seqProp, sourceLayerList, i);
         }
 
             // Update the Seq Menu indices so they display the correct prefabs
         for (int i = 0; i < seqNumSteps; i++)
         {
-            SeqItem currSeqStepVariant = af.GetSequenceForLayer(layer)[i];
+            SeqItem currSeqStepVariant = af.GetSequenceForLayer(sourceLayerList)[i];
 
             int sourceVariantIndexForStep = seqList[i].sourceVariantIndex;
-            SourceVariant sourceVar = af.GetSourceVariantAtIndexForLayer(layer, sourceVariantIndexForStep);
+            SourceVariant sourceVar = af.GetSourceVariantAtIndexForLayer(sourceLayerList, sourceVariantIndexForStep);
 
-            List<SeqItem> seq = af.GetSequenceForLayer(layer);
+            List<SeqItem> seq = af.GetSequenceForLayer(sourceLayerList);
         }
 
-        List<int> sourceVariant_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(layer);
-        SerializedProperty svMenuListProp = ed.edUtils.GetSourceVariantMenuListForLayer(layer);
+        List<int> sourceVariant_MenuIndices = af.GetSourceVariantMenuIndicesForLayer(sourceLayerList);
+        SerializedProperty svMenuListProp = ed.edUtils.GetSourceVariantMenuListForLayer(sourceLayerList);
 
         for (int i = 1; i < numSourceVariantsInUseProp + 1; i++)
         {
@@ -901,7 +901,7 @@ public class SequenceEditor
 
             //Update the sourceVariants list with the new prefabs
             SourceVariant sourceVariant = sourceVariants[i];
-            sourceVariant.Go = af.GetPrefabAtIndexForLayer(layer, prefabIndex);
+            sourceVariant.Go = af.GetPrefabAtIndexForLayer(sourceLayerList, prefabIndex);
         }*/
 
         /*//===============================================================================
@@ -913,7 +913,7 @@ public class SequenceEditor
         ed.serializedObject.ApplyModifiedProperties();
 
         //=== Now convert to Prefab indices, check them,  and set the sourceVariant choices
-        List<int> sourceVariant_PrefabIndices = af.CreateSourceVariantPrefabIndicesListForLayer(layer);
+        List<int> sourceVariant_PrefabIndices = af.CreateSourceVariantPrefabIndicesListForLayer(sourceLayerList);
         for (int i = 1; i < numSourceVariantsInUseProp + 1; i++)
         {
             int prefabIndex = sourceVariant_PrefabIndices[i];
@@ -924,14 +924,14 @@ public class SequenceEditor
 
             sourceVariants[i].Go = go;
 
-            for (int j = 0; j < af.GetSequencerForLayer(layer).Length(); j++)
+            for (int j = 0; j < af.GetSequencerForLayer(sourceLayerList).Length(); j++)
             {
                 {
                     af.seqPostSourceVarIndex[j] = seqList[i].sourceVariantIndex;
                     af.seqPostSize[j] = ed.EnforceVectorMinMax(af.seqPostSize[i], -9.99f, 9.99f);
 
                 currSeqStepVariant = seqList[i];
-                //ed.varEd.SetSequenceVariantFromDisplaySettings(this.layer, ref currSeqStepVariant, i);
+                //ed.varEd.SetSequenceVariantFromDisplaySettings(this.sourceLayerList, ref currSeqStepVariant, i);
             }
         }*/
     }
@@ -1018,7 +1018,7 @@ public class SequenceEditor
         af.PrintSeqGOs(layer);
         PrintSeqGoMenus(layer);
 
-        // PrintSeqGoMenus(layer);
+        // PrintSeqGoMenus(sourceLayerList);
     }
 
     //------------------
@@ -1044,7 +1044,7 @@ public class SequenceEditor
         if (onIndex == -1)
             onIndex = 0;
 
-        if (layerSet == LayerSet.railALayerSet || layerSet == LayerSet.railBLayerSet)
+        if (layerSet == LayerSet.railALayer || layerSet == LayerSet.railBLayer)
 
             for (int i = 0; i < seqList.Count; i++)
             {
@@ -1074,7 +1074,7 @@ public class SequenceEditor
     }
 
     //--------------
-    // return a list of kMaxNumSourceVariants for the Variant names of this layer
+    // return a list of kMaxNumSourceVariants for the Variant names of this sourceLayerList
     public string[] GetSourceVariantNamesForLayer(LayerSet layer)
     {
         string shortprefabName = "";
@@ -1102,7 +1102,7 @@ public class SequenceEditor
     }
 
     //--------------
-    // return a list of kMaxNumSourceVariants for the Variant names of this layer
+    // return a list of kMaxNumSourceVariants for the Variant names of this sourceLayerList
     public string GetVariantNameAtIndexForLayer(int i, LayerSet layer)
     {
         string shortprefabName = "";
@@ -1130,37 +1130,37 @@ public class SequenceEditor
     {
         if (allDisabled == true)
         {
-            if (layerSet == LayerSet.postLayerSet)
+            if (layerSet == LayerSet.postLayer)
                 allPostsDisabled = true;
-            if (layerSet == LayerSet.railALayerSet)
+            if (layerSet == LayerSet.railALayer)
                 allRailADisabled = true;
-            if (layerSet == LayerSet.railBLayerSet)
+            if (layerSet == LayerSet.railBLayer)
                 allRailBDisabled = true;
-            if (layerSet == LayerSet.extraLayerSet)
+            if (layerSet == LayerSet.extraLayer)
                 allExtrasDisabled = true;
         }
         else
         {
-            if (layerSet == LayerSet.postLayerSet)
+            if (layerSet == LayerSet.postLayer)
                 allPostsDisabled = false;
-            if (layerSet == LayerSet.railALayerSet)
+            if (layerSet == LayerSet.railALayer)
                 allRailADisabled = false;
-            if (layerSet == LayerSet.railBLayerSet)
+            if (layerSet == LayerSet.railBLayer)
                 allRailBDisabled = false;
-            if (layerSet == LayerSet.extraLayerSet)
+            if (layerSet == LayerSet.extraLayer)
                 allExtrasDisabled = false;
         }
     }
 
     public bool AreAllLayerSequencesDisabled(LayerSet layerSet)
     {
-        if (layerSet == LayerSet.postLayerSet && allPostsDisabled == true)
+        if (layerSet == LayerSet.postLayer && allPostsDisabled == true)
             return true;
-        if (layerSet == LayerSet.railALayerSet && allRailADisabled == true)
+        if (layerSet == LayerSet.railALayer && allRailADisabled == true)
             return true;
-        if (layerSet == LayerSet.railBLayerSet && allRailBDisabled == true)
+        if (layerSet == LayerSet.railBLayer && allRailBDisabled == true)
             return true;
-        if (layerSet == LayerSet.extraLayerSet && allExtrasDisabled == true)
+        if (layerSet == LayerSet.extraLayer && allExtrasDisabled == true)
             return true;
         return false;
     }
@@ -1349,11 +1349,11 @@ public class SequenceEditor
     }
 
     //----------------------
-    /*public bool GetUseSequencerForLayer(LayerSet layer)
+    /*public bool GetUseSequencerForLayer(LayerSet sourceLayerList)
     {
-        if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
-            return af.useRailSequencer[(int)layer];
-        else if (layer == LayerSet.postLayerSet)
+        if (sourceLayerList == LayerSet.railALayer || sourceLayerList == LayerSet.railBLayer)
+            return af.useRailSequencer[(int)sourceLayerList];
+        else if (sourceLayerList == LayerSet.postLayer)
             return af.usePostSequencer;
         return false;
     }*/
@@ -1366,7 +1366,7 @@ public class SequenceEditor
         for (int i = 0; i < seqList.Count; i++)
         {
             SeqItem seqStepVariant = seqList[i];
-            //GameObject go = seqStepVariant.GetSourceVariantGO(af, layer);
+            //GameObject go = seqStepVariant.GetSourceVariantGO(af, sourceLayerList);
 
             index = af.FindFirstInVariants(mainVariants, seqStepVariant.GetSourceVariantGO(af, layer), layer);
             seqList[i].sourceVariantIndex = index;

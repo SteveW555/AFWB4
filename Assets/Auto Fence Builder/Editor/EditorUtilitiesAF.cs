@@ -40,9 +40,9 @@ so = ed.serializedObject;
     //-- Replace null SVs with valid, but does NOT check that the SV GOs are not null, that's done in CheckSourceVariantGOs()
     private bool CheckSourceVariantsForEveryLayerAreValid()
     {
-        bool neededFixing = af.CheckSourceVariantsForLayerAreValid(LayerSet.railALayerSet);
-        neededFixing = af.CheckSourceVariantsForLayerAreValid(LayerSet.railBLayerSet);
-        neededFixing = af.CheckSourceVariantsForLayerAreValid(LayerSet.postLayerSet);
+        bool neededFixing = af.CheckSourceVariantsForLayerAreValid(LayerSet.railALayer);
+        neededFixing = af.CheckSourceVariantsForLayerAreValid(LayerSet.railBLayer);
+        neededFixing = af.CheckSourceVariantsForLayerAreValid(LayerSet.postLayer);
 
         return neededFixing;
     }
@@ -55,9 +55,9 @@ so = ed.serializedObject;
     public SerializedProperty GetSequencerListForLayerProp(LayerSet layer)
     {
         SerializedProperty seqListProp = railASeqListProp;
-        if (layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railBLayer)
             seqListProp = railBSeqListProp;
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             seqListProp = postSeqListProp;
 
         return seqListProp;
@@ -67,14 +67,14 @@ so = ed.serializedObject;
     {
         SerializedProperty numSourceVarsInUseProp = null;
 
-        if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
         {
             SerializedProperty railVarsInUseArray = serializedObject.FindProperty("numRailVariantsInUse");
             numSourceVarsInUseProp = railVarsInUseArray.GetArrayElementAtIndex((int)layer);
         }
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             numSourceVarsInUseProp = serializedObject.FindProperty("_numPostVariantsInUse");
-        else if (layer == LayerSet.extraLayerSet)
+        else if (layer == LayerSet.extraLayer)
             numSourceVarsInUseProp = serializedObject.FindProperty("numExtraVariantsInUse");
 
         if (numSourceVarsInUseProp == null)
@@ -132,7 +132,7 @@ so = ed.serializedObject;
         //SerializedProperty numStepsProp = SeqItemAtStepProp.FindPropertyRelative
 
 
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             return railASeqListProp;
         
         
@@ -155,9 +155,9 @@ so = ed.serializedObject;
     public SerializedProperty GetSourceVariantMenuListForLayer(LayerSet layer)
     {
         SerializedProperty sourceVariant_MenuIndex_List = serializedObject.FindProperty("railASourceVariant_MenuIndices"); // the railVariantMenuIndex[2] array
-        if (layer == LayerSet.railALayerSet)
+        if (layer == LayerSet.railALayer)
             sourceVariant_MenuIndex_List = serializedObject.FindProperty("railBSourceVariant_MenuIndices");
-        else if (layer == LayerSet.postLayerSet)
+        else if (layer == LayerSet.postLayer)
             sourceVariant_MenuIndex_List = serializedObject.FindProperty("postSourceVariant_MenuIndex");
 
         if (sourceVariant_MenuIndex_List == null)
@@ -224,13 +224,13 @@ so = ed.serializedObject;
                     variantsPost[i].Go = menuGoPost;
             }
 
-            if (af.railSourceVariants[(int)LayerSet.railALayerSet][i].Go == null)
+            if (af.railSourceVariants[(int)LayerSet.railALayer][i].Go == null)
             {
-                af.railSourceVariants[(int)LayerSet.railALayerSet][i].Go = af.railPrefabs[af.currentRail_PrefabIndex[(int)LayerSet.railBLayerSet]];
-                Debug.Log($"CheckAllSourceVariantsArePoulated()  railSourceVariants[railALayerSet]   {i}   game object was missing");
+                af.railSourceVariants[(int)LayerSet.railALayer][i].Go = af.railPrefabs[af.currentRail_PrefabIndex[(int)LayerSet.railBLayer]];
+                Debug.Log($"CheckAllSourceVariantsArePoulated()  railSourceVariants[railALayer]   {i}   game object was missing");
             }
-            if (af.railSourceVariants[(int)LayerSet.railBLayerSet][i].Go == null)
-                af.railSourceVariants[(int)LayerSet.railALayerSet][i].Go = af.railPrefabs[af.currentRail_PrefabIndex[(int)LayerSet.railBLayerSet]];
+            if (af.railSourceVariants[(int)LayerSet.railBLayer][i].Go == null)
+                af.railSourceVariants[(int)LayerSet.railALayer][i].Go = af.railPrefabs[af.currentRail_PrefabIndex[(int)LayerSet.railBLayer]];
 
             if (af.postSourceVariants[i].Go == null)
                 af.postSourceVariants[i].Go = af.postPrefabs[af.currentPost_PrefabIndex];
@@ -265,16 +265,16 @@ so = ed.serializedObject;
         return false;
     }
 
-    /// <summary> In the Prefabs loaded List, check that Current one for each layer is valid, if not, set them to the first one in the list</summary>
+    /// <summary> In the Prefabs loaded List, check that Current one for each sourceLayerList is valid, if not, set them to the first one in the list</summary>
     /// <param name="caller"></param>
     /// <returns></returns>
     private bool CheckAllLayerPrefabsExist([CallerMemberName] string caller = null)
     {
-        bool layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.railALayerSet, caller);
-        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.railBLayerSet, caller);
-        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.postLayerSet, caller);
-        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.subpostLayerSet, caller);
-        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.extraLayerSet, caller);
+        bool layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.railALayer, caller);
+        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.railBLayer, caller);
+        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.postLayer, caller);
+        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.subpostLayer, caller);
+        layerPrefabsChanged = CheckPrefabsExistForLayer(LayerSet.extraLayer, caller);
         return layerPrefabsChanged;
     }
 
@@ -306,7 +306,7 @@ so = ed.serializedObject;
     }
     //--------------------------
     /// <summary>
-    /// Checks the integrity of each layer's prefabs, and optionally reloads them if they are missing or empty
+    /// Checks the integrity of each sourceLayerList's prefabs, and optionally reloads them if they are missing or empty
     /// </summary>
     /// <returns>If Reloading was necessary</returns>
     /// <remarks>Only one of each Rail or Post set is checked as they use the same prefabs
@@ -314,9 +314,9 @@ so = ed.serializedObject;
     protected bool CheckPrefabsAndOptionReload(bool reload = true, bool warn = true)
     {
         bool neededReload = false;
-        neededReload = CheckPrefabsForLayer(LayerSet.railALayerSet, warn);
-        neededReload = CheckPrefabsForLayer(LayerSet.postLayerSet, warn);
-        neededReload = CheckPrefabsForLayer(LayerSet.extraLayerSet, warn);
+        neededReload = CheckPrefabsForLayer(LayerSet.railALayer, warn);
+        neededReload = CheckPrefabsForLayer(LayerSet.postLayer, warn);
+        neededReload = CheckPrefabsForLayer(LayerSet.extraLayer, warn);
 
         if (neededReload == true && reload == true)
             LoadPrefabs();
@@ -324,7 +324,7 @@ so = ed.serializedObject;
     }
     /// <summary>
     /// Checks if the prefabs here are null or empoty.
-    /// Do not reload here as you risk doing multiple loads for each failed layer
+    /// Do not reload here as you risk doing multiple loads for each failed sourceLayerList
     /// </summary>
     protected bool CheckPrefabsForLayer(LayerSet layer, bool warn = false)
     {

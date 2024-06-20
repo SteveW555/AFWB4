@@ -52,13 +52,13 @@ namespace AFWB
             CreateFallbackObjects();
 
             List<GameObject> prefabsForLayer = null;
-            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.postLayerSet);
+            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.postLayer);
             
             
-            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.railALayerSet);
+            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.railALayer);
             //prefabsForLayer.Sort((x, y) => string.Compare(x.name, y.name));
             
-            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.extraLayerSet);
+            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.extraLayer);
             //prefabsForLayer.Sort((x, y) => string.Compare(x.name, y.name));
 
 
@@ -74,7 +74,7 @@ namespace AFWB
             //=====================================
             AddRailPrefabsToExtras();
 
-            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayerSet, warn: false);
+            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
             posts.Sort((x, y) => string.Compare(x.name, y.name));
 
 
@@ -94,15 +94,15 @@ namespace AFWB
         //-------------------------------------
         private void AddExtraPrefabsToPosts()
         {
-            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayerSet, warn: false);
-            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayerSet, warn: false);
+            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
+            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
             posts.AddRange(exs);
         }
         //-------------------------------------
         private void AddPostPrefabsToExtras()
         {
-            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayerSet, warn: false);
-            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayerSet, warn: false);
+            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
+            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
 
             for (int i = 0; i < posts.Count; i++)
             {
@@ -116,8 +116,8 @@ namespace AFWB
         //-------------------------------------
         private void AddRailPrefabsToExtras()
         {
-            List<GameObject> rails = af.GetPrefabsForLayer(LayerSet.railALayerSet, warn: false);
-            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayerSet, warn: false);
+            List<GameObject> rails = af.GetPrefabsForLayer(LayerSet.railALayer, warn: false);
+            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
 
             for (int i = 0; i < rails.Count; i++)
             {
@@ -171,7 +171,7 @@ namespace AFWB
                     {
                         //      Rails
                         //=========================
-                        if ((layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet) && GoHasRailSuffix(go) == true)
+                        if ((layer == LayerSet.railALayer || layer == LayerSet.railBLayer) && GoHasRailSuffix(go) == true)
                         {
                             if (MeshUtilitiesAFWB.GetFirstMeshInGameObject(go) != null)
                             {
@@ -185,7 +185,7 @@ namespace AFWB
 
                         //      Posts
                         //=========================
-                        else if (layer == LayerSet.postLayerSet && go.name.EndsWith("_Post"))
+                        else if (layer == LayerSet.postLayer && go.name.EndsWith("_Post"))
                         {
                             if (MeshUtilitiesAFWB.GetFirstMeshInGameObject(go) != null)
                             {
@@ -198,7 +198,7 @@ namespace AFWB
                         }
                         //      Extras
                         //=========================
-                        else if (layer == LayerSet.extraLayerSet && go.name.EndsWith("_Extra"))
+                        else if (layer == LayerSet.extraLayer && go.name.EndsWith("_Extra"))
                         {
                             if (MeshUtilitiesAFWB.GetFirstMeshInGameObject(go) != null)
                             {
@@ -225,11 +225,11 @@ namespace AFWB
         {
             PrefabDetails prefabDetails = new PrefabDetails(parentDir);
 
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 af.railPrefabDetails.Add(prefabDetails);
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 af.postPrefabDetails.Add(prefabDetails);
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 af.extraPrefabDetails.Add(prefabDetails);
         }
         
@@ -246,11 +246,11 @@ namespace AFWB
         {
             bool match = false;
 
-            if ((layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet) && GoHasRailSuffix(go))
+            if ((layer == LayerSet.railALayer || layer == LayerSet.railBLayer) && GoHasRailSuffix(go))
                 match = true;
-            else if (layer == LayerSet.postLayerSet && go.name.EndsWith("_Post"))
+            else if (layer == LayerSet.postLayer && go.name.EndsWith("_Post"))
                 match = true;
-            else if (layer == LayerSet.extraLayerSet && go.name.EndsWith("_Extra"))
+            else if (layer == LayerSet.extraLayer && go.name.EndsWith("_Extra"))
                 match = true;
             return match;
         }
@@ -294,7 +294,7 @@ namespace AFWB
             if (savedPrefab != null)
             {
                 Debug.Log($"Prefab copied successfully: {path}");
-                LoadAllPrefabsForLayer(af, LayerSet.postLayerSet);
+                LoadAllPrefabsForLayer(af, LayerSet.postLayer);
                 int indexOfNewPrefab = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, prefabName);
                 if (indexOfNewPrefab != -1)
                 {
@@ -397,7 +397,7 @@ namespace AFWB
             string[] userPostFilePaths = null;
 
             //==== Posts ====
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 string postPrefabsFolderPath = prefabsFolderPath + "/_Posts_AFWB/";
                 try
@@ -418,7 +418,7 @@ namespace AFWB
                 System.Array.Copy(userPostFilePaths, 0, filePaths, filePaths.Length - userPostFilePaths.Length, userPostFilePaths.Length);
             }
             //==== Rails ====
-            else if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
             {
                 string railPrefabsFolderPath = prefabsFolderPath + "/_Rails_AFWB/";
                 try
@@ -438,7 +438,7 @@ namespace AFWB
                 System.Array.Copy(userRailFilePaths, 0, filePaths, filePaths.Length - userRailFilePaths.Length, userRailFilePaths.Length);
             }
             //==== Extras ====
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
             {
                 string extrasPrefabsFolderPath = prefabsFolderPath + "/_Extras_AFWB/";
                 try

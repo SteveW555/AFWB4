@@ -387,7 +387,7 @@ namespace AFWB
                     }
                 }
 
-                CreateColliderForLayer(thisSub, thisSub.transform.localPosition, LayerSet.subpostLayerSet);
+                CreateColliderForLayer(thisSub, thisSub.transform.localPosition, LayerSet.subpostLayer);
 
                 postAndSubpostStringList.Add($"{postAndSubpostStringList.Count.ToString()} - Sub[{sectionIndex.ToString()} {i.ToString()}]");
                 postsAndSubpostsCombined.Add(thisSub.transform);
@@ -932,7 +932,7 @@ namespace AFWB
                         }
                     }
 
-                    CreateColliderForLayer(thisSub, thisSub.transform.localPosition, LayerSet.subpostLayerSet);
+                    CreateColliderForLayer(thisSub, thisSub.transform.localPosition, LayerSet.subpostLayer);
 
                     postAndSubpostStringList.Add($"{postAndSubpostStringList.Count.ToString()} - Sub[{sectionIndex.ToString()} {i.ToString()}]");
                     postsAndSubpostsCombined.Add(thisSub.transform);

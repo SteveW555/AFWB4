@@ -11,11 +11,11 @@ using static AFWB.AutoFenceCreator;
 
 public class RandomizationEditor
 {
-    LayerSet kRailALayer = LayerSet.railALayerSet;
-    LayerSet kRailBLayer = LayerSet.railBLayerSet;
-    LayerSet kPostLayer = LayerSet.postLayerSet;
-    LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
-    LayerSet kExtraLayer = LayerSet.extraLayerSet;
+    LayerSet kRailALayer = LayerSet.railALayer;
+    LayerSet kRailBLayer = LayerSet.railBLayer;
+    LayerSet kPostLayer = LayerSet.postLayer;
+    LayerSet kSubpostLayer = LayerSet.subpostLayer;
+    LayerSet kExtraLayer = LayerSet.extraLayer;
 
     AutoFenceCreator af;
     AutoFenceEditor ed;
@@ -96,7 +96,7 @@ public class RandomizationEditor
         int sliderWidth = 241, valBoxWidth = 43, titleWidth = 196, toggleWidth = 24, miniButtonWidth = 20, endOfLineSpace = 2;
         GUILayout.BeginHorizontal();
         ed.cyanBoldStyle.wordWrap = false; //TODO find where this isn't being reset to default false
-        EditorGUILayout.LabelField(new GUIContent(layerWord + " Randomization", "Enable/Disable all randomization of this layer"),
+        EditorGUILayout.LabelField(new GUIContent(layerWord + " Randomization", "Enable/Disable all randomization of this sourceLayerList"),
             ed.moduleHeaderLabelStyle, GUILayout.Width(145));
         EditorGUILayout.PropertyField(allowRandProp, new GUIContent("", ""), GUILayout.Width(toggleWidth));
 
@@ -125,7 +125,7 @@ public class RandomizationEditor
             af.ForceRebuildFromClickPoints();
         }
 
-        // Randomization is off for this layer,  Nothing to do here!
+        // Randomization is off for this sourceLayerList,  Nothing to do here!
         if (allowRandProp.boolValue == false)
         {
             return false;
@@ -525,7 +525,7 @@ public class RandomizationEditor
         return allowRandProp.boolValue; //so we know if it was enabled
     }
     //----------------------------------------------------------------
-    //Sets the rotation angles for each layer from the menu index
+    //Sets the rotation angles for each sourceLayerList from the menu index
     public void GetRotationAnglesFromMenuIndex()
     {
         string angStr = ed.quantizeRotStrings[quantizeRotIndexProp.intValue];
@@ -588,7 +588,7 @@ public class RandomizationEditor
 
     }
     //--------------------------
-    // Mainly needed for the Rails which are dependent on which layer is being edited
+    // Mainly needed for the Rails which are dependent on which sourceLayerList is being edited
     private string SetupSerializedPropertiesByLayer(LayerSet layer)
     {
         allowRandProp = ed.allowPostRandomization;

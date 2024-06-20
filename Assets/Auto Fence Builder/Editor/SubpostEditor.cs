@@ -15,7 +15,7 @@ public class SubpostEditor
     private AutoFenceEditor ed;
     private PrefabAssignEditor helperEd;
     private string subpostsStr = "Subposts", subpostsHelpStr = "Click to Disable Subposts";
-    private LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
+    private LayerSet kSubpostLayer = LayerSet.subpostLayer;
 
     private SerializedProperty subWaveFreqProp;
     private SerializedProperty subWaveAmpProp;
@@ -73,14 +73,14 @@ public class SubpostEditor
         if (GUILayout.Button(new GUIContent("Copy", "Copy All Post Parameters"), EditorStyles.miniButton, GUILayout.Width(42)))
         {
             ScriptablePresetAFWB preset = ed.mainPresetList[af.currPresetIndex];
-            CopyPasteAFWB.CopyComponentParametersFromScriptablePreset(preset, AFWB.LayerSet.subpostLayerSet);
+            CopyPasteAFWB.CopyComponentParametersFromScriptablePreset(preset, AFWB.LayerSet.subpostLayer);
         }
         if (GUILayout.Button(new GUIContent("Paste", "Paste All Paste Parameters"), EditorStyles.miniButton, GUILayout.Width(44)))
         {
             CopyPasteAFWB.PasteExtraParametersFromScriptablePreset(af);
         }
 
-        ed.assetFolderLinks.Show_Prefab_Mesh_Material_InAssetFolder(LayerSet.subpostLayerSet, 242);
+        ed.assetFolderLinks.Show_Prefab_Mesh_Material_InAssetFolder(LayerSet.subpostLayer, 242);
 
         GUILayout.EndHorizontal();
 
@@ -288,7 +288,7 @@ public class SubpostEditor
         GUILayout.Space(10);
 
         EditorGUI.BeginChangeCheck();
-        EditorShowTransforms.ShowTransformEditor(LayerSet.subpostLayerSet, ed);
+        EditorShowTransforms.ShowTransformEditor(LayerSet.subpostLayer, ed);
 
         if (EditorGUI.EndChangeCheck())
         {

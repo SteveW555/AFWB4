@@ -73,7 +73,7 @@ public class UserCustomPrefab
         RotationType rotType = RotationType.none;
 
         rotType = AutoRotateY(go, af.GetPrefabTypeFromLayer(layer));
-        if (rotType == RotationType.none || layer == LayerSet.postLayerSet)
+        if (rotType == RotationType.none || layer == LayerSet.postLayer)
         {
             rotType = AutoRotateX(go, af.GetPrefabTypeFromLayer(layer));
         }
@@ -166,11 +166,11 @@ public class UserCustomPrefab
         LoadUtilitiesAFWB.ResetMeshOnUserPrefab(af, layer);
 
         /*string path = af.userBackupPathPost;
-        if(layer == LayerSet.railALayerSet)
+        if(layer == LayerSet.railALayer)
             path = af.userBackupPathRailA;
-        if (layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railBLayer)
             path = af.userBackupPathRailB;
-        if (layer == LayerSet.extraLayerSet)
+        if (layer == LayerSet.extraLayer)
             path = af.userBackupPathExtra;
 
         GameObject backup = (GameObject)AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));

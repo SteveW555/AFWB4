@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Linq;
 using System.ComponentModel;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using System;
+using System.Reflection;
 
 /*
  * For Prefabs & Source Variants, and all the menus that interact with them
@@ -23,11 +25,11 @@ namespace AFWB
         //-- These have a one-to-one correspondence with the main prefab lists and are set during Load or a refresh
         public List<string> GetPrefabNamesForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 return railMenuNames;
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
                 return postMenuNames;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return extraMenuNames;
             return null;
         }
@@ -35,29 +37,29 @@ namespace AFWB
         //-----------------------
         public int GetMainPrefabMenuIndexForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return currentRail_PrefabMenuIndex[kRailALayerInt];
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
                 return currentRail_PrefabMenuIndex[kRailBLayerInt];
-            else if ((layer == LayerSet.postLayerSet))
+            else if ((layer == LayerSet.postLayer))
                 return currentPost_PrefabMenuIndex;
-            else if ((layer == LayerSet.subpostLayerSet))
+            else if ((layer == LayerSet.subpostLayer))
                 return currentSubpost_PrefabMenuIndex;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return currentExtra_PrefabMenuIndex;
             return 0;
         }
         public void SetMainPrefabMenuIndexForLayer(LayerSet layer, int index)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 currentRail_PrefabMenuIndex[kRailALayerInt] = index;
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
                 currentRail_PrefabMenuIndex[kRailBLayerInt] = index;
-            else if ((layer == LayerSet.postLayerSet))
+            else if ((layer == LayerSet.postLayer))
                 currentPost_PrefabMenuIndex = index;
-            else if ((layer == LayerSet.subpostLayerSet))
+            else if ((layer == LayerSet.subpostLayer))
                 currentSubpost_PrefabMenuIndex = index;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 currentExtra_PrefabMenuIndex = index;
         }
 
@@ -107,30 +109,30 @@ namespace AFWB
             bool valid = false;
             string msg = "currentPrefabIndex";
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
             {
                 currentPrefabIndex = currentRail_PrefabIndex[kRailALayerInt];
-                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.railALayerSet, false, msg);
+                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.railALayer, false, msg);
             }
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
             {
                 currentPrefabIndex = currentRail_PrefabIndex[kRailBLayerInt];
-                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.railBLayerSet, false, msg);
+                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.railBLayer, false, msg);
             }
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
             {
                 currentPrefabIndex = currentPost_PrefabIndex;
-                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.postLayerSet, false, msg);
+                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.postLayer, false, msg);
             }
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
             {
                 currentPrefabIndex = currentSubpost_PrefabIndex;
-                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.subpostLayerSet, false, msg);
+                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.subpostLayer, false, msg);
             }
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
             {
                 currentPrefabIndex = currentExtra_PrefabIndex;
-                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.extraLayerSet, false, msg);
+                valid = CheckPrefabAtIndexForLayer(currentPrefabIndex, LayerSet.extraLayer, false, msg);
             }
 
             return currentPrefabIndex;
@@ -142,33 +144,33 @@ namespace AFWB
         /// </summary>
         /// <param name="layer"></param>
         /// <param name="index"></param>
-        /// <returns> The prefab for ease of debugging </returns>
-        public GameObject SetCurrentPrefabIndexForLayer(int index, LayerSet layer)
+        /// <returns> The index in case we had to correct it </returns>
+        public int SetCurrentPrefabIndexForLayer(int index, LayerSet layer)
         {
             //List<SourceVariant> sv = GetSourceVariantsForLayer(layer);
 
             if (CheckPrefabAtIndexForLayer(index, layer) == false)
                 index = 0;
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
             {
                 currentRail_PrefabIndex[kRailALayerInt] = index;
                 SetFirstSourceVariantToMainForLayer(layer);
 
             }
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
             {
                 currentRail_PrefabIndex[kRailBLayerInt] = index;
                 SetFirstSourceVariantToMainForLayer(layer);
             }
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
             {
                 currentPost_PrefabIndex = index;
                 SetFirstSourceVariantToMainForLayer(layer);
             }
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 currentSubpost_PrefabIndex = index;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 currentExtra_PrefabIndex = index;
 
             GameObject prefab = GetPrefabAtIndexForLayer(index, layer);
@@ -179,7 +181,7 @@ namespace AFWB
             {
                 slopeMode[layer.Int()] = SlopeMode.shear;//-- Always change to 'shear' for panel fences
             }
-            return prefab;
+            return index;
         }
         public bool SetIsUserPrefab(GameObject prefab, LayerSet layer)
         {
@@ -187,13 +189,13 @@ namespace AFWB
             if (prefab.name.StartsWith("[User]") || prefab.name.StartsWith("[U]"))
                 isUserPrefab = true;
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 useCustomRail[0] = isUserPrefab;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 useCustomRail[1] = isUserPrefab;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 useCustomPost = isUserPrefab;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 useCustomExtra = isUserPrefab;
 
             return isUserPrefab;
@@ -239,11 +241,11 @@ namespace AFWB
         {
             //-- Although this looks strange checking the already assigned index, 
             //-- it it hasn't been accessed yet, such as after applying a preset this is the opportunity to fix it.
-            bool allLayersValid = CheckPrefabAtIndexForLayer(currentRail_PrefabIndex[0], LayerSet.railALayerSet, resetBad: true) &&
-                                  CheckPrefabAtIndexForLayer(currentRail_PrefabIndex[1], LayerSet.railALayerSet, resetBad: true) &&
-                                  CheckPrefabAtIndexForLayer(currentPost_PrefabIndex, LayerSet.postLayerSet, resetBad: true) &&
-                                  CheckPrefabAtIndexForLayer(currentSubpost_PrefabIndex, LayerSet.subpostLayerSet, resetBad: true) &&
-                                  CheckPrefabAtIndexForLayer(currentExtra_PrefabIndex, LayerSet.extraLayerSet, resetBad: true);
+            bool allLayersValid = CheckPrefabAtIndexForLayer(currentRail_PrefabIndex[0], LayerSet.railALayer, resetBad: true) &&
+                                  CheckPrefabAtIndexForLayer(currentRail_PrefabIndex[1], LayerSet.railALayer, resetBad: true) &&
+                                  CheckPrefabAtIndexForLayer(currentPost_PrefabIndex, LayerSet.postLayer, resetBad: true) &&
+                                  CheckPrefabAtIndexForLayer(currentSubpost_PrefabIndex, LayerSet.subpostLayer, resetBad: true) &&
+                                  CheckPrefabAtIndexForLayer(currentExtra_PrefabIndex, LayerSet.extraLayer, resetBad: true);
 
             return allLayersValid;
         }
@@ -280,6 +282,34 @@ namespace AFWB
                 name = StripLayerTypeFromNameStatic(layer, prefab.name);
             return name;
         }
+        //-----------------------
+        public Material GetMainMaterialForLayer(LayerSet layer)
+        {
+            GameObject prefab = GetMainPrefabForLayer(layer);
+            Material mat = null;
+            if (prefab != null)
+            {
+                Renderer renderer = GetMainRendererForLayer(layer);
+                if (renderer != null)
+                {
+                    mat = renderer.sharedMaterial;
+                    if (mat == null)
+                        Debug.LogWarning($"GetMainMaterialForLayer()  {layer.String()} prefab {prefab.name} had no material\n");
+                }
+
+            }
+            return mat;
+        }
+        //-----------------------
+        public Renderer GetMainRendererForLayer(LayerSet layer)
+        {
+            GameObject prefab = GetMainPrefabForLayer(layer);
+            Renderer renderer = null;
+            renderer = prefab.GetComponent<Renderer>();
+            if (renderer == null)
+                Debug.LogWarning($"GetMainRendererForLayer()  {layer.String()} prefab {prefab.name} had no renderer\n");
+            return renderer;
+        }
 
         //-----------------------
         /// <summary>
@@ -295,15 +325,15 @@ namespace AFWB
         {
             //if (warn) DebugUtilitiesTCT.LogStackTrace();
 
-            
+
             List<GameObject> prefabsForLayer = null;
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 prefabsForLayer = railPrefabs;
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
                 prefabsForLayer = postPrefabs;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 prefabsForLayer = extraPrefabs;
-            else if (layer == LayerSet.allLayerSet)
+            else if (layer == LayerSet.allLayer)
                 prefabsForLayer = GetAllPrefabs();
 
             //-- Always warn for null
@@ -322,11 +352,11 @@ namespace AFWB
         //----------------------
         public void SetPrefabsForLayer(LayerSet layer, List<GameObject> prefabsForLayer)
         {
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 railPrefabs = prefabsForLayer;
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
                 postPrefabs = prefabsForLayer;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 extraPrefabs = prefabsForLayer;
         }
         public GameObject SetPrefabForLayerByName(LayerSet layer, string prefabname)
@@ -338,7 +368,7 @@ namespace AFWB
 
 
             // set the current prefab index for layer
-            SetCurrentPrefabIndexForLayer(prefabIndex, layer );
+            SetCurrentPrefabIndexForLayer(prefabIndex, layer);
             //sync the prefab menu index
             SetMenuIndexFromPrefabIndexForLayer(prefabIndex, layer);
 
@@ -348,9 +378,9 @@ namespace AFWB
         public List<GameObject> GetAllPrefabs()
         {
             List<GameObject> allPrefabs = new List<GameObject>();
-            allPrefabs.AddRange(GetPrefabsForLayer(LayerSet.railALayerSet));
-            allPrefabs.AddRange(GetPrefabsForLayer(LayerSet.postLayerSet));
-            allPrefabs.AddRange(GetPrefabsForLayer(LayerSet.extraLayerSet));
+            allPrefabs.AddRange(GetPrefabsForLayer(LayerSet.railALayer));
+            allPrefabs.AddRange(GetPrefabsForLayer(LayerSet.postLayer));
+            allPrefabs.AddRange(GetPrefabsForLayer(LayerSet.extraLayer));
             return allPrefabs;
         }
 
@@ -358,11 +388,11 @@ namespace AFWB
         public List<GameObject> GetPrefabsForPrefabType(PrefabTypeAFWB prefabType)
         {
             if (prefabType == PrefabTypeAFWB.railPrefab)
-                return GetPrefabsForLayer(LayerSet.railALayerSet); // it doesn't matter which Rail Set, the prefabs are the same
+                return GetPrefabsForLayer(LayerSet.railALayer); // it doesn't matter which Rail Set, the prefabs are the same
             else if (prefabType == PrefabTypeAFWB.postPrefab)
-                return GetPrefabsForLayer(LayerSet.postLayerSet);
+                return GetPrefabsForLayer(LayerSet.postLayer);
             else if (prefabType == PrefabTypeAFWB.extraPrefab)
-                return GetPrefabsForLayer(LayerSet.extraLayerSet);
+                return GetPrefabsForLayer(LayerSet.extraLayer);
             return null;
         }
 
@@ -372,15 +402,15 @@ namespace AFWB
         // so we have to convert when using them in context
         public List<string> GetPrefabMenuNamesForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return railMenuNames;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return railMenuNames;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 return postMenuNames;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return postMenuNames;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return extraMenuNames;
 
             return null;
@@ -393,11 +423,11 @@ namespace AFWB
             string shortprefabName = "";
             for (int i = 0; i < layerPrefabMenuNames.Count; i++)
             {
-                if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+                if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                     shortprefabName = StripPanelRailFromName(layerPrefabMenuNames[i]);
-                else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+                else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
                     shortprefabName = StripPostFromName(layerPrefabMenuNames[i]);
-                else if (layer == LayerSet.extraLayerSet)
+                else if (layer == LayerSet.extraLayer)
                     shortprefabName = StripExtraFromName(layerPrefabMenuNames[i]);
 
                 if (stripCategory == true)
@@ -425,15 +455,15 @@ namespace AFWB
                                        $"True menu count is {menuCount}.  Menu selection not set \n");
                 return;
             }
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 currentPost_PrefabMenuIndex = menuIndex;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 currentRail_PrefabMenuIndex[kRailALayerInt] = menuIndex;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 currentRail_PrefabMenuIndex[kRailBLayerInt] = menuIndex;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 currentSubpost_PrefabMenuIndex = menuIndex;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 currentExtra_PrefabMenuIndex = menuIndex;
         }
 
@@ -474,11 +504,11 @@ namespace AFWB
         {
             int numPrefabs = 0;
 
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 numPrefabs = railPrefabs.Count;
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
                 numPrefabs = postPrefabs.Count;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 numPrefabs = extraPrefabs.Count;
 
             return numPrefabs;
@@ -488,15 +518,15 @@ namespace AFWB
         // IsLayerEnabled
         internal bool IsLayerEnabled(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return useRailLayer[kRailALayerInt];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return useRailLayer[kRailBLayerInt];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 return usePostsLayer;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return useSubpostsLayer;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return useExtrasLayer;
             return false;
         }
@@ -524,15 +554,15 @@ namespace AFWB
         private List<Transform> GetBuiltLayerTransforms(LayerSet layer)
         {
             List<Transform> builtLayer = null;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 builtLayer = railsAPool;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 builtLayer = railsBPool;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 builtLayer = postsPool;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 builtLayer = subpostsPool;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 builtLayer = ex.extrasPool;
 
             if (builtLayer == null)
@@ -562,11 +592,11 @@ namespace AFWB
             int menuIndex = FindPrefabIndexInMenuNamesList(layer, prefabName, warnMissing: false);
             if (menuIndex == -1)
             {
-                if (layer == LayerSet.extraLayerSet)
+                if (layer == LayerSet.extraLayer)
                 {
-                    menuIndex = FindPrefabIndexInMenuNamesList(LayerSet.postLayerSet, prefabName, warnMissing: false);
+                    menuIndex = FindPrefabIndexInMenuNamesList(LayerSet.postLayer, prefabName, warnMissing: false);
                     if (menuIndex == -1)
-                        menuIndex = FindPrefabIndexInMenuNamesList(LayerSet.railALayerSet, prefabName, warnMissing: false);
+                        menuIndex = FindPrefabIndexInMenuNamesList(LayerSet.railALayer, prefabName, warnMissing: false);
                 }
                 if (menuIndex == -1)
                     Debug.LogWarning($"menuIndex was -1 for layer  {GetLayerNameAsString(layer)} in ConvertRailPrefabIndexToMenuIndex()");
@@ -593,7 +623,7 @@ namespace AFWB
         {
             if (prefabIndex == -1)
                 Debug.LogWarning($"prefabIndex was -1 in ConvertRailPrefabIndexToMenuIndex()");
-            LayerSet layer = LayerSet.railALayerSet;
+            LayerSet layer = LayerSet.railALayer;
             GameObject prefab = GetPrefabAtIndexForLayer(prefabIndex, layer);
             string prefabName = prefab.name;
             int menuIndex = FindPrefabIndexInMenuNamesList(GetPrefabTypeFromLayer(layer), prefabName);
@@ -665,9 +695,9 @@ namespace AFWB
         //==================================================================================
         public void OnSourceVariantGoChanged(GameObject go)
         {
-            UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(LayerSet.railALayerSet);
-            UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(LayerSet.railBLayerSet);
-            UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(LayerSet.postLayerSet);
+            UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(LayerSet.railALayer);
+            UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(LayerSet.railBLayer);
+            UpdateSourceVariantMenuIndicesForLayerFromPrefabIndicies(LayerSet.postLayer);
         }
 
         // List<int> sourceVariantMenuIndices : This is the list that holds kMaxNumSourceVariants (usually Main + 8 = 9) menu indices for each of the source sourceVariants
@@ -715,11 +745,11 @@ namespace AFWB
         public List<int> GetSourceVariantMenuListForLayer(LayerSet layer)
         {
             List<int> sourceVariantMenuIndices = new List<int>();
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 sourceVariantMenuIndices = railASourceVariant_MenuIndices;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 sourceVariantMenuIndices = railBSourceVariant_MenuIndices;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 sourceVariantMenuIndices = postSourceVariant_MenuIndices;
 
             return sourceVariantMenuIndices;
@@ -765,7 +795,7 @@ namespace AFWB
         public void SetAllSourceVariantsToMainForLayer(LayerSet layer)
         {
             //Ignore Extras and Subposts for now
-            if (layer == LayerSet.extraLayerSet || layer == LayerSet.subpostLayerSet || layer == LayerSet.allLayerSet || layer == LayerSet.noneLayerSet)
+            if (layer == LayerSet.extraLayer || layer == LayerSet.subpostLayer || layer == LayerSet.allLayer || layer == LayerSet.None)
                 return;
             List<SourceVariant> sourceVariants = GetSourceVariantsForLayer(layer);
             GameObject mainPrefab = GetMainPrefabForLayer(layer);
@@ -781,7 +811,7 @@ namespace AFWB
         public void SetSourceVariantAtIndexToMainForLayer(int index, LayerSet layer)
         {
             //Ignore Extras and Subposts for now
-            if (layer == LayerSet.extraLayerSet || layer == LayerSet.subpostLayerSet || layer == LayerSet.allLayerSet || layer == LayerSet.noneLayerSet)
+            if (layer == LayerSet.extraLayer || layer == LayerSet.subpostLayer || layer == LayerSet.allLayer || layer == LayerSet.None)
                 return;
 
             List<SourceVariant> sourceVariants = GetSourceVariantsForLayer(layer);
@@ -795,7 +825,7 @@ namespace AFWB
         {
             List<int> sourceVariantMenuIndices = new List<int>();
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
             {
                 List<SourceVariant> sourceVariants = GetSourceVariantsForLayer(layer, warn: false);
                 for (int i = 0; i < sourceVariants.Count; i++)
@@ -809,11 +839,11 @@ namespace AFWB
                 return railASourceVariant_MenuIndices;
             }
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 sourceVariantMenuIndices = railASourceVariant_MenuIndices;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 sourceVariantMenuIndices = railBSourceVariant_MenuIndices;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 sourceVariantMenuIndices = postSourceVariant_MenuIndices;
 
             if (sourceVariantMenuIndices == null)
@@ -907,9 +937,9 @@ namespace AFWB
 
         public bool CheckSourceVariantGosForAllLayersAreValid()
         {
-            bool neededFixing = CheckSourceVariantGosForLayerAreValid(LayerSet.railALayerSet);
-            neededFixing = CheckSourceVariantGosForLayerAreValid(LayerSet.railBLayerSet);
-            neededFixing = CheckSourceVariantGosForLayerAreValid(LayerSet.postLayerSet);
+            bool neededFixing = CheckSourceVariantGosForLayerAreValid(LayerSet.railALayer);
+            neededFixing = CheckSourceVariantGosForLayerAreValid(LayerSet.railBLayer);
+            neededFixing = CheckSourceVariantGosForLayerAreValid(LayerSet.postLayer);
             return neededFixing;
         }
 
@@ -966,11 +996,11 @@ namespace AFWB
         {
              List<int> prefabIndices = new List<int>();
 
-             if (layer == LayerSet.railALayerSet)
+             if (layer == LayerSet.railALayer)
                  prefabIndices = railASourceVariant_PrefabIndices;
-             else if (layer == LayerSet.railBLayerSet)
+             else if (layer == LayerSet.railBLayer)
                  prefabIndices = railBSourceVariant_PrefabIndices;
-             else if (layer == LayerSet.postLayerSet)
+             else if (layer == LayerSet.postLayer)
                  prefabIndices = postSourceVariant_PrefabIndices;
 
              return prefabIndices;
@@ -1054,11 +1084,11 @@ namespace AFWB
         // Will give warnings if issues
         public void CheckAllPrefabsLists()
         {
-            GetPrefabsForLayer(LayerSet.railALayerSet);
-            GetPrefabsForLayer(LayerSet.railBLayerSet);
-            GetPrefabsForLayer(LayerSet.postLayerSet);
-            GetPrefabsForLayer(LayerSet.subpostLayerSet);
-            GetPrefabsForLayer(LayerSet.extraLayerSet);
+            GetPrefabsForLayer(LayerSet.railALayer);
+            GetPrefabsForLayer(LayerSet.railBLayer);
+            GetPrefabsForLayer(LayerSet.postLayer);
+            GetPrefabsForLayer(LayerSet.subpostLayer);
+            GetPrefabsForLayer(LayerSet.extraLayer);
         }
 
         //-----------------------
@@ -1119,13 +1149,13 @@ namespace AFWB
         //-----------------------
         public float GetRandomQuantRotProbForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return quantizeRotProbRailA;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return quantizeRotProbRailB;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 return quantizeRotProbPost;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return quantizeRotProbSubpost;
 
             return 0;
@@ -1133,13 +1163,13 @@ namespace AFWB
 
         public void SetRandomQuantRotProbForLayer(LayerSet layer, float quantizeRotProb)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 quantizeRotProbRailA = quantizeRotProb;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 quantizeRotProbRailB = quantizeRotProb;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 quantizeRotProbPost = quantizeRotProb;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 quantizeRotProbSubpost = quantizeRotProb;
         }
 
@@ -1152,35 +1182,35 @@ namespace AFWB
         //======================================================================
         public string GetLayerNameAsString(LayerSet layer, bool useCamel = false)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
             {
                 if (useCamel)
                     return "railA";
                 else
                     return "RailA";
             }
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
             {
                 if (useCamel)
                     return "railB";
                 else
                     return "RailB";
             }
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
             {
                 if (useCamel)
                     return "post";
                 else
                     return "Post";
             }
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
             {
                 if (useCamel)
                     return "subpost";
                 else
                     return "Subpost";
             }
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
             {
                 if (useCamel)
                     return "extra";

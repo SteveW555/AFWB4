@@ -70,7 +70,7 @@ public class SourceVariant
         string varsStr = "";
         if (af)
         {
-            varsStr = af.GetSourceVariantGOsForLayerAsString(LayerSet.railALayerSet);
+            varsStr = af.GetSourceVariantGOsForLayerAsString(LayerSet.railALayer);
         }
         foreach (var observer in observers)
         {

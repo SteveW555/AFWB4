@@ -163,14 +163,14 @@ public class ExtraEditor
         if (GUILayout.Button(new GUIContent("Copy", "Copy All Extras Parameters"), EditorStyles.miniButton, GUILayout.Width(42)))
         {
             ScriptablePresetAFWB preset = ed.mainPresetList[af.currPresetIndex];
-            CopyPasteAFWB.CopyComponentParametersFromScriptablePreset(preset, AFWB.LayerSet.extraLayerSet);
+            CopyPasteAFWB.CopyComponentParametersFromScriptablePreset(preset, AFWB.LayerSet.extraLayer);
         }
         if (GUILayout.Button(new GUIContent("Paste", "Paste All Extras Parameters"), EditorStyles.miniButton, GUILayout.Width(44)))
         {
             CopyPasteAFWB.PasteExtraParametersFromScriptablePreset(af);
         }
         //====== Show Prefab Material Mesh   ======
-        ed.assetFolderLinks.Show_Prefab_Mesh_Material_InAssetFolder(LayerSet.extraLayerSet, 208);
+        ed.assetFolderLinks.Show_Prefab_Mesh_Material_InAssetFolder(LayerSet.extraLayer, 208);
 
         GUILayout.EndHorizontal();
         GUILayout.Space(10);
@@ -181,7 +181,7 @@ public class ExtraEditor
         //                          Choose Extra Prefab
         //==============================================================================
 
-        helper.ChooseMainPrefab(LayerSet.extraLayerSet);
+        helper.ChooseMainPrefab(LayerSet.extraLayer);
 
 
         //==============================================================================
@@ -229,7 +229,7 @@ public class ExtraEditor
                 raiseExtraByPostHeightProp.boolValue = false;
 
                 // af.currentExtra_PrefabIndex].extraTransformPositionOffset.y = 0;
-                af.SetPrefabForLayerByName(LayerSet.extraLayerSet, "Concrete Wall");
+                af.SetPrefabForLayerByName(LayerSet.extraLayer, "Concrete Wall");
 
                 af.ex.extraSurfaceNormalAmount = 0;
                 af.ex.pivotPosition = 0;
@@ -437,7 +437,7 @@ public class ExtraEditor
         if (EditorGUI.EndChangeCheck())
         {
             serializedObject.ApplyModifiedProperties();
-            af.ResetPoolForLayer(LayerSet.extraLayerSet);
+            af.ResetPoolForLayer(LayerSet.extraLayer);
             af.ForceRebuildFromClickPoints();
         }
 
@@ -1102,7 +1102,7 @@ public class ExtraEditor
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                af.ResetPoolForLayer(LayerSet.extraLayerSet);
+                af.ResetPoolForLayer(LayerSet.extraLayer);
                 af.ForceRebuildFromClickPoints();
             }
 
@@ -1123,7 +1123,7 @@ public class ExtraEditor
                 if (EditorGUI.EndChangeCheck())
                 {
                     serializedObject.ApplyModifiedProperties();
-                    af.ResetPoolForLayer(LayerSet.extraLayerSet);
+                    af.ResetPoolForLayer(LayerSet.extraLayer);
                     af.ForceRebuildFromClickPoints();
                 }
             }
@@ -1171,7 +1171,7 @@ public class ExtraEditor
                     af.ex.extraScatterVarIndex[i] = af.ConvertExtraMenuIndexToPrefabIndex(af.ex.extraScatterVarMenuIndex[i]);
 
                     af.ex.prefabVars[i] = af.extraPrefabs[af.ex.extraScatterVarIndex[i]];
-                    af.ResetPoolForLayer(LayerSet.extraLayerSet);
+                    af.ResetPoolForLayer(LayerSet.extraLayer);
                     af.ForceRebuildFromClickPoints();
                 }
                 GUILayout.Space(7);
@@ -1271,7 +1271,7 @@ public class ExtraEditor
         GUILayout.Space(10);
         EditorGUI.BeginChangeCheck();
 
-        EditorShowTransforms.ShowTransformEditor(LayerSet.extraLayerSet, ed);
+        EditorShowTransforms.ShowTransformEditor(LayerSet.extraLayer, ed);
 
         if (EditorGUI.EndChangeCheck())
         {

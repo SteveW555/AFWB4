@@ -12,8 +12,8 @@ using static AFWB.AutoFenceCreator;
 
 public class RailEditor
 {
-    private const LayerSet kRailALayer = LayerSet.railALayerSet;
-    private const LayerSet kRailBLayer = LayerSet.railBLayerSet;
+    private const LayerSet kRailALayer = LayerSet.railALayer;
+    private const LayerSet kRailBLayer = LayerSet.railBLayer;
     private AutoFenceCreator af;
     private AutoFenceEditor ed;
     private ExtrasAFWB ex;
@@ -38,10 +38,10 @@ public class RailEditor
     public void ShowRailEditor(SerializedObject serializedObject, LayerSet layer)
     {
         spreadModeStr = new string[] { "Total", "Per Rail", "Gap" };
-        //=====  Set up the variables depending on which layer it is  =====
+        //=====  Set up the variables depending on which sourceLayerList it is  =====
 
         int railLayerIndex = kRailALayerInt;
-        if (layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railBLayer)
             railLayerIndex = kRailBLayerInt;
         string layerName = af.GetLayerNameAsString(layer);
 
@@ -53,7 +53,7 @@ public class RailEditor
         SerializedProperty railSpreadProp = serializedObject.FindProperty("railSpread").GetArrayElementAtIndex(railLayerIndex);
         SerializedProperty railSpreadModeProp = serializedObject.FindProperty("railSpreadMode").GetArrayElementAtIndex(railLayerIndex);
 
-        if (layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railBLayer)
         {
             railLayerIndex = AutoFenceCreator.kRailBLayerInt;
             railStr = "Rail B";
@@ -198,7 +198,7 @@ public class RailEditor
 
             //If we changed the scale, Resize the Colliders to fit the new svSize
             List<Transform> rails = ed.af.railsAPool;
-            if (railLayer == LayerSet.railBLayerSet)
+            if (railLayer == LayerSet.railBLayer)
                 rails = ed.af.railsBPool;
 
             for (int i = 0; i < rails.Count; i++)

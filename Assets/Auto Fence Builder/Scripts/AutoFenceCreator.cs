@@ -49,18 +49,18 @@ namespace AFWB
 
     /// <summary> 
     /// Defines the types of layer sets in the Auto Fence Builder.
-    /// <para> 'railALayerSet' is the layer set type for fence rail A.</para>
-    /// <para> 'railBLayerSet' is the layer set type for fence rail B. </para>
-    /// <para> 'postLayerSet' is the layer set type for fence posts. </para>
-    /// <para> 'extraLayerSet' is the layer set type for extra components or decorations on the fence. </para>
-    /// <para> 'subpostLayerSet' is the layer set type for sub-posts on the fence. </para>
-    /// <para> 'markerLayerSet' is a special type representing layers such as "Markers" not defined above</para>
-    /// <para> 'allLayerSet' is a special type representing all the above types. </para>
-    /// <para> 'noneLayerSet' is a special type representing no layer set. </para>
+    /// <para> 'railALayer' is the layer set type for fence rail A.</para>
+    /// <para> 'railBLayer' is the layer set type for fence rail B. </para>
+    /// <para> 'postLayer' is the layer set type for fence posts. </para>
+    /// <para> 'extraLayer' is the layer set type for extra components or decorations on the fence. </para>
+    /// <para> 'subpostLayer' is the layer set type for sub-posts on the fence. </para>
+    /// <para> 'markerLayer' is a special type representing layers such as "Markers" not defined above</para>
+    /// <para> 'allLayer' is a special type representing all the above types. </para>
+    /// <para> 'None' is a special type representing no layer set. </para>
     /// </summary>
     public enum LayerSet
     {
-        railALayerSet = 0, railBLayerSet = 1, postLayerSet = 2, extraLayerSet = 3, subpostLayerSet = 4, markerLayerSet = 5, allLayerSet = 6, noneLayerSet = 7
+        railALayer = 0, railBLayer = 1, postLayer = 2, extraLayer = 3, subpostLayer = 4, markerLayer = 5, allLayer = 6, None = 7
     };
     public enum Seed { railAFlip = 0, railAHeight };
     public enum RotationType { none = 0, x90, x180, y90, y180, z90, z180 };
@@ -391,11 +391,11 @@ namespace AFWB
         {
             List<PrefabDetails> prefabDetails = null;
 
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 prefabDetails = af.railPrefabDetails;
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
                 prefabDetails = af.postPrefabDetails;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 prefabDetails = af.extraPrefabDetails;
 
 
@@ -431,12 +431,12 @@ namespace AFWB
                                                               .ToArray();
         public string[] LayerSetNames => _layerSetNames;
 
-        readonly LayerSet kRailALayer = LayerSet.railALayerSet; // to save a lot of typing
-        readonly LayerSet kRailBLayer = LayerSet.railBLayerSet;
-        LayerSet kPostLayer = LayerSet.postLayerSet;
-        LayerSet kExtraLayer = LayerSet.extraLayerSet;
-        LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
-        LayerSet kAllLayer = LayerSet.allLayerSet;
+        readonly LayerSet kRailALayer = LayerSet.railALayer; // to save a lot of typing
+        readonly LayerSet kRailBLayer = LayerSet.railBLayer;
+        LayerSet kPostLayer = LayerSet.postLayer;
+        LayerSet kExtraLayer = LayerSet.extraLayer;
+        LayerSet kSubpostLayer = LayerSet.subpostLayer;
+        LayerSet kAllLayer = LayerSet.allLayer;
         public enum RailLayerIndex { railLayerIndexA = 0, railLayerIndexB };
         public const int kRailALayerInt = 0, kRailBLayerInt = 1, kPostLayerInt = 2, kSubpostLayerInt = 3, kExtraLayerInt = 4; // the index of these layers in LayerSet
         public const int kMaxNumSourceVariants = 9, kMaxNumSeqSteps = 20, kMaxNumSingles = 100;
@@ -820,7 +820,7 @@ namespace AFWB
         // Sequencer
         public bool showPostSequencer = false;
 
-        public Sequencer postSequencer = new Sequencer(LayerSet.postLayerSet);
+        public Sequencer postSequencer = new Sequencer(LayerSet.postLayer);
 
         /*[SerializeField] public List<SeqItem> _SeqItemListPost = new List<SeqItem>(new SeqItem[kMaxNumSeqSteps]);
         public List<SeqItem> SeqItemListPost
@@ -981,8 +981,8 @@ namespace AFWB
 
 
         //==================   Sequencer   =====================
-        public Sequencer railASequencer = new Sequencer(LayerSet.railALayerSet);
-        public Sequencer railBSequencer = new Sequencer(LayerSet.railBLayerSet);
+        public Sequencer railASequencer = new Sequencer(LayerSet.railALayer);
+        public Sequencer railBSequencer = new Sequencer(LayerSet.railBLayer);
 
         public bool[] showRailSequencer = { false, false };
         /*[SerializeField] public List<SeqItem> _SeqItemListRailA = new List<SeqItem>(new SeqItem[kMaxNumSeqSteps]);
@@ -1363,24 +1363,24 @@ namespace AFWB
         {
             if (IsRailLayer(layer))
             {
-                if (layer == LayerSet.railALayerSet)
+                if (layer == LayerSet.railALayer)
                     return showRailSequencer[kRailALayerInt];
-                else if (layer == LayerSet.railBLayerSet)
+                else if (layer == LayerSet.railBLayer)
                     return showRailSequencer[kRailBLayerInt];
             }
             else
-                 if (layer == LayerSet.postLayerSet)
+                 if (layer == LayerSet.postLayer)
                 return showPostSequencer;
 
             return false;
         }
         public void ShowVariationsForLayer(LayerSet layer, bool showVariations)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 showRailVariations[0] = showVariations;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 showRailVariations[1] = showVariations;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 showPostVariations = showVariations;
         }
         //-------------------------------------
@@ -1707,26 +1707,26 @@ namespace AFWB
                 {
                     postsFolder = new GameObject("Posts");
                     postsFolder.transform.parent = currentFencesFolder.transform;
-                    ResetPoolForLayer(LayerSet.postLayerSet);
+                    ResetPoolForLayer(LayerSet.postLayer);
                 }
                 if (railsFolder == null)
                 {
                     railsFolder = new GameObject("Rails");
                     railsFolder.transform.parent = currentFencesFolder.transform;
-                    ResetPoolForLayer(LayerSet.railALayerSet);
-                    ResetPoolForLayer(LayerSet.railBLayerSet);
+                    ResetPoolForLayer(LayerSet.railALayer);
+                    ResetPoolForLayer(LayerSet.railBLayer);
                 }
                 if (subpostsFolder == null)
                 {
                     subpostsFolder = new GameObject("Subs");
                     subpostsFolder.transform.parent = currentFencesFolder.transform;
-                    ResetPoolForLayer(LayerSet.subpostLayerSet);
+                    ResetPoolForLayer(LayerSet.subpostLayer);
                 }
                 if (extrasFolder == null)
                 {
                     extrasFolder = new GameObject("Extras");
                     extrasFolder.transform.parent = currentFencesFolder.transform;
-                    ResetPoolForLayer(LayerSet.extraLayerSet);
+                    ResetPoolForLayer(LayerSet.extraLayer);
                 }
             }
         }
@@ -2028,11 +2028,11 @@ namespace AFWB
         // AFWB build-in prefabs are always scaled (1,1,1), but users' might differ
         void ResetNativePrefabScales()
         {
-            nativeRailAScale = GetCurrentPrefabForLayer(LayerSet.railALayerSet).transform.localScale;
-            nativeRailBScale = GetCurrentPrefabForLayer(LayerSet.railBLayerSet).transform.localScale;
-            nativeSubScale = GetCurrentPrefabForLayer(LayerSet.postLayerSet).transform.localScale;
-            nativeExtraScale = GetCurrentPrefabForLayer(LayerSet.extraLayerSet).transform.localScale;
-            nativePostScale = GetCurrentPrefabForLayer(LayerSet.postLayerSet).transform.localScale;
+            nativeRailAScale = GetCurrentPrefabForLayer(LayerSet.railALayer).transform.localScale;
+            nativeRailBScale = GetCurrentPrefabForLayer(LayerSet.railBLayer).transform.localScale;
+            nativeSubScale = GetCurrentPrefabForLayer(LayerSet.postLayer).transform.localScale;
+            nativeExtraScale = GetCurrentPrefabForLayer(LayerSet.extraLayer).transform.localScale;
+            nativePostScale = GetCurrentPrefabForLayer(LayerSet.postLayer).transform.localScale;
 
 
         }
@@ -2291,17 +2291,17 @@ namespace AFWB
                 GameObject thisGO = thisVariant.Go;
                 if (thisGO == null)
                     Debug.Log($" CreateAllPreparedMeshVariations  {GetLayerNameAsString(layer)}   sourceVariants is null");
-                if (layer == LayerSet.railALayerSet)
+                if (layer == LayerSet.railALayer)
                 {
                     //-- This INCLUDES the main  singleVarGO.
-                    railAPreparedMeshVariants[i] = CreatePreparedRailMesh(LayerSet.railALayerSet, MeshUtilitiesAFWB.GetAllMeshesFromGameObject(thisGO));
+                    railAPreparedMeshVariants[i] = CreatePreparedRailMesh(LayerSet.railALayer, MeshUtilitiesAFWB.GetAllMeshesFromGameObject(thisGO));
                     //-- If it'stackIdx a variation and not the main singleVarGO, make sure it'stackIdx height adjustedNativeScale matches th main
                     if (scaleVariationHeightToMainHeightA == true && i > 0)
                         variantMeshHeight = railAPreparedMeshVariants[i][0].bounds.size.y;
                 }
-                if (layer == LayerSet.railBLayerSet)
+                if (layer == LayerSet.railBLayer)
                 {
-                    railBPreparedMeshVariants[i] = CreatePreparedRailMesh(LayerSet.railBLayerSet, MeshUtilitiesAFWB.GetAllMeshesFromGameObject(thisGO));
+                    railBPreparedMeshVariants[i] = CreatePreparedRailMesh(LayerSet.railBLayer, MeshUtilitiesAFWB.GetAllMeshesFromGameObject(thisGO));
                     if (scaleVariationHeightToMainHeightB == true && i > 0)
                         variantMeshHeight = railBPreparedMeshVariants[i][0].bounds.size.y;
                 }
@@ -2311,7 +2311,7 @@ namespace AFWB
         public List<List<Mesh>> GetPreparedMeshVariantsForLayer(LayerSet layer)
         {
             List<List<Mesh>> preparedMeshVariants = railAPreparedMeshVariants;
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
                 preparedMeshVariants = railBPreparedMeshVariants;
 
             if (preparedMeshVariants == null)
@@ -2595,12 +2595,12 @@ namespace AFWB
         //-----------------------
         public void ResizeSingleVariantsLists(int sectionCount)
         {
-            if (useRailLayer[kRailALayerInt] == true && useRailSingles[kRailALayerInt] == true && sectionCount > singlesContainer.GetSingleVariantsForLayer(LayerSet.railALayerSet, af, warning: false).Count)
-                ResizeSingleVariantsListForLayer(LayerSet.railALayerSet, sectionCount);
-            else if (useRailLayer[kRailBLayerInt] == true && useRailSingles[kRailBLayerInt] && sectionCount > singlesContainer.GetSingleVariantsForLayer(LayerSet.railBLayerSet, af, warning: false).Count)
-                ResizeSingleVariantsListForLayer(LayerSet.railBLayerSet, sectionCount);
-            else if (usePostsLayer == true && usePostSingles == true && sectionCount > singlesContainer.GetSingleVariantsForLayer(LayerSet.postLayerSet, af, warning: false).Count)
-                ResizeSingleVariantsListForLayer(LayerSet.postLayerSet, sectionCount);
+            if (useRailLayer[kRailALayerInt] == true && useRailSingles[kRailALayerInt] == true && sectionCount > singlesContainer.GetSingleVariantsForLayer(LayerSet.railALayer, af, warning: false).Count)
+                ResizeSingleVariantsListForLayer(LayerSet.railALayer, sectionCount);
+            else if (useRailLayer[kRailBLayerInt] == true && useRailSingles[kRailBLayerInt] && sectionCount > singlesContainer.GetSingleVariantsForLayer(LayerSet.railBLayer, af, warning: false).Count)
+                ResizeSingleVariantsListForLayer(LayerSet.railBLayer, sectionCount);
+            else if (usePostsLayer == true && usePostSingles == true && sectionCount > singlesContainer.GetSingleVariantsForLayer(LayerSet.postLayer, af, warning: false).Count)
+                ResizeSingleVariantsListForLayer(LayerSet.postLayer, sectionCount);
         }
         //-----------------------------------
         //-- Will expand the List to be of railScale count
@@ -2627,18 +2627,18 @@ namespace AFWB
         //Includes Mesh and Transforms
         public void CalculateAllFinalPrefabSizes(bool print = false)
         {
-            prefabMeshWithTransformsSize[(int)LayerSet.railALayerSet] = CalculateTotalSizeOfCurrentLayerPrefab(LayerSet.railALayerSet);
-            prefabMeshWithTransformsSize[(int)LayerSet.railBLayerSet] = CalculateTotalSizeOfCurrentLayerPrefab(LayerSet.railBLayerSet);
-            prefabMeshWithTransformsSize[(int)LayerSet.postLayerSet] = CalculateTotalSizeOfCurrentLayerPrefab(LayerSet.postLayerSet);
+            prefabMeshWithTransformsSize[(int)LayerSet.railALayer] = CalculateTotalSizeOfCurrentLayerPrefab(LayerSet.railALayer);
+            prefabMeshWithTransformsSize[(int)LayerSet.railBLayer] = CalculateTotalSizeOfCurrentLayerPrefab(LayerSet.railBLayer);
+            prefabMeshWithTransformsSize[(int)LayerSet.postLayer] = CalculateTotalSizeOfCurrentLayerPrefab(LayerSet.postLayer);
 
             if (print)
             {
                 if (useRailLayer[0])
-                    Debug.Log("Rail A Size = " + prefabMeshWithTransformsSize[(int)LayerSet.railALayerSet] + "\n");
+                    Debug.Log("Rail A Size = " + prefabMeshWithTransformsSize[(int)LayerSet.railALayer] + "\n");
                 if (useRailLayer[1])
-                    Debug.Log("Rail B Size = " + prefabMeshWithTransformsSize[(int)LayerSet.railBLayerSet] + "\n");
+                    Debug.Log("Rail B Size = " + prefabMeshWithTransformsSize[(int)LayerSet.railBLayer] + "\n");
                 if (usePostsLayer)
-                    Debug.Log("Post Size = " + prefabMeshWithTransformsSize[(int)LayerSet.postLayerSet] + "\n");
+                    Debug.Log("Post Size = " + prefabMeshWithTransformsSize[(int)LayerSet.postLayer] + "\n");
             }
         }
         //-----------------------------------------
@@ -2705,7 +2705,7 @@ namespace AFWB
         // Called when the layout is required to change
         // Creates, the interpolated postsPool, the smoothing curve and
         // then calls RebuildFromFinalList where the fence gets put together
-        public void ForceRebuildFromClickPoints(LayerSet layerSet = LayerSet.allLayerSet, [CallerMemberName] string caller = null)
+        public void ForceRebuildFromClickPoints(LayerSet layerSet = LayerSet.allLayer, [CallerMemberName] string caller = null)
         {
             if (clickPoints.Count == 0)
                 return;
@@ -2807,7 +2807,7 @@ namespace AFWB
         //------------------------
         // This is where the gameobjects actually get built
         // The final list differs from the main clickPoints list in that has now added extra postsPool for interpolating and smoothing
-        public void RebuildFromFinalList(LayerSet layer = LayerSet.allLayerSet)
+        public void RebuildFromFinalList(LayerSet layer = LayerSet.allLayer)
         {
             Timer t = new Timer("RebuildFromFinalList"); t.enabled = false;// Uncomment to time build
             railsATotalTriCount = railsBTotalTriCount = postsTotalTriCount = subPostsTotalTriCount = extrasTotalTriCount = 0;
@@ -2831,9 +2831,9 @@ namespace AFWB
             // Crete a new single clean fixed Rail mesh which can be duplicated to make the individual sections.
             // These cannot be pre-packed in to the game objects, otherwise the mesh modifications would compound on every rebuild.
             if (useRailLayer[kRailALayerInt])
-                CreateAllPreparedMeshVariations(LayerSet.railALayerSet);
+                CreateAllPreparedMeshVariations(LayerSet.railALayer);
             if (useRailLayer[kRailBLayerInt])
-                CreateAllPreparedMeshVariations(LayerSet.railBLayerSet);
+                CreateAllPreparedMeshVariations(LayerSet.railBLayer);
 
             variationModeRailA = VariationMode.sequenced;
             variationModeRailB = VariationMode.sequenced;
@@ -2903,19 +2903,19 @@ namespace AFWB
                     }
                     else if (IsBreakPoint(allPostPositions[sectionIndex + 1]) == false || allowGaps == false)
                     {
-                        if (useRailLayer[kRailALayerInt] == true && (layer == LayerSet.railALayerSet || layer == LayerSet.allLayerSet))
-                            railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railALayerSet, GetPreparedMeshVariantsForLayer(LayerSet.railALayerSet));  //---- CreateMergedPrefabs Main Rails ----
-                                                                                                                                                                                 //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railALayerSet, GetPreparedMeshVariantsForLayer(LayerSet.railALayerSet));  //---- CreateMergedPrefabs Main Rails ----
+                        if (useRailLayer[kRailALayerInt] == true && (layer == LayerSet.railALayer || layer == LayerSet.allLayer))
+                            railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railALayer, GetPreparedMeshVariantsForLayer(LayerSet.railALayer));  //---- CreateMergedPrefabs Main Rails ----
+                                                                                                                                                                                 //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railALayer, GetPreparedMeshVariantsForLayer(LayerSet.railALayer));  //---- CreateMergedPrefabs Main Rails ----
 
-                        if (useRailLayer[kRailBLayerInt] == true && (layer == LayerSet.railBLayerSet || layer == LayerSet.allLayerSet))
-                            railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railBLayerSet, GetPreparedMeshVariantsForLayer(LayerSet.railBLayerSet)); //---- CreateMergedPrefabs Seconday Rails ----
-                                                                                                                                                                                //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railBLayerSet, GetPreparedMeshVariantsForLayer(LayerSet.railBLayerSet)); //---- CreateMergedPrefabs Seconday Rails ----
+                        if (useRailLayer[kRailBLayerInt] == true && (layer == LayerSet.railBLayer || layer == LayerSet.allLayer))
+                            railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railBLayer, GetPreparedMeshVariantsForLayer(LayerSet.railBLayer)); //---- CreateMergedPrefabs Seconday Rails ----
+                                                                                                                                                                                //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railBLayer, GetPreparedMeshVariantsForLayer(LayerSet.railBLayer)); //---- CreateMergedPrefabs Seconday Rails ----
 
-                        if (useSubpostsLayer == true && (layer == LayerSet.subpostLayerSet || layer == LayerSet.allLayerSet))
+                        if (useSubpostsLayer == true && (layer == LayerSet.subpostLayer || layer == LayerSet.allLayer))
                             BuildSubposts(A, B, sectionIndex);
                         //-- if the subpostsPool are replicating the postsPool, need to build the last subpost at the last Post
                         if (sectionIndex == allPostPositions.Count - 2 && useSubpostsLayer == true && (subsSpacingMode == SubSpacingMode.postPositionsOnly || subsSpacingMode == SubSpacingMode.nodePositionsOnly || addSubpostAtPostPointAlso == true) &&
-                            (layer == LayerSet.subpostLayerSet || layer == LayerSet.allLayerSet))
+                            (layer == LayerSet.subpostLayer || layer == LayerSet.allLayer))
                             BuildSubposts(B, A, sectionIndex + 1, true);
                     }
                     else
@@ -3041,7 +3041,7 @@ namespace AFWB
             RailOffsetMode offsetMode = railOffsetMode[layerIndex];
             //Vector3 currentVectorDir;
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
             {
                 currSeq = optimalSequenceRailA;
                 variationMode = variationModeRailA;
@@ -3055,7 +3055,7 @@ namespace AFWB
                 randomScope = railARandomScope;
                 rotateFromBase = rotateFromBaseRailA;
             }
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
             {
                 railRotation = railBRotation;
                 railPositionOffset = railBPositionOffset;
@@ -3319,22 +3319,22 @@ namespace AFWB
                                     //Hide this singleVarGO
                                     if (currSingleItem.enabled == true)
                                     {
-                                        if (layer == LayerSet.railALayerSet) railABuiltCount++;
-                                        else if (layer == LayerSet.railBLayerSet) railBBuiltCount++;
+                                        if (layer == LayerSet.railALayer) railABuiltCount++;
+                                        else if (layer == LayerSet.railBLayer) railBBuiltCount++;
                                         thisRail.hideFlags = HideFlags.HideInHierarchy; thisRail.SetActive(false);
                                         return null;
                                     }
                                     // First destroy the existing Rail that we're about to replace with a Single Variant
-                                    if (layer == LayerSet.railALayerSet)
+                                    if (layer == LayerSet.railALayer)
                                         DestroyImmediate(railsAPool[railABuiltCount].gameObject);
-                                    if (layer == LayerSet.railBLayerSet)
+                                    if (layer == LayerSet.railBLayer)
                                         DestroyImmediate(railsBPool[railBBuiltCount].gameObject);
 
                                     thisRail = Instantiate(rail_Variants[currVariantIndex].Go, Vector3.zero, Quaternion.identity) as GameObject;
                                     FormatInstantiatedGONameWithSectionAndVariation(thisRail, sectionIndex, currVariantIndex);
-                                    if (layer == LayerSet.railALayerSet)
+                                    if (layer == LayerSet.railALayer)
                                         railsAPool[railABuiltCount] = thisRail.transform;
-                                    if (layer == LayerSet.railBLayerSet)
+                                    if (layer == LayerSet.railBLayer)
                                         railsBPool[railBBuiltCount] = thisRail.transform;
                                     isSingle = true;
                                     // Override the sequence for this section
@@ -3442,24 +3442,24 @@ namespace AFWB
                 if (useRailVariations[layerIndex] == true && useRailSeq == true && (currVariantIndex > 0 || variationMode == VariationMode.sequenced) &&
                 (currSourceVariant != null && currSourceVariant.enabled == false || varSizeMultiplier.x == 0 || varSizeMultiplier.y == 0 || varSizeMultiplier.z == 0))
                 {
-                    if (layer == LayerSet.railALayerSet) railABuiltCount++;
-                    else if (layer == LayerSet.railBLayerSet) railBBuiltCount++;
+                    if (layer == LayerSet.railALayer) railABuiltCount++;
+                    else if (layer == LayerSet.railBLayer) railBBuiltCount++;
                     thisRail.hideFlags = HideFlags.HideInHierarchy; thisRail.SetActive(false);
                     return null;
                 }
 
-                if (layer == LayerSet.railALayerSet)
+                if (layer == LayerSet.railALayer)
                     railsATotalTriCount += triCount / 3;
-                if (layer == LayerSet.railBLayerSet)
+                if (layer == LayerSet.railBLayer)
                     railsBTotalTriCount += triCount / 3;
 
                 //=====================================
                 //      Rail Rotation From Direction
                 //======================================
                 GameObject prevRail = null;
-                if (layer == LayerSet.railALayerSet && railABuiltCount > numStackedRailsInThisSet)
+                if (layer == LayerSet.railALayer && railABuiltCount > numStackedRailsInThisSet)
                     prevRail = railsAPool[railABuiltCount - numStackedRailsInThisSet].gameObject;
-                else if (layer == LayerSet.railBLayerSet && railBBuiltCount > numStackedRailsInThisSet)
+                else if (layer == LayerSet.railBLayer && railBBuiltCount > numStackedRailsInThisSet)
                     prevRail = railsBPool[railBBuiltCount - numStackedRailsInThisSet].gameObject;
 
                 //====================================
@@ -3837,9 +3837,9 @@ namespace AFWB
 
                 thisRail.isStatic = usingStaticBatching;
                 railBuiltCount++;
-                if (layer == LayerSet.railALayerSet)
+                if (layer == LayerSet.railALayer)
                     railABuiltCount++;
-                else if (layer == LayerSet.railBLayerSet)
+                else if (layer == LayerSet.railBLayer)
                     railBBuiltCount++;
 
                 //====== Organize into subfolders so we can combine for drawcalls, but don't hit the mesh combine limit of 65k ==========
@@ -3847,9 +3847,9 @@ namespace AFWB
                 int numRailsBFolders = (railBBuiltCount / objectsPerFolder) + 1;
 
                 string railsDividedFolderName = "";
-                if (layer == LayerSet.railALayerSet)
+                if (layer == LayerSet.railALayer)
                     railsDividedFolderName = "RailsAGroupedFolder" + (numRailsAFolders - 1);
-                else if (layer == LayerSet.railBLayerSet)
+                else if (layer == LayerSet.railBLayer)
                     railsDividedFolderName = "RailsBGroupedFolder" + (numRailsBFolders - 1);
 
 
@@ -3965,22 +3965,22 @@ namespace AFWB
                         //Hide this singleVarGO
                         if (currSingleItem.enabled == true)
                         {
-                            if (layer == LayerSet.railALayerSet) railABuiltCount++;
-                            else if (layer == LayerSet.railBLayerSet) railBBuiltCount++;
+                            if (layer == LayerSet.railALayer) railABuiltCount++;
+                            else if (layer == LayerSet.railBLayer) railBBuiltCount++;
                             thisRail.hideFlags = HideFlags.HideInHierarchy; thisRail.SetActive(false);
                             return null;
                         }
                         // First destroy the existing Rail that we're about to replace with a Single Variant
-                        if (layer == LayerSet.railALayerSet)
+                        if (layer == LayerSet.railALayer)
                             DestroyImmediate(railsAPool[railABuiltCount].gameObject);
-                        if (layer == LayerSet.railBLayerSet)
+                        if (layer == LayerSet.railBLayer)
                             DestroyImmediate(railsBPool[railBBuiltCount].gameObject);
 
                         thisRail = Instantiate(rail_Variants[currVariantIndex].Go, Vector3.zero, Quaternion.identity) as GameObject;
                         FormatInstantiatedGONameWithSectionAndVariation(thisRail, sectionIndex, currVariantIndex);
-                        if (layer == LayerSet.railALayerSet)
+                        if (layer == LayerSet.railALayer)
                             railsAPool[railABuiltCount] = thisRail.transform;
-                        if (layer == LayerSet.railBLayerSet)
+                        if (layer == LayerSet.railBLayer)
                             railsBPool[railBBuiltCount] = thisRail.transform;
                         isSingle = true;
                         // Override the sequence for this section
@@ -4582,12 +4582,12 @@ namespace AFWB
             Vector3 markerScale = new Vector3(0.3f, 0.3f, 0.3f);
 
             //-- Variation might need to know the size of the Mesh
-            GameObject go = GetCurrentPrefabForLayer(LayerSet.postLayerSet);
+            GameObject go = GetCurrentPrefabForLayer(LayerSet.postLayer);
             float postMeshHeight = MeshUtilitiesAFWB.GetCombinedSizeOfAllMeshesInGameObject(go).y;
 
             Vector3 variantScaling = Vector3.one, variantOffset = Vector3.zero;
 
-            int numSeqSteps = GetNumSeqStepsForLayer(LayerSet.postLayerSet);
+            int numSeqSteps = GetNumSeqStepsForLayer(LayerSet.postLayer);
 
 
             //SeqItem currSeqItem = new SeqItem();
@@ -4611,9 +4611,9 @@ namespace AFWB
 
                 //float groundY = postPos.y, padding = 0.35f, min = 0.5f;
                 float groundY = clickPointPos.y, padding = 0.35f, min = 0.5f;
-                (float highestPointRailA, float yOffsetRailA) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railALayerSet);
-                (float highestPointRailB, float yOffsetRailB) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railBLayerSet);
-                (float highestPointPost, float yOffsetPost) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.postLayerSet);
+                (float highestPointRailA, float yOffsetRailA) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railALayer);
+                (float highestPointRailB, float yOffsetRailB) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railBLayer);
+                (float highestPointPost, float yOffsetPost) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.postLayer);
 
                 float maxRailTop = Mathf.Max(highestPointRailA + yOffsetRailA, highestPointRailB + yOffsetRailB);
                 float maxGoTop = Mathf.Max(maxRailTop, highestPointPost + yOffsetPost);
@@ -4625,7 +4625,7 @@ namespace AFWB
                 if (usePostVariations)
                 {
                     int seqStep = postIndex % numSeqSteps;
-                    SeqItem currSeqItem = GetSeqItemAtStepForLayer(seqStep, LayerSet.postLayerSet);
+                    SeqItem currSeqItem = GetSeqItemAtStepForLayer(seqStep, LayerSet.postLayer);
                     variantScaling = currSeqItem.size;
                     variantOffset = currSeqItem.pos;
                     extraHeightOfVariant = (globalScale.y * postScale.y * mainPostsSizeBoost.y * (variantScaling.y - 1) * postMeshHeight) + variantOffset.y;
@@ -4655,7 +4655,7 @@ namespace AFWB
 
             //-- Is it a sequencer step or a Single?
             Vector3 variantScaling = Vector3.one, variantOffset = Vector3.zero;
-            if (GetUseSequencerForLayer(LayerSet.postLayerSet) == true /* || using single*/)
+            if (GetUseSequencerForLayer(LayerSet.postLayer) == true /* || using single*/)
             {
                 SeqItem currSeqItem = postSequencer.GetSeqItemForSectionIndex(postIndex);
                 variantScaling = postSequencer.GetSeqScaleForSectionIndex(postIndex);
@@ -4675,9 +4675,9 @@ namespace AFWB
             float postTop = markerPos.y;
 
             float groundY = postPos.y, padding = 0.35f, min = 0.5f;
-            (float highestPointRailA, float yOffsetRailA) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railALayerSet);
-            (float highestPointRailB, float yOffsetRailB) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railBLayerSet);
-            (float highestPointPost, float yOffsetPost) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.postLayerSet);
+            (float highestPointRailA, float yOffsetRailA) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railALayer);
+            (float highestPointRailB, float yOffsetRailB) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railBLayer);
+            (float highestPointPost, float yOffsetPost) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.postLayer);
 
             float maxRailTop = Mathf.Max(highestPointRailA + yOffsetRailA, highestPointRailB + yOffsetRailB);
             float maxGoTop = Mathf.Max(maxRailTop, highestPointPost + yOffsetPost);
@@ -4837,7 +4837,7 @@ namespace AFWB
         {
             int index = -1, numVariants = GetNumSourceVariantsInUseForLayer(layer, incMain: true);
             List<SourceVariant> variants = GetSourceVariantsForLayer(layer);
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
             {
                 for (int i = 0; i < numVariants; i++)
                 {
@@ -5091,15 +5091,15 @@ namespace AFWB
         //----------------------
         public int GetNumBuiltForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 return postsBuiltCount;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 return railABuiltCount;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return railBBuiltCount;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return subpostsBuiltCount;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return ex.extrasBuiltCount;
 
             return 0;
@@ -5156,10 +5156,10 @@ namespace AFWB
             LayerSet layer = GetRailLayerOfRail(go);
 
             int railAIndex = IsRailAPoint(go.transform.localPosition);
-            if (layer == LayerSet.railALayerSet && railAIndex != -1)
+            if (layer == LayerSet.railALayer && railAIndex != -1)
                 return (railAIndex, 0);
             int railBIndex = IsRailBPoint(go.transform.localPosition);
-            if (layer == LayerSet.railALayerSet && railBIndex != -1)
+            if (layer == LayerSet.railALayer && railBIndex != -1)
                 return (railBIndex, 1);
 
             return (-1, -1);
@@ -5172,60 +5172,60 @@ namespace AFWB
             if (go == null)
             {
                 Debug.LogWarning("GetRailLayerOfRail: go is null");
-                return LayerSet.noneLayerSet;
+                return LayerSet.None;
             }
             if (go.transform.parent == null)
             {
                 Debug.LogWarning("GetRailLayerOfRail: go.transform.parent is null");
-                return LayerSet.noneLayerSet;
+                return LayerSet.None;
             }
 
             if (go.transform.parent.name.Contains("RailsAGroupedFolder"))
-                return LayerSet.railALayerSet;
+                return LayerSet.railALayer;
             else if (go.transform.parent.name.Contains("RailsBGroupedFolder"))
-                return LayerSet.railBLayerSet;
-            return LayerSet.noneLayerSet;
+                return LayerSet.railBLayer;
+            return LayerSet.None;
         }
         //---------------
         public LayerSet InferLayerFromGoName(GameObject go)
         {
-            LayerSet layer = LayerSet.noneLayerSet;
+            LayerSet layer = LayerSet.None;
             if (go == null || go.transform.parent == null)
             {
                 //Debug.LogWarning("InferLayerFromGoName: singleVarGO is null");
                 return layer;
             }
             if (go.transform.parent.name.Contains("RailsAGroupedFolder"))
-                layer = LayerSet.railALayerSet;
+                layer = LayerSet.railALayer;
             else if (go.transform.parent.name.Contains("RailsBGroupedFolder"))
-                layer = LayerSet.railBLayerSet;
+                layer = LayerSet.railBLayer;
             else if (go.transform.parent.name.Contains("PostsGroupedFolder0"))
-                layer = LayerSet.postLayerSet;
+                layer = LayerSet.postLayer;
             else if (go.transform.parent.name.Contains("ExtrasGroupedFolder"))
-                layer = LayerSet.extraLayerSet;
+                layer = LayerSet.extraLayer;
             else if (go.transform.parent.name.Contains("SubsGroupedFolder"))
-                layer = LayerSet.subpostLayerSet;
+                layer = LayerSet.subpostLayer;
             else if (go.transform.name.Contains("Marker"))
-                layer = LayerSet.markerLayerSet;
+                layer = LayerSet.markerLayer;
 
             else if (go.transform.name.Contains("_Post"))
-                layer = LayerSet.postLayerSet;
+                layer = LayerSet.postLayer;
 
             //-- The following doesn't work because the prefab names dont have the designator A or B. Left here as it's not obvious
             /*else if (go.transform.name.Contains("_RailA"))
-                    layer = LayerSet.railALayerSet;
+                    layer = LayerSet.railALayer;
             else if (go.transform.name.Contains("_RailB"))
-                layer = LayerSet.railBLayerSet;*/
+                layer = LayerSet.railBLayer;*/
 
             else if (go.transform.name.Contains("_Extra"))
-                layer = LayerSet.extraLayerSet;
+                layer = LayerSet.extraLayer;
             else if (go.transform.name.Contains("_Ex")) //--TODO. This is a temporary fix for shortening the name to _Ex during Extra pool creation
-                layer = LayerSet.extraLayerSet;
+                layer = LayerSet.extraLayer;
             else if (go.transform.name.Contains("_Sub"))
-                layer = LayerSet.subpostLayerSet;
+                layer = LayerSet.subpostLayer;
 
             else
-                layer = LayerSet.noneLayerSet;
+                layer = LayerSet.None;
 
 
 
@@ -5286,7 +5286,7 @@ namespace AFWB
             //-- If a Post wasn't found in Posts, maybe the Post is using an Extra
             if (prefabType == PrefabTypeAFWB.postPrefab)
             {
-                prefabs = GetPrefabsForLayer(LayerSet.extraLayerSet);
+                prefabs = GetPrefabsForLayer(LayerSet.extraLayer);
                 for (int i = 0; i < prefabs.Count; i++)
                 {
                     if (prefabs[i] == null)
@@ -5299,7 +5299,7 @@ namespace AFWB
             //-- If an Extra wasn't found, maybe the Extra is using a Post
             if (prefabType == PrefabTypeAFWB.extraPrefab)
             {
-                prefabs = GetPrefabsForLayer(LayerSet.postLayerSet);
+                prefabs = GetPrefabsForLayer(LayerSet.postLayer);
                 for (int i = 0; i < prefabs.Count; i++)
                 {
                     if (prefabs[i] == null)
@@ -5333,13 +5333,13 @@ namespace AFWB
         {
             int defaultPrefabIndex = 0;
 
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 defaultPrefabIndex = FindPrefabIndexByName(layer, "BrickSquare_Post", false, false);
-            else if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 defaultPrefabIndex = FindPrefabIndexByName(layer, "Brick_WallHigh_Panel", false, false);
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 defaultPrefabIndex = FindPrefabIndexByName(layer, "BrickSquare_Post", false, false);
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 defaultPrefabIndex = FindPrefabIndexByName(layer, "ConcreteBlock_Extra", false, false);
 
             if (GetPrefabAtIndexForLayer(defaultPrefabIndex, layer) == null)
@@ -5513,12 +5513,12 @@ namespace AFWB
 
             GameObject rail = null;
             float userHeightScale = 0;
-            if (railSet == LayerSet.railALayerSet)
+            if (railSet == LayerSet.railALayer)
             {
                 rail = railPrefabs[currentRail_PrefabIndex[0]];
                 userHeightScale = railAScale.y;
             }
-            else if (railSet == LayerSet.railBLayerSet)
+            else if (railSet == LayerSet.railBLayer)
             {
                 rail = railPrefabs[currentRail_PrefabIndex[1]];
                 userHeightScale = railBScale.y;
@@ -5529,9 +5529,9 @@ namespace AFWB
             float finalRailHeight = meshHeight * userHeightScale * globalScale.y;
             float bottom = -finalRailHeight / 2;
 
-            if (railSet == LayerSet.railALayerSet)
+            if (railSet == LayerSet.railALayer)
                 railAPositionOffset = new Vector3(railAPositionOffset.x, 0, railAPositionOffset.z);
-            else if (railSet == LayerSet.railBLayerSet)
+            else if (railSet == LayerSet.railBLayer)
                 railBPositionOffset = new Vector3(railBPositionOffset.x, 0, railBPositionOffset.z);
 
             ForceRebuildFromClickPoints();
@@ -5543,12 +5543,12 @@ namespace AFWB
 
             GameObject rail = null;
             int numRails = 1;
-            if (railSet == LayerSet.railALayerSet)
+            if (railSet == LayerSet.railALayer)
             {
                 rail = railPrefabs[currentRail_PrefabIndex[0]];
                 numRails = (int)numStackedRails[kRailALayerInt];
             }
-            else if (railSet == LayerSet.railBLayerSet)
+            else if (railSet == LayerSet.railBLayer)
             {
                 rail = railPrefabs[currentRail_PrefabIndex[1]];
                 numRails = (int)numStackedRails[kRailBLayerInt];
@@ -5585,12 +5585,12 @@ namespace AFWB
 
         public void ResetRail(LayerSet layer, bool controlKey, bool rebuild = true)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
             {
                 allowHeightVariationRailA = false;
                 ResetRailATransforms(rebuild: false);
             }
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
             {
 
                 allowHeightVariationRailB = false;
@@ -5608,9 +5608,9 @@ namespace AFWB
 
             if (controlKey)
             {
-                int prefabIndex = GetPrefabIndexForLayerByName(LayerSet.railALayerSet, "_A_DefaultBrickWall_Panel");
+                int prefabIndex = GetPrefabIndexForLayerByName(LayerSet.railALayer, "_A_DefaultBrickWall_Panel");
                 if (prefabIndex == -1)
-                    prefabIndex = GetPrefabIndexForLayerByName(LayerSet.railALayerSet, "ABasicConcrete_Panel");
+                    prefabIndex = GetPrefabIndexForLayerByName(LayerSet.railALayer, "ABasicConcrete_Panel");
                 if (prefabIndex == -1)
                     prefabIndex = 0;
                 SetCurrentPrefabIndexForLayer(prefabIndex, layer);
@@ -5633,7 +5633,7 @@ namespace AFWB
             overlapAtCorners = true;
             autoHideBuriedRails = false;
             slopeMode[kRailALayerInt] = SlopeMode.shear;
-            GroundRails(LayerSet.railALayerSet);
+            GroundRails(LayerSet.railALayer);
             if (rebuild == true)
                 ForceRebuildFromClickPoints();
         }
@@ -5648,7 +5648,7 @@ namespace AFWB
             overlapAtCorners = true;
             autoHideBuriedRails = false;
             slopeMode[kRailBLayerInt] = SlopeMode.shear;
-            GroundRails(LayerSet.railBLayerSet);
+            GroundRails(LayerSet.railBLayer);
             if (rebuild == true)
                 ForceRebuildFromClickPoints();
         }
@@ -5755,13 +5755,13 @@ namespace AFWB
         /// <returns></returns>
         private bool CheckShouldSkip(GameObject prefab, LayerSet layer)
         {
-            if ((layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet) && prefab.name.Contains("_Extra"))
+            if ((layer == LayerSet.postLayer || layer == LayerSet.subpostLayer) && prefab.name.Contains("_Extra"))
                 return true;
 
-            if (layer == LayerSet.extraLayerSet && prefab.name.Contains("_Post"))
+            if (layer == LayerSet.extraLayer && prefab.name.Contains("_Post"))
                 return true;
 
-            if (layer == LayerSet.extraLayerSet && (prefab.name.Contains("_Rail") || prefab.name.Contains("_Panel")))
+            if (layer == LayerSet.extraLayer && (prefab.name.Contains("_Rail") || prefab.name.Contains("_Panel")))
                 return true;
             return false;
         }
@@ -5769,10 +5769,10 @@ namespace AFWB
         //----------------------------------------
         public void CreatePrefabMenuNames()
         {
-            CreatePrefabMenuNamesForLayer(LayerSet.railALayerSet);
-            CreatePrefabMenuNamesForLayer(LayerSet.postLayerSet);
-            CreatePrefabMenuNamesForLayer(LayerSet.extraLayerSet);
-            CreatePrefabMenuNamesForLayer(LayerSet.subpostLayerSet);
+            CreatePrefabMenuNamesForLayer(LayerSet.railALayer);
+            CreatePrefabMenuNamesForLayer(LayerSet.postLayer);
+            CreatePrefabMenuNamesForLayer(LayerSet.extraLayer);
+            CreatePrefabMenuNamesForLayer(LayerSet.subpostLayer);
 
             AddExtrasToPostMenus();
             AddExtrasToSubpostMenus();
@@ -5787,8 +5787,8 @@ namespace AFWB
         /// </summary>
         private void AddExtrasToPostMenus()
         {
-            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayerSet);
-            List<string> postMenuNames = GetPrefabMenuNamesForLayer(LayerSet.postLayerSet);
+            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayer);
+            List<string> postMenuNames = GetPrefabMenuNamesForLayer(LayerSet.postLayer);
 
             for (int i = 0; i < extraMenuNames.Count; i++)
             {
@@ -5797,8 +5797,8 @@ namespace AFWB
         }
         private void AddExtrasToSubpostMenus()
         {
-            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayerSet);
-            List<string> subpostMenuNames = GetPrefabMenuNamesForLayer(LayerSet.subpostLayerSet);
+            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayer);
+            List<string> subpostMenuNames = GetPrefabMenuNamesForLayer(LayerSet.subpostLayer);
 
             for (int i = 0; i < extraMenuNames.Count; i++)
             {
@@ -5807,8 +5807,8 @@ namespace AFWB
         }
         private void AddPostsToExtrasMenu()
         {
-            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayerSet);
-            List<string> postMenuNames = GetPrefabMenuNamesForLayer(LayerSet.postLayerSet);
+            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayer);
+            List<string> postMenuNames = GetPrefabMenuNamesForLayer(LayerSet.postLayer);
 
             for (int i = 0; i < postMenuNames.Count; i++)
             {
@@ -5818,8 +5818,8 @@ namespace AFWB
         }
         private void AddRailsToExtraMenus()
         {
-            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayerSet);
-            List<string> railMenuNames = GetPrefabMenuNamesForLayer(LayerSet.railALayerSet);
+            List<string> extraMenuNames = GetPrefabMenuNamesForLayer(LayerSet.extraLayer);
+            List<string> railMenuNames = GetPrefabMenuNamesForLayer(LayerSet.railALayer);
 
             for (int i = 0; i < railMenuNames.Count; i++)
             {
@@ -5831,9 +5831,9 @@ namespace AFWB
         {
             int layerIndex = (int)layer;
             string path = userBackupPathPost;
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 path = userBackupPathRail[layerIndex];
-            if (layer == LayerSet.extraLayerSet)
+            if (layer == LayerSet.extraLayer)
                 path = userBackupPathExtra;
             return path;
         }
@@ -5849,13 +5849,13 @@ namespace AFWB
         // Relaces the prefab at the current index with in go
         public void SetCurrentPrefabForLayer(GameObject go, LayerSet layer)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 postPrefabs[currentPost_PrefabIndex] = go;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 railPrefabs[currentRail_PrefabIndex[0]] = go;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 railPrefabs[currentRail_PrefabIndex[1]] = go;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 extraPrefabs[currentExtra_PrefabIndex] = go;
 
         }

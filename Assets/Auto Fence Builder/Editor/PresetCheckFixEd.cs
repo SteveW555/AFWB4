@@ -18,10 +18,10 @@ namespace AFWB
         /// <param name="layer">The LayerSet that the SourceVariants belong to.</param>
         /// <param name="preset">The ScriptablePresetAFWB that the SourceVariants are part of.</param>
         /// <param name="af">The AutoFenceCreator gizmoSingletonInstance that is currently in use.</param>
-        /// <param name="mainGo">Optional. The main GameObject to use if a SourceVariant needs to be created or replaced. If not provided, the method will use the currently assigned Main prefab for the layer.</param>
+        /// <param name="mainGo">Optional. The main GameObject to use if a SourceVariant needs to be created or replaced. If not provided, the method will use the currently assigned Main prefab for the sourceLayerList.</param>
         /// <param name="warn">Optional. If set to true, the method will log warnings when it encounters issues. Defaults to true.</param>
         /// <remarks>
-        /// Optionally pass in a main go. By default it will use the currently assigned Main prefab for the layer,
+        /// Optionally pass in a main go. By default it will use the currently assigned Main prefab for the sourceLayerList,
         /// but in cases where the main prefab is not yet assigned, (during loading of a preset) you can pass in a go to use instead.
         /// </remarks>
         /// <returns>Returns the number of sourceVariants fixed.</returns>
@@ -95,12 +95,12 @@ namespace AFWB
         }
 
         //----------------
-        // A wrapper for above that checks the existing List for that layer if none is passed in
+        // A wrapper for above that checks the existing List for that sourceLayerList if none is passed in
         public static int CheckAndRepairSourceVariantsListForLayer(LayerSet layer, ScriptablePresetAFWB preset, bool warn = true)
         {
             //  We don't want to warn here as we are already chececking for probelms
-            //List<SourceVariant> sourceVariants = GetSourceVariantsForLayer(layer, warn: false);
-            //int numFixed = CheckAndRepairSourceVariantsList(sourceVariants, layer,  preset, warn);
+            //List<SourceVariant> sourceVariants = GetSourceVariantsForLayer(sourceLayerList, warn: false);
+            //int numFixed = CheckAndRepairSourceVariantsList(sourceVariants, sourceLayerList,  preset, warn);
             //return numFixed;
 
             return 0;
@@ -110,10 +110,10 @@ namespace AFWB
         public static int CheckAndRepairSourceVariantsListsAllLayers(ScriptablePresetAFWB preset, bool warn = true)
         {
             int numFixed = 0;
-            numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.postLayerSet, preset, warn);
-            numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.railALayerSet, preset, warn);
-            numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.railBLayerSet, preset, warn);
-            //numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.subpostLayerSet, warn); //for v4.1
+            numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.postLayer, preset, warn);
+            numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.railALayer, preset, warn);
+            numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.railBLayer, preset, warn);
+            //numFixed += CheckAndRepairSourceVariantsListForLayer(LayerSet.subpostLayer, warn); //for v4.1
             return numFixed;
         }
         //---------------------------------
@@ -126,45 +126,45 @@ namespace AFWB
             //     Post
             //===============
             List<SourceVariant> postSourceVariants = preset.postVariants;
-            GameObject mainPostGo = GetMainPrefabForLayerForPreset(LayerSet.postLayerSet, af, preset);
-            numFixed += PresetCheckFixEd.CheckAndRepairSourceVariantsList(postSourceVariants, LayerSet.postLayerSet, preset, af, mainPostGo, warn);
+            GameObject mainPostGo = GetMainPrefabForLayerForPreset(LayerSet.postLayer, af, preset);
+            numFixed += PresetCheckFixEd.CheckAndRepairSourceVariantsList(postSourceVariants, LayerSet.postLayer, preset, af, mainPostGo, warn);
 
             //     Rail A
             //===============
             List<SourceVariant> railASourceVariants = preset.railAVariants;
-            GameObject mainRailAGo = GetMainPrefabForLayerForPreset(LayerSet.railALayerSet, af, preset);
-            numFixed += PresetCheckFixEd.CheckAndRepairSourceVariantsList(railASourceVariants, LayerSet.railALayerSet, preset, af, mainRailAGo, warn);
+            GameObject mainRailAGo = GetMainPrefabForLayerForPreset(LayerSet.railALayer, af, preset);
+            numFixed += PresetCheckFixEd.CheckAndRepairSourceVariantsList(railASourceVariants, LayerSet.railALayer, preset, af, mainRailAGo, warn);
 
             //     Rail B
             //===============
             List<SourceVariant> railBSourceVariants = preset.railBVariants;
-            GameObject mainRailBGo = GetMainPrefabForLayerForPreset(LayerSet.railBLayerSet, af, preset);
-            numFixed += PresetCheckFixEd.CheckAndRepairSourceVariantsList(railBSourceVariants, LayerSet.railBLayerSet, preset, af, mainRailBGo, warn);
+            GameObject mainRailBGo = GetMainPrefabForLayerForPreset(LayerSet.railBLayer, af, preset);
+            numFixed += PresetCheckFixEd.CheckAndRepairSourceVariantsList(railBSourceVariants, LayerSet.railBLayer, preset, af, mainRailBGo, warn);
 
             // for v4.1
             /* List<SourceVariant> subpostSourceVariants = preset.subpostVariants;
-            GameObject mainSubpostGo = GetMainPrefabForLayerForPreset(LayerSet.subpostLayerSet, af, preset);
-            af.CheckAndRepairSourceVariantsListForLayer(subpostSourceVariants, LayerSet.subpostLayerSet, true, mainSubpostGo);*/
+            GameObject mainSubpostGo = GetMainPrefabForLayerForPreset(LayerSet.subpostLayer, af, preset);
+            af.CheckAndRepairSourceVariantsListForLayer(subpostSourceVariants, LayerSet.subpostLayer, true, mainSubpostGo);*/
             return numFixed;
         }
         public static GameObject GetMainPrefabForLayerForPreset(LayerSet layer, AutoFenceCreator af, ScriptablePresetAFWB preset)
         {
             GameObject mainForPreset = null;
             string msg = preset.categoryName + "/" + preset.name;
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 mainForPreset = af.FindPrefabByName(layer, preset.postName, true, true, msg);
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 mainForPreset = af.FindPrefabByName(layer, preset.railAName, true, true, msg);
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 mainForPreset = af.FindPrefabByName(layer, preset.railBName, true, true, msg);
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 mainForPreset = af.FindPrefabByName(layer, preset.subpostName, true, true, msg);
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 mainForPreset = af.FindPrefabByName(layer, preset.extraName, true, true, msg);
 
             if (mainForPreset == null)
             {
-                //Debug.LogWarning("Couldn't find prefab for layer: " + preset.postName + "   " + layer.ToString() + "  in preset: " + msg + "\n");
+                //Debug.LogWarning("Couldn't find prefab for sourceLayerList: " + preset.postName + "   " + sourceLayerList.ToString() + "  in preset: " + msg + "\n");
                 af.FixAndWarnBadPrefab(layer, -1);
             }
 
@@ -176,9 +176,9 @@ namespace AFWB
         /// If it's not null but set to the wrong variant, it is set to the main GameObject.
         /// If it's not null, but the Go is null or different, it is set to the main GameObject.
         ///
-        /// <param name="layer">The layer set being processed.</param>
+        /// <param name="layer">The sourceLayerList set being processed.</param>
         /// <param name="sourceVariants">The list of source variants.</param>
-        /// <param name="preset">The scriptable preset associated with the layer.</param>
+        /// <param name="preset">The scriptable preset associated with the sourceLayerList.</param>
         /// <param name="mainGo">The main GameObject to ensure as the first source variant.</param>
         /// <param name="mainGoName">The name of the main GameObject.</param>
         /// <param name="warn">Whether to log warnings if the first source variant is null or does not match the main GameObject.</param>

@@ -61,7 +61,7 @@ namespace TCT.PrintUtils
                 if (allInOneLine)
                     stringBuilder.Append(itemString).Append(", ");
                 else
-                    Debug.Log(itemString);
+                    Debug.Log(itemString + "\n");
             }
 
             if (allInOneLine)

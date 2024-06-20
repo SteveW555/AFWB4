@@ -10,10 +10,10 @@ using UnityEngine;
 // Called from AutoFenceEditor, builds controls for the Variations Sequence Blocks
 public class SinglesEditor
 {
-    private LayerSet kRailALayer = LayerSet.railALayerSet;
-    private LayerSet kRailBLayer = LayerSet.railBLayerSet;
-    private LayerSet kPostLayer = LayerSet.postLayerSet;
-    private LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
+    private LayerSet kRailALayer = LayerSet.railALayer;
+    private LayerSet kRailBLayer = LayerSet.railBLayer;
+    private LayerSet kPostLayer = LayerSet.postLayer;
+    private LayerSet kSubpostLayer = LayerSet.subpostLayer;
 
     private AutoFenceCreator af;
     private AutoFenceEditor ed;
@@ -163,7 +163,7 @@ public class SinglesEditor
 
         //===================      Get Properties     ===================================
         SerializedProperty singlesContainerArrayProp = null, layerSinglesContainerProp = null;
-        if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+        if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
         {
             singlesContainerArrayProp = ed.serializedObject.FindProperty("railSinglesContainer");
             layerSinglesContainerProp = singlesContainerArrayProp.GetArrayElementAtIndex((int)layer);
@@ -197,7 +197,7 @@ public class SinglesEditor
             //      Foldout
             //======================
             GUILayout.Space(9); //puts foldout triangle inside box
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 af.showRailSinglesEditor[layerIndex] = EditorGUILayout.Foldout(af.showRailSinglesEditor[layerIndex], "");
             else
                 af.showPostSinglesEditor = EditorGUILayout.Foldout(af.showPostSinglesEditor, "");
@@ -280,17 +280,17 @@ public class SinglesEditor
                 "\n\n This will Clear the entire list as there no longer any Individual Single sections"), GUILayout.Width(120)))
             {
                 af.singlesContainer.ResetAllSinglesForLayer(currLayerSet, af);
-                if (currLayerSet == LayerSet.railALayerSet)
+                if (currLayerSet == LayerSet.railALayer)
                 {
                     af.railSinglesEnabled[0] = false;
                     af.singlesContainer.ToggleAllSingleVariants(kRailALayer, af.railSinglesEnabled[0], af);
                 }
-                if (currLayerSet == LayerSet.railBLayerSet)
+                if (currLayerSet == LayerSet.railBLayer)
                 {
                     af.railSinglesEnabled[1] = false;
                     af.singlesContainer.ToggleAllSingleVariants(kRailBLayer, af.railSinglesEnabled[1], af);
                 }
-                if (currLayerSet == LayerSet.postLayerSet)
+                if (currLayerSet == LayerSet.postLayer)
                 {
                     af.postSinglesEnabled = false;
                     af.singlesContainer.ToggleAllSingleVariants(kPostLayer, af.postSinglesEnabled, af);
@@ -308,21 +308,21 @@ public class SinglesEditor
             //=====================
             if (GUILayout.Button(new GUIContent(disableString, "Toggle that disables all single section modifications"), GUILayout.Width(130)))
             {
-                if (currLayerSet == LayerSet.railALayerSet)
+                if (currLayerSet == LayerSet.railALayer)
                 {
                     af.railSinglesEnabled[0] = !af.railSinglesEnabled[0];
                     af.singlesContainer.ToggleAllSingleVariants(kRailALayer, af.railSinglesEnabled[0], af);
                     if (af.railSinglesEnabled[0] == false && numSingles > 0)
                         EditorGUILayout.LabelField(new GUIContent("All Singles are disabled, 'Enable All Singles' to show"), ed.warningStyle, GUILayout.Width(300));
                 }
-                if (currLayerSet == LayerSet.railBLayerSet)
+                if (currLayerSet == LayerSet.railBLayer)
                 {
                     af.railSinglesEnabled[1] = !af.railSinglesEnabled[1];
                     af.singlesContainer.ToggleAllSingleVariants(kRailBLayer, af.railSinglesEnabled[1], af);
                     if (af.railSinglesEnabled[0] == false && numSingles > 0)
                         EditorGUILayout.LabelField(new GUIContent("All Singles are disabled, 'Enable All Singles' to show"), ed.warningStyle, GUILayout.Width(300));
                 }
-                if (currLayerSet == LayerSet.postLayerSet)
+                if (currLayerSet == LayerSet.postLayer)
                 {
                     af.postSinglesEnabled = !af.postSinglesEnabled;
                     af.singlesContainer.ToggleAllSingleVariants(kPostLayer, af.postSinglesEnabled, af);
@@ -364,7 +364,7 @@ public class SinglesEditor
             //===================================================
             //      Main Loop : Singles Variants List Editor
             //===================================================
-            //List<SinglesItem> SinglesItemsList = af.GetSingleVariantsForLayer(layer);
+            //List<SinglesItem> SinglesItemsList = af.GetSingleVariantsForLayer(sourceLayerList);
 
             if (af.railSinglesEnabled[0] && numSinglesItems > 0)
             {
@@ -494,7 +494,7 @@ public class SinglesEditor
                 }
 
                 //currSeqStepVariant = seqList[i];
-                //ed.varEd.SetSequenceVariantFromDisplaySettings(this.layer, ref currSeqStepVariant, i);
+                //ed.varEd.SetSequenceVariantFromDisplaySettings(this.sourceLayerList, ref currSeqStepVariant, i);
             }
         }
     }

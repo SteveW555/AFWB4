@@ -56,7 +56,7 @@ public class PostEditor
         if (GUILayout.Button(new GUIContent("Copy", "Copy All Post Parameters"), EditorStyles.miniButton, GUILayout.Width(42)))
         {
             ScriptablePresetAFWB preset = ed.mainPresetList[af.currPresetIndex];
-            CopyPasteAFWB.CopyComponentParametersFromScriptablePreset(preset, AFWB.LayerSet.postLayerSet);
+            CopyPasteAFWB.CopyComponentParametersFromScriptablePreset(preset, AFWB.LayerSet.postLayer);
         }
         if (GUILayout.Button(new GUIContent("Paste", "Paste All Paste Parameters"), EditorStyles.miniButton, GUILayout.Width(44)))
         {
@@ -67,13 +67,13 @@ public class PostEditor
         //=====================================
         if (af.usePostVariations == true)
         {
-            bool allPostsDisabled = SequenceEditor.AreAllSeqItemsDisabledForLayer(af.postSequencer, af.GetNumSectionsBuiltForLayer(LayerSet.postLayerSet));
+            bool allPostsDisabled = SequenceEditor.AreAllSeqItemsDisabledForLayer(af.postSequencer, af.GetNumSectionsBuiltForLayer(LayerSet.postLayer));
             if (allPostsDisabled == true && af.usePostVariations == true)
                 EditorGUILayout.LabelField(" [All steps are disabled!  Re-enable in Variations]", ed.warningStyle, GUILayout.Width(320));
         }
         //      Show Asset Folder Links
         //=====================================
-        ed.assetFolderLinks.Show_Prefab_Mesh_Material_InAssetFolder(LayerSet.postLayerSet, 204);
+        ed.assetFolderLinks.Show_Prefab_Mesh_Material_InAssetFolder(LayerSet.postLayer, 204);
 
         GUILayout.EndHorizontal();
         GUILayout.Space(1);
@@ -84,7 +84,7 @@ public class PostEditor
         //
         //===================================================================================
         GUILayout.BeginVertical("Box");
-        helper.ChooseMainPrefab(LayerSet.postLayerSet);
+        helper.ChooseMainPrefab(LayerSet.postLayer);
         GUILayout.EndVertical();
 
         //==============================================================================
@@ -141,7 +141,7 @@ public class PostEditor
         //===========================
         GUILayout.Space(2);
         EditorGUI.BeginChangeCheck();
-        EditorShowTransforms.ShowTransformEditor(LayerSet.postLayerSet, ed);
+        EditorShowTransforms.ShowTransformEditor(LayerSet.postLayer, ed);
 
         GUILayout.Space(10);
 
@@ -229,7 +229,7 @@ public class PostEditor
          if (EditorGUI.EndChangeCheck())
          {
              serializedObject.ApplyModifiedProperties();
-             af.ResetPoolForLayer(LayerSet.postLayerSet);
+             af.ResetPoolForLayer(LayerSet.postLayer);
              af.ForceRebuildFromClickPoints();
          }*/
         //============================
@@ -266,7 +266,7 @@ public class PostEditor
         if (EditorGUI.EndChangeCheck())
         {
             serializedObject.ApplyModifiedProperties();
-            af.ResetPoolForLayer(LayerSet.postLayerSet);
+            af.ResetPoolForLayer(LayerSet.postLayer);
             af.ForceRebuildFromClickPoints();
         }
 
@@ -295,13 +295,13 @@ public class PostEditor
 
         if (controlKey)
         {
-            int prefabIndex = af.GetPrefabIndexForLayerByName(LayerSet.postLayerSet, "Brick_Square1_Post");
+            int prefabIndex = af.GetPrefabIndexForLayerByName(LayerSet.postLayer, "Brick_Square1_Post");
             if (prefabIndex == -1)
-                prefabIndex = af.GetPrefabIndexForLayerByName(LayerSet.postLayerSet, "ABasicConcrete_Post");
+                prefabIndex = af.GetPrefabIndexForLayerByName(LayerSet.postLayer, "ABasicConcrete_Post");
             if (prefabIndex == -1)
                 prefabIndex = 0;
-            af.SetCurrentPrefabIndexForLayer(prefabIndex, LayerSet.postLayerSet);
-            af.SetMenuIndexFromPrefabIndexForLayer(prefabIndex, LayerSet.postLayerSet);
+            af.SetCurrentPrefabIndexForLayer(prefabIndex, LayerSet.postLayer);
+            af.SetMenuIndexFromPrefabIndexForLayer(prefabIndex, LayerSet.postLayer);
 
         }
 
@@ -334,7 +334,7 @@ public class PostEditor
 
         GUILayout.Space(30);
         Sequencer sequencer = af.postSequencer;
-        if (af.usePostVariations == true && af.GetUseSequencerForLayer(LayerSet.postLayerSet) == true)
+        if (af.usePostVariations == true && af.GetUseSequencerForLayer(LayerSet.postLayer) == true)
             EditorGUILayout.LabelField(new GUIContent("[ Seq In Use ]"), ed.smallOrangeItalicLabelStyle, GUILayout.Width(80));
 
 
@@ -350,7 +350,7 @@ public class PostEditor
             {
                 af.postSourceVariants[1].Go = af.postPrefabs[af.currentPost_PrefabIndex];
             }*/
-            af.ResetPoolForLayer(LayerSet.postLayerSet);
+            af.ResetPoolForLayer(LayerSet.postLayer);
             af.ForceRebuildFromClickPoints();
         }
         if (ed.showPostVariations.boolValue)
@@ -358,8 +358,8 @@ public class PostEditor
             using (new EditorGUI.DisabledScope(af.usePostVariations == false))
             {
                 //===============  Setup Sources  ==========================
-                ed.varEd.SetupSourcePrefabs(LayerSet.postLayerSet);
-                ed.seqEd.SetupStepSeqVariations(LayerSet.postLayerSet);
+                ed.varEd.SetupSourcePrefabs(LayerSet.postLayer);
+                ed.seqEd.SetupStepSeqVariations(LayerSet.postLayer);
 
                 ed.DrawUILine(ed.UILineGrey, 6, 10, 2, 10);
             }

@@ -20,28 +20,28 @@ namespace AFWB
             float scaleY = railABoxColliderHeightScale, offsetY = railABoxColliderHeightOffset;
             bool useCustomPrefab = useCustomRail[kRailALayerInt];
 
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
             {
                 colliderType = railBColliderMode;
                 scaleY = railBBoxColliderHeightScale;
                 offsetY = railBBoxColliderHeightOffset;
                 useCustomPrefab = useCustomRail[kRailBLayerInt];
             }
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
             {
                 colliderType = postColliderMode;
                 scaleY = postBoxColliderHeightScale;
                 offsetY = postBoxColliderHeightOffset;
                 useCustomPrefab = useCustomPost;
             }
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
             {
                 colliderType = extraColliderMode;
                 scaleY = extraBoxColliderHeightScale;
                 offsetY = extraBoxColliderHeightOffset;
                 useCustomPrefab = useCustomExtra;
             }
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
             {
                 colliderType = subpostColliderMode;
                 scaleY = subpostBoxColliderHeightScale;
@@ -143,7 +143,7 @@ namespace AFWB
                     MeshCollider meshCollider = go.AddComponent<MeshCollider>();
                     meshCollider.sharedMesh = customMesh;
 
-                    if (layer == LayerSet.railALayerSet)
+                    if (layer == LayerSet.railALayer)
                     {
                         //Vector3 goSize =  MeshUtilitiesAFWB.GetWorldSizeOfGameObject(go, layer, this);
                         //Vector3 collMeshSize = customMesh.bounds.size;
@@ -199,15 +199,15 @@ namespace AFWB
         public Mesh GetCustomColliderMeshForLayer(LayerSet layer)
         {
             Mesh mesh = null;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 mesh = railACustomColliderMesh;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 mesh = railBCustomColliderMesh;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 mesh = postCustomColliderMesh;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 mesh = extraCustomColliderMesh;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 mesh = subpostCustomColliderMesh;
 
             return mesh;
@@ -221,7 +221,7 @@ namespace AFWB
             StackLog(GetType().Name, verbose: false);
             //==  Check Posts  ==
             int numPosts = postsPool.Count;
-            if (numPosts > 0 && IsLayerEnabled(LayerSet.postLayerSet))
+            if (numPosts > 0 && IsLayerEnabled(LayerSet.postLayer))
             {
                 for (int i = 0; i < 1; i++) // Pointless loop, but might extend to all postsPool later
                 {
@@ -262,21 +262,21 @@ namespace AFWB
         {
             return;
             
-            int numPosts = GetNumBuiltForLayer(LayerSet.postLayerSet);
-            if (numPosts > 0 && IsLayerEnabled(LayerSet.postLayerSet))
+            int numPosts = GetNumBuiltForLayer(LayerSet.postLayer);
+            if (numPosts > 0 && IsLayerEnabled(LayerSet.postLayer))
             {
                 //__Check if we need to remove any old ones
-                RemoveAllCollidersOfTypeFromLayer<BoxCollider>(LayerSet.postLayerSet);
+                RemoveAllCollidersOfTypeFromLayer<BoxCollider>(LayerSet.postLayer);
                 for (int i = 0; i < numPosts; i++)
                 {
                     GameObject go = postsPool[i].gameObject;
                     AddColliderOfTypeToGameObjectAndChildren<BoxCollider>(go);
                 }
             }
-            int numRailsA = GetNumBuiltForLayer(LayerSet.railALayerSet);
-            if (numRailsA > 0 && IsLayerEnabled(LayerSet.railALayerSet))
+            int numRailsA = GetNumBuiltForLayer(LayerSet.railALayer);
+            if (numRailsA > 0 && IsLayerEnabled(LayerSet.railALayer))
             {
-                RemoveAllCollidersOfTypeFromLayer<BoxCollider>(LayerSet.railALayerSet);
+                RemoveAllCollidersOfTypeFromLayer<BoxCollider>(LayerSet.railALayer);
                 for (int i = 0; i < numRailsA; i++)
                 {
                     GameObject go = railsAPool[i].gameObject;
@@ -284,10 +284,10 @@ namespace AFWB
                     AddColliderOfTypeToGameObjectAndChildren<BoxCollider>(go);
                 }
             }
-            int numRailsB = GetNumBuiltForLayer(LayerSet.railBLayerSet);
-            if (numRailsB > 0 && IsLayerEnabled(LayerSet.railBLayerSet))
+            int numRailsB = GetNumBuiltForLayer(LayerSet.railBLayer);
+            if (numRailsB > 0 && IsLayerEnabled(LayerSet.railBLayer))
             {
-                RemoveAllCollidersOfTypeFromLayer<BoxCollider>(LayerSet.railBLayerSet);
+                RemoveAllCollidersOfTypeFromLayer<BoxCollider>(LayerSet.railBLayer);
                 for (int i = 0; i < numRailsB; i++)
                 {
                     GameObject go = railsBPool[i].gameObject;
@@ -335,41 +335,41 @@ namespace AFWB
 
         private void RemoveAllCollidersOfTypeFromLayer<T>(LayerSet layer) where T : Collider
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
-                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.postLayerSet); i++)
+                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.postLayer); i++)
                 {
                     GameObject go = postsPool[i].gameObject;
                     RemoveAllCollidersOfTypeFromGO<T>(go);
                 }
             }
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
             {
-                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.railALayerSet); i++)
+                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.railALayer); i++)
                 {
                     GameObject go = railsAPool[i].gameObject;
                     RemoveAllCollidersOfTypeFromGO<T>(go);
                 }
             }
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
             {
-                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.railBLayerSet); i++)
+                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.railBLayer); i++)
                 {
                     GameObject go = railsBPool[i].gameObject;
                     RemoveAllCollidersOfTypeFromGO<T>(go);
                 }
             }
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
             {
-                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.subpostLayerSet); i++)
+                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.subpostLayer); i++)
                 {
                     GameObject go = subpostsPool[i].gameObject;
                     RemoveAllCollidersOfTypeFromGO<T>(go);
                 }
             }
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
             {
-                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.extraLayerSet); i++)
+                for (int i = 0; i < GetNumBuiltForLayer(LayerSet.extraLayer); i++)
                 {
                     GameObject go = ex.extrasPool[i].gameObject;
                     RemoveAllCollidersOfTypeFromGO<T>(go);
@@ -456,11 +456,11 @@ namespace AFWB
         //--------------------------
         private void RemoveAllCollidersForAllLayers()
         {
-            RemoveAllCollidersForLayer(LayerSet.railALayerSet);
-            RemoveAllCollidersForLayer(LayerSet.railBLayerSet);
-            RemoveAllCollidersForLayer(LayerSet.postLayerSet);
-            RemoveAllCollidersForLayer(LayerSet.extraLayerSet);
-            RemoveAllCollidersForLayer(LayerSet.subpostLayerSet);
+            RemoveAllCollidersForLayer(LayerSet.railALayer);
+            RemoveAllCollidersForLayer(LayerSet.railBLayer);
+            RemoveAllCollidersForLayer(LayerSet.postLayer);
+            RemoveAllCollidersForLayer(LayerSet.extraLayer);
+            RemoveAllCollidersForLayer(LayerSet.subpostLayer);
         }
 
         //--------------------------

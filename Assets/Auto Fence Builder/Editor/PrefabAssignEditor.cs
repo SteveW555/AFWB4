@@ -16,12 +16,12 @@ public partial class PrefabAssignEditor
     AutoFenceCreator af;
     AutoFenceEditor ed;
 
-    LayerSet kRailALayer = LayerSet.railALayerSet; // to save a lot of typing
-    LayerSet kRailBLayer = LayerSet.railBLayerSet;
-    LayerSet kPostLayer = LayerSet.postLayerSet;
-    LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
-    LayerSet kExtraLayer = LayerSet.extraLayerSet;
-    int kRailAIndex = (int)LayerSet.railALayerSet, kRailBIndex = (int)LayerSet.railBLayerSet;
+    LayerSet kRailALayer = LayerSet.railALayer; // to save a lot of typing
+    LayerSet kRailBLayer = LayerSet.railBLayer;
+    LayerSet kPostLayer = LayerSet.postLayer;
+    LayerSet kSubpostLayer = LayerSet.subpostLayer;
+    LayerSet kExtraLayer = LayerSet.extraLayer;
+    int kRailAIndex = (int)LayerSet.railALayer, kRailBIndex = (int)LayerSet.railBLayer;
 
     RandomLookupAFWB randTableRailA = null, randTableRailB = null, randTablePost = null;
     int randTableSize = 0;
@@ -384,12 +384,12 @@ public partial class PrefabAssignEditor
             if (addedUserPrefab == true)
             {
                 //-- As the prefabs were reloaded after saving, the new one should now be in the prefab Lists
-                //indexOfNewPrefab = af.FindPrefabForLayer(savedUserPrefab, layer);
+                //indexOfNewPrefab = af.FindPrefabForLayer(savedUserPrefab, sourceLayerList);
 
                 //-- Usually we choose a prefabfrom the menu, then have to sync the prebIndex with it.
                 //-- But as we added a known custom prefab directly, we have to do the reverse and sync the menu index with the prefab index
-                //af.SetCurrentPrefabIndexForLayer(indexOfNewPrefab, layer);
-                //af.SetMenuIndexFromPrefabIndexForLayer(indexOfNewPrefab, layer);
+                //af.SetCurrentPrefabIndexForLayer(indexOfNewPrefab, sourceLayerList);
+                //af.SetMenuIndexFromPrefabIndexForLayer(indexOfNewPrefab, sourceLayerList);
                 //ed.postprop
             }
             if (layer == kPostLayer)
@@ -448,10 +448,10 @@ public partial class PrefabAssignEditor
 
     private void PostPrefabOverrides(int currMenuIndex, int numMenuNames, LayerSet layer)
     {
-        if (layer == LayerSet.postLayerSet)
+        if (layer == LayerSet.postLayer)
         {
             GUI.backgroundColor = new Color(0.96f, 0.92f, 1f);
-            string mainPostName = af.GetMainPrefabNameForLayer(LayerSet.postLayerSet);
+            string mainPostName = af.GetMainPrefabNameForLayer(LayerSet.postLayer);
             EditorGUI.BeginChangeCheck();
             GUILayout.Space(2);
             GUILayout.BeginHorizontal();
@@ -510,7 +510,7 @@ public partial class PrefabAssignEditor
 
                     //    Choose prefab Popup Menu
                     //===================================
-                    List<string> shortPrefabMenuNames = af.GetShortPrefabMenuNamesForLayer(LayerSet.postLayerSet);
+                    List<string> shortPrefabMenuNames = af.GetShortPrefabMenuNamesForLayer(LayerSet.postLayer);
                     nodePostsMenuIndexProp.intValue = EditorGUILayout.Popup("", nodePostsMenuIndexProp.intValue, shortPrefabMenuNames.ToArray(),
                         ed.lilacPopupStyle, GUILayout.Width(200));
 
@@ -520,7 +520,7 @@ public partial class PrefabAssignEditor
                     if (GUILayout.Button(new GUIContent("M", $"Set to the same Prefab as the Main Post:  \n" +
                         $"[   {mainPostName}   ]"), EditorStyles.miniButton, GUILayout.Width(25)))
                     {
-                        nodePostsMenuIndexProp.intValue = af.GetMainPrefabMenuIndexForLayer(LayerSet.postLayerSet);
+                        nodePostsMenuIndexProp.intValue = af.GetMainPrefabMenuIndexForLayer(LayerSet.postLayer);
                     }
 
 
@@ -531,7 +531,7 @@ public partial class PrefabAssignEditor
                 {
                     ed.serializedObject.ApplyModifiedProperties(); //sets nodePostsOverrideMenuIndex to nodePostsMenuIndexProp.intValue
                     af.nodePostsOverridePrefabIndex = af.ConvertPostMenuIndexToPrefabIndex(af.nodePostsOverrideMenuIndex);
-                    af.ResetPoolForLayer(LayerSet.postLayerSet);
+                    af.ResetPoolForLayer(LayerSet.postLayer);
                     af.ForceRebuildFromClickPoints();
                 }
 
@@ -570,7 +570,7 @@ public partial class PrefabAssignEditor
                     //    Choose prefab Popup Menu
                     //===================================
                     GUILayout.Space(3);
-                    List<string> shortPrefabMenuNames = af.GetShortPrefabMenuNamesForLayer(LayerSet.postLayerSet);
+                    List<string> shortPrefabMenuNames = af.GetShortPrefabMenuNamesForLayer(LayerSet.postLayer);
                     endsMenuIndexProp.intValue = EditorGUILayout.Popup("", endsMenuIndexProp.intValue, shortPrefabMenuNames.ToArray(), ed.lilacPopupStyle,
                         GUILayout.Width(200));
 
@@ -580,7 +580,7 @@ public partial class PrefabAssignEditor
                     if (GUILayout.Button(new GUIContent("M", $"Set to the same Prefab as the Main Post:  \n" +
                         $"[   {mainPostName}   ]"), EditorStyles.miniButton, GUILayout.Width(25)))
                     {
-                        endsMenuIndexProp.intValue = af.GetMainPrefabMenuIndexForLayer(LayerSet.postLayerSet);
+                        endsMenuIndexProp.intValue = af.GetMainPrefabMenuIndexForLayer(LayerSet.postLayer);
                     }
 
                 }
@@ -590,7 +590,7 @@ public partial class PrefabAssignEditor
                 {
                     ed.serializedObject.ApplyModifiedProperties();//sets endPostsOverrideMenuIndex to endsMenuIndexProp.intValue
                     af.endPostsOverridePrefabIndex = af.ConvertPostMenuIndexToPrefabIndex(af.endPostsOverrideMenuIndex);
-                    af.ResetPoolForLayer(LayerSet.postLayerSet);
+                    af.ResetPoolForLayer(LayerSet.postLayer);
                     af.ForceRebuildFromClickPoints();
                 }
             }

@@ -16,7 +16,7 @@ namespace AFWB
     {
         public const int kMaxNumSeqSteps = 20; //TODO
         public int numSteps = 2;
-        LayerSet layer = LayerSet.noneLayerSet;
+        LayerSet layer = LayerSet.None;
         public bool useSeq = false;
 
         public List<SeqItem> seqList = new List<SeqItem>(new SeqItem[kMaxNumSeqSteps]);
@@ -246,7 +246,7 @@ namespace AFWB
             //go = null;
             stepEnabled = true;
             unavailableIndex = 0;
-            layer = LayerSet.noneLayerSet;
+            layer = LayerSet.None;
         }
 
         // Initialize and set to first object in SourceVariants List
@@ -480,12 +480,12 @@ namespace AFWB
 
             RandomLookupAFWB rTable = RandomLookupAFWB.randForRailA;
             int rIndex = RandomLookupAFWB.railARandLookupIndex;
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
             {
                 rTable = RandomLookupAFWB.randForRailA;
                 rIndex = RandomLookupAFWB.railARandLookupIndex;
             }
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
             {
                 rTable = RandomLookupAFWB.randForPost;
                 rIndex = RandomLookupAFWB.postRandLookupIndex;
@@ -672,7 +672,7 @@ namespace AFWB
             bool mirrorZ = af.allowMirrorZRailA;
             bool invertZ = af.allowInvertRailA;
 
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
             {
                 backToFront = af.allowBackToFrontRailB;
                 mirrorZ = af.allowMirrorZRailB;

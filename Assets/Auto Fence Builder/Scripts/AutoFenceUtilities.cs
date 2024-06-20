@@ -18,7 +18,7 @@ namespace AFWB
         public LayerSet Layer { get; private set; }
         private readonly string exceptionMessage; // Private field for storing the message
 
-        public AFWBOutOfRangeException(string exceptionMessage, float min, float max, int postCount = 0, LayerSet layer = LayerSet.allLayerSet)
+        public AFWBOutOfRangeException(string exceptionMessage, float min, float max, int postCount = 0, LayerSet layer = LayerSet.allLayer)
             : base(exceptionMessage) // Pass the message to the base Exception constructor
         {
             Min = min;
@@ -99,19 +99,19 @@ namespace AFWB
         {
             switch (layer)
             {
-                case LayerSet.railALayerSet:
+                case LayerSet.railALayer:
                     componentToolbar = ComponentToolbar.railsA;
                     break;
-                case LayerSet.railBLayerSet:
+                case LayerSet.railBLayer:
                     componentToolbar = ComponentToolbar.railsB;
                     break;
-                case LayerSet.postLayerSet:
+                case LayerSet.postLayer:
                     componentToolbar = ComponentToolbar.posts;
                     break;
-                case LayerSet.extraLayerSet:
+                case LayerSet.extraLayer:
                     componentToolbar = ComponentToolbar.extras;
                     break;
-                case LayerSet.subpostLayerSet:
+                case LayerSet.subpostLayer:
                     componentToolbar = ComponentToolbar.subposts;
                     break;
                 default:
@@ -130,26 +130,26 @@ namespace AFWB
         //----------------------------
         public Vector3 GetScaleTransformForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return railAScale;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return railBScale;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return ex.extraTransformScale;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return subpostScale;
             return postScale;
         }
         //----------------------------
         public Vector3 GetPositionTransformForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return railAPositionOffset;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return railBPositionOffset;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return ex.extraTransformPositionOffset;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return subpostPositionOffset;
             return subpostPositionOffset;
         }
@@ -157,15 +157,15 @@ namespace AFWB
 
         public Vector3 GetRotationTransformForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 return postRotation;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 return railARotation;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return railBRotation;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 return subpostRotation;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 return ex.extraTransformRotation;
 
             return Vector3.zero;
@@ -173,40 +173,40 @@ namespace AFWB
 
         public void SetScaleTransformForLayer(Vector3 scale, LayerSet layer)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 postScale = scale;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 railAScale = scale;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 railBScale = scale;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 subpostScale = scale;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 ex.extraTransformScale = scale;
         }
         public void SetPositionTransformForLayer(Vector3 positionOffset, LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 railAPositionOffset = positionOffset;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 railBPositionOffset = positionOffset;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 ex.extraTransformPositionOffset = positionOffset;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 subpostPositionOffset = positionOffset;
 
         }
         public void SetRotationTransformForLayer(Vector3 rotation, LayerSet layer)
         {
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 postRotation = rotation;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 railARotation = rotation;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 railBRotation = rotation;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 subpostRotation = rotation;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 ex.extraTransformRotation = rotation;
 
         }
@@ -321,11 +321,11 @@ namespace AFWB
         public static string StripLayerTypeFromNameStatic(LayerSet layer, string name)
         {
             string baseName = "";
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 baseName = StripPanelRailFromNameStatic(name);
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
                 baseName = StripPostFromNameStatic(name);
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 baseName = StripExtraFromNameStatic(name);
             return baseName;
         }
@@ -484,22 +484,22 @@ namespace AFWB
         /*public List<SourceVariant> CreateUsedVariantsList(LayerSet layer)
         {
             List<SourceVariant> uniqueVaraints = null;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
             {
                 nonNullRailSourceVariants[0] = CreateUniqueVariantList(railSourceVariants[0]);
                 return nonNullRailSourceVariants[0];
             }
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
             {
                 nonNullRailSourceVariants[1] = CreateUniqueVariantList(railSourceVariants[0]);
                 return nonNullRailSourceVariants[1];
             }
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
             {
                 nonNullPostVariants = CreateUniqueVariantList(postSourceVariants);
                 return nonNullPostVariants;
             }
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
             {
                 nonNullSubpostVariants = CreateUniqueVariantList(subpostSourceVariants);
                 return nonNullSubpostVariants;
@@ -688,7 +688,7 @@ namespace AFWB
             userSubMeshRailOffsets = new List<float>(); // used in MeshUtilitiesAFB and during rails build
 
             //Creates a cleaned up GameObject with any children
-            userPrefabRail[kRailALayerInt] = MeshUtilitiesAFWB.CreateCleanUncombinedAFBRailFromGameObject(newUserRail, this, GetCurrentPrefabForLayer(LayerSet.railALayerSet));
+            userPrefabRail[kRailALayerInt] = MeshUtilitiesAFWB.CreateCleanUncombinedAFBRailFromGameObject(newUserRail, this, GetCurrentPrefabForLayer(LayerSet.railALayer));
             if (userPrefabRail[kRailALayerInt] != null)
                 userPrefabRail[kRailALayerInt].name = newUserRail.name;
             return userPrefabRail[kRailALayerInt];
@@ -1038,11 +1038,11 @@ namespace AFWB
         public Sequencer GetSequencerForLayer(LayerSet layer)
         {
             Sequencer sequencer = null;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 sequencer = railASequencer;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 sequencer = railBSequencer;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 sequencer = postSequencer;
             else
                 Debug.Log($"layer {layer.String()} has no sequencer in GetSequencerForLayer()");
@@ -1240,13 +1240,13 @@ namespace AFWB
         //[MethodImpl(MethodImplOptions.NoInlining)]
         public GameObject FindPrefabByNameAndType(PrefabTypeAFWB prefabType, string prefabName, bool warnMissing = true, bool returnMissingDefault = true, string msg = "")
         {
-            LayerSet layer = LayerSet.postLayerSet;
+            LayerSet layer = LayerSet.postLayer;
             if (prefabType == PrefabTypeAFWB.railPrefab)
-                layer = LayerSet.railALayerSet; // any rail layer will do as their prefabs lists are the same
+                layer = LayerSet.railALayer; // any rail layer will do as their prefabs lists are the same
             else if (prefabType == PrefabTypeAFWB.extraPrefab)
-                layer = LayerSet.extraLayerSet;
+                layer = LayerSet.extraLayer;
             else if (prefabType == PrefabTypeAFWB.allPrefab)
-                layer = LayerSet.allLayerSet;
+                layer = LayerSet.allLayer;
 
             GameObject go = FindPrefabByName(layer, prefabName, warnMissing, returnMissingDefault, msg);
             return go;
@@ -1267,9 +1267,9 @@ namespace AFWB
             }
 
             //-- If it wasn't found, maybe the Post is using an Extra
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
-                prefabs = GetPrefabsForLayer(LayerSet.extraLayerSet);
+                prefabs = GetPrefabsForLayer(LayerSet.extraLayer);
                 for (int i = 0; i < prefabs.Count; i++)
                 {
                     if (prefabs[i] == null)
@@ -1542,19 +1542,19 @@ namespace AFWB
 
 
             colorStr = usePostsLayer ? inUseStr : notInUseStr;
-            Debug.Log($"{colorStr}         Post = {GetMainPrefabForLayer(LayerSet.postLayerSet).name} \n</color>");
+            Debug.Log($"{colorStr}         Post = {GetMainPrefabForLayer(LayerSet.postLayer).name} \n</color>");
 
             colorStr = useRailLayer[0] ? inUseStr : notInUseStr;
-            Debug.Log($"{colorStr}         RailA = {GetMainPrefabForLayer(LayerSet.railALayerSet).name} \n</color>");
+            Debug.Log($"{colorStr}         RailA = {GetMainPrefabForLayer(LayerSet.railALayer).name} \n</color>");
 
             colorStr = useRailLayer[1] ? inUseStr : notInUseStr;
-            Debug.Log($"{colorStr}         RailB = {GetMainPrefabForLayer(LayerSet.railBLayerSet).name} \n</color>");
+            Debug.Log($"{colorStr}         RailB = {GetMainPrefabForLayer(LayerSet.railBLayer).name} \n</color>");
 
             colorStr = useSubpostsLayer ? inUseStr : notInUseStr;
-            Debug.Log($"{colorStr}         Subpost = {GetMainPrefabForLayer(LayerSet.subpostLayerSet).name} \n</color>");
+            Debug.Log($"{colorStr}         Subpost = {GetMainPrefabForLayer(LayerSet.subpostLayer).name} \n</color>");
 
             colorStr = useExtrasLayer ? inUseStr : notInUseStr;
-            Debug.Log($"{colorStr}         Extra = {GetMainPrefabForLayer(LayerSet.extraLayerSet).name} \n</color>");
+            Debug.Log($"{colorStr}         Extra = {GetMainPrefabForLayer(LayerSet.extraLayer).name} \n</color>");
 
 
         }
@@ -1658,7 +1658,7 @@ namespace AFWB
         //- Is it a Rail type, either A or B 
         public bool IsRailLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 return true;
             return false;
         }
@@ -1673,9 +1673,9 @@ namespace AFWB
         //---------------
         public int GetRailLayerOfRailAsInt(GameObject go)
         {
-            if (GetRailLayerOfRail(go) == LayerSet.railALayerSet)
+            if (GetRailLayerOfRail(go) == LayerSet.railALayer)
                 return 0;
-            else if (GetRailLayerOfRail(go) == LayerSet.railBLayerSet)
+            else if (GetRailLayerOfRail(go) == LayerSet.railBLayer)
                 return 1;
             return -1;
         }
@@ -1689,25 +1689,25 @@ namespace AFWB
         {
             GameObject userPrefab = null;
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 userPrefab = userPrefabRail[0];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 userPrefab = userPrefabRail[1];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 userPrefab = userPrefabPost;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 userPrefab = userPrefabExtra;
             return userPrefab;
         }
         public void SetUserPrefabForLayer(GameObject userPrefab, LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 userPrefabRail[0] = userPrefab;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 userPrefabRail[1] = userPrefab;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 userPrefabPost = userPrefab;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 userPrefabExtra = userPrefab;
         }
         //------------
@@ -1774,7 +1774,7 @@ namespace AFWB
                 }
 
                 thisPost.transform.parent = postsDividedFolder.transform;
-                CreateColliderForLayer(thisPost, thisPost.transform.localPosition, LayerSet.postLayerSet); // ??? Needs further checking
+                CreateColliderForLayer(thisPost, thisPost.transform.localPosition, LayerSet.postLayer); // ??? Needs further checking
             }
 
         }
@@ -1854,11 +1854,11 @@ namespace AFWB
         }
         public int GetNumSectionsBuiltForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return allPostPositions.Count - 1;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return allPostPositions.Count - 1;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 return allPostPositions.Count;
             return 0;
         }
@@ -1908,11 +1908,11 @@ namespace AFWB
             switch (prefabType)
             {
                 case PrefabTypeAFWB.postPrefab:
-                    return LayerSet.postLayerSet;
+                    return LayerSet.postLayer;
                 case PrefabTypeAFWB.railPrefab:
-                    return LayerSet.railALayerSet;
+                    return LayerSet.railALayer;
                 case PrefabTypeAFWB.extraPrefab:
-                    return LayerSet.extraLayerSet;
+                    return LayerSet.extraLayer;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(prefabType), prefabType, null);
             }
@@ -1922,13 +1922,13 @@ namespace AFWB
     {
         public static PrefabTypeAFWB ToPrefabType(this LayerSet layerSet)
         {
-            if (layerSet == LayerSet.postLayerSet)
+            if (layerSet == LayerSet.postLayer)
                 return PrefabTypeAFWB.postPrefab;
-            else if (layerSet == LayerSet.railALayerSet || layerSet == LayerSet.railBLayerSet)
+            else if (layerSet == LayerSet.railALayer || layerSet == LayerSet.railBLayer)
                 return PrefabTypeAFWB.railPrefab;
-            else if (layerSet == LayerSet.extraLayerSet)
+            else if (layerSet == LayerSet.extraLayer)
                 return PrefabTypeAFWB.extraPrefab;
-            else if (layerSet == LayerSet.subpostLayerSet)
+            else if (layerSet == LayerSet.subpostLayer)
                 return PrefabTypeAFWB.postPrefab;
             else
             {
@@ -1951,14 +1951,14 @@ namespace AFWB
         {
             string result = layerSet switch
             {
-                LayerSet.railALayerSet => "Rail A",
-                LayerSet.railBLayerSet => "Rail B",
-                LayerSet.postLayerSet => "Post",
-                LayerSet.extraLayerSet => "Extra",
-                LayerSet.subpostLayerSet => "Subpost",
-                LayerSet.allLayerSet => "All",
-                LayerSet.markerLayerSet => "Marker",
-                LayerSet.noneLayerSet => "None",
+                LayerSet.railALayer => "Rail A",
+                LayerSet.railBLayer => "Rail B",
+                LayerSet.postLayer => "Post",
+                LayerSet.extraLayer => "Extra",
+                LayerSet.subpostLayer => "Subpost",
+                LayerSet.allLayer => "All",
+                LayerSet.markerLayer => "Marker",
+                LayerSet.None => "None",
                 _ => "Unknown"
             };
             if (removeSpaces)
@@ -1967,13 +1967,13 @@ namespace AFWB
         }
         public static bool IsFence(this LayerSet layerSet)
         {
-            if (layerSet <= LayerSet.subpostLayerSet)
+            if (layerSet <= LayerSet.subpostLayer)
                 return true;
             return false;
         }
         public static bool IsMarker(this LayerSet layerSet)
         {
-            if (layerSet == LayerSet.markerLayerSet)
+            if (layerSet == LayerSet.markerLayer)
                 return true;
             return false;
         }

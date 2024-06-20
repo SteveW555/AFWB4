@@ -13,9 +13,9 @@ namespace AFWB
         public PrefabTypeAFWB GetPrefabTypeFromLayer(LayerSet layer)
         {
             PrefabTypeAFWB prefabType = PrefabTypeAFWB.postPrefab;
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 prefabType = PrefabTypeAFWB.railPrefab;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 prefabType = PrefabTypeAFWB.extraPrefab;
 
             return prefabType;
@@ -24,13 +24,13 @@ namespace AFWB
         // this is only used in situations where the post/subpost, or railA/RailB distinction doesn't matter
         public LayerSet GetLayerFromPrefabType(PrefabTypeAFWB prefabType)
         {
-            LayerSet layer = LayerSet.postLayerSet;
+            LayerSet layer = LayerSet.postLayer;
             if (prefabType == PrefabTypeAFWB.postPrefab)
-                layer = LayerSet.postLayerSet;
+                layer = LayerSet.postLayer;
             else if (prefabType == PrefabTypeAFWB.railPrefab)
-                layer = LayerSet.railALayerSet;
+                layer = LayerSet.railALayer;
             else if (prefabType == PrefabTypeAFWB.extraPrefab)
-                layer = LayerSet.extraLayerSet;
+                layer = LayerSet.extraLayer;
             return layer;
         }
         //---------------------
@@ -42,15 +42,15 @@ namespace AFWB
         }
         public void SetPrafabMenuIndexForLayer(int menuIndex, LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 currentRail_PrefabMenuIndex[kRailALayerInt] = menuIndex;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 currentRail_PrefabMenuIndex[kRailBLayerInt] = menuIndex;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 currentPost_PrefabMenuIndex = menuIndex;
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 currentSubpost_PrefabMenuIndex = menuIndex;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 currentExtra_PrefabMenuIndex = menuIndex;
         }
 
@@ -64,11 +64,11 @@ namespace AFWB
         }
         public bool GetUseLayerVariations(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return useRailVariations[0];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return useRailVariations[1];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 return usePostVariations;
             return false;
         }
@@ -106,14 +106,14 @@ namespace AFWB
         {
             List<SourceVariant> sourceVariants = null;
 
-            if (layer == LayerSet.subpostLayerSet)
+            if (layer == LayerSet.subpostLayer)
                 return null;//-- For v4.1
 
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 sourceVariants = postSourceVariants;
-            else if (layer == LayerSet.railALayerSet)
+            else if (layer == LayerSet.railALayer)
                 sourceVariants = railSourceVariants[kRailALayerInt];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 sourceVariants = railSourceVariants[kRailBLayerInt];
 
             if (sourceVariants == null && warn == true)
@@ -172,11 +172,11 @@ namespace AFWB
         public int GetNumSourceVariantsInUseForLayer(LayerSet layer, bool incMain)
         {
             int num = 0;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 num = numRailVariantsInUse[kRailALayerInt];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 num = numRailVariantsInUse[kRailBLayerInt];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 num = NumPostVariantsInUse;
             if (incMain == true)
                 num += 1;
@@ -187,11 +187,11 @@ namespace AFWB
             if (num > AutoFenceCreator.kMaxNumSourceVariants)
                 num = AutoFenceCreator.kMaxNumSourceVariants;
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 numRailVariantsInUse[kRailALayerInt] = num;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 numRailVariantsInUse[kRailBLayerInt] = num;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 NumPostVariantsInUse = num;
         }
 
@@ -202,11 +202,11 @@ namespace AFWB
             List<int> menuIndices = new List<int>();
 
 
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 menuIndices = railASourceVariant_MenuIndices;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 menuIndices = railBSourceVariant_MenuIndices;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 menuIndices = postSourceVariant_MenuIndices;
 
             return menuIndices;
@@ -215,19 +215,19 @@ namespace AFWB
         // if only active is true it only prints numInUse and notkMaxNumVariants
         public void PrintSourceVariantGOsForAllLayers(bool activeOnly)
         {
-            PrintSourceVariantGOsForLayer(LayerSet.railALayerSet, activeOnly);
-            PrintSourceVariantGOsForLayer(LayerSet.railBLayerSet, activeOnly);
-            PrintSourceVariantGOsForLayer(LayerSet.postLayerSet, activeOnly);
+            PrintSourceVariantGOsForLayer(LayerSet.railALayer, activeOnly);
+            PrintSourceVariantGOsForLayer(LayerSet.railBLayer, activeOnly);
+            PrintSourceVariantGOsForLayer(LayerSet.postLayer, activeOnly);
         }
         //-----------------------------------------------------------
         public void PrintCurrentPrefabsForAllLayer()
         {
             Debug.Log($"\n     -----     Current Layer Prefabs:     ----- \n");
-            PrintCurrentPrefabForLayer(LayerSet.railALayerSet);
-            PrintCurrentPrefabForLayer(LayerSet.railBLayerSet);
-            PrintCurrentPrefabForLayer(LayerSet.postLayerSet);
-            PrintCurrentPrefabForLayer(LayerSet.subpostLayerSet);
-            PrintCurrentPrefabForLayer(LayerSet.extraLayerSet);
+            PrintCurrentPrefabForLayer(LayerSet.railALayer);
+            PrintCurrentPrefabForLayer(LayerSet.railBLayer);
+            PrintCurrentPrefabForLayer(LayerSet.postLayer);
+            PrintCurrentPrefabForLayer(LayerSet.subpostLayer);
+            PrintCurrentPrefabForLayer(LayerSet.extraLayer);
         }
         //-----------------------------------------------------------
         public void PrintCurrentPrefabForLayer(LayerSet layer)
@@ -266,7 +266,7 @@ namespace AFWB
 
 
                 colorStr = (i < numInUse) ? inUseStrCol : notInUseStrCol;
-                Debug.Log($"{colorStr}         Post = {GetMainPrefabForLayer(LayerSet.postLayerSet).name} \n</color>");
+                Debug.Log($"{colorStr}         Post = {GetMainPrefabForLayer(LayerSet.postLayer).name} \n</color>");
 
 
                 Debug.Log($"{colorStr}    ***   Source Variant {i}:    {goName}    {inUseStr} \n</color>");
@@ -396,11 +396,11 @@ namespace AFWB
         }
         /*public bool GetUseSequencerForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return useRailSequencer[0];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return useRailSequencer[1];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 return usePostSequencer;
             return false;
         }*/
@@ -485,11 +485,11 @@ namespace AFWB
 
         public VariationMode GetVariationModeForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return variationModeRailA;
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 return variationModeRailA;
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 return variationModePost;
 
             else return VariationMode.sequenced;
@@ -498,51 +498,51 @@ namespace AFWB
         public bool GetAllowRandomizationForLayer(LayerSet layer)
         {
             bool allow = false;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 allow = allowRailRandomization[kRailALayerInt];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 allow = allowRailRandomization[kRailBLayerInt];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 allow = allowPostRandomization;
-            /*else if (layer == LayerSet.subpostLayerSet) // For v4.0
+            /*else if (layer == LayerSet.subpostLayer) // For v4.0
                 allow = allowSubpostRandomization;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 allow = allowExtraRandomization;*/
             return allow;
         }
         public void ToggleRandomizationForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 allowRailRandomization[kRailALayerInt] = !allowRailRandomization[kRailALayerInt];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 allowRailRandomization[kRailBLayerInt] = !allowRailRandomization[kRailBLayerInt];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 allowPostRandomization = !allowPostRandomization;
-            /*else if (layer == LayerSet.subpostLayerSet) // For v4.0
+            /*else if (layer == LayerSet.subpostLayer) // For v4.0
                  allowSubpostRandomization = !allowSubpostRandomization;
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                  allowExtraRandomization = !allowExtraRandomization;*/
         }
         public bool GetUseVariationsForLayer(LayerSet layer)
         {
             bool use = false;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 use = useRailVariations[0];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 use = useRailVariations[1];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 use = usePostVariations;
-            /*else if (layer == LayerSet.subpostLayerSet) 
+            /*else if (layer == LayerSet.subpostLayer) 
                 allow = allowSubpostRandomization;*/
             return use;
         }
         public void ToggleUseVariationsForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 useRailVariations[0] = !useRailVariations[0];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 useRailVariations[1] = !useRailVariations[1];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 usePostVariations = !usePostVariations;
 
         }
@@ -550,11 +550,11 @@ namespace AFWB
 
         public void ToggleUseSinglesForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 useRailSingles[0] = !useRailSingles[0];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 useRailSingles[1] = !useRailSingles[1];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 usePostSingles = !usePostSingles;
         }
 

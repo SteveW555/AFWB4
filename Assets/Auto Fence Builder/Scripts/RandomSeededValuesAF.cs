@@ -149,7 +149,7 @@ namespace AFWB
             if (rChanceMissing == null || rChanceMissing.Count < count)
                 GenerateRandomChanceMissingValues();
 
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 if (rPostSizeX == null || rPostSizeX.Count < count || rPostSizeZ == null || rPostSizeZ.Count < count)
                     GenerateRandomPostSizeXZValues();
@@ -158,7 +158,7 @@ namespace AFWB
                     GenerateRandomPostShiftXZ();
             }
 
-            if (layer == LayerSet.extraLayerSet)
+            if (layer == LayerSet.extraLayer)
             {
                 if (rExtraVarIndex == null || rExtraVarIndex.Count == 0)
                     GenerateRandomExtraVarIndex();
@@ -173,7 +173,7 @@ namespace AFWB
         }
         public void GenerateRandomExtraScatterPos(int inputSeed = 0)
         {
-            if (layer != LayerSet.extraLayerSet)
+            if (layer != LayerSet.extraLayer)
                 return;
 
             int seed = (inputSeed != 0) ? inputSeed : scatterPosSeed;
@@ -201,7 +201,7 @@ namespace AFWB
         }
         public void GenerateRandomExtraScatterScale(Vector3 min, Vector3 max, int inputSeed = 0)
         {
-            if (layer != LayerSet.extraLayerSet)
+            if (layer != LayerSet.extraLayer)
                 return;
 
             int seed = (inputSeed != 0) ? inputSeed : scatterScaleSeed;
@@ -227,7 +227,7 @@ namespace AFWB
         }
         public void GenerateRandomExtraScatterRotation(int inputSeed = 0)
         {
-            if (layer != LayerSet.extraLayerSet)
+            if (layer != LayerSet.extraLayer)
                 return;
 
             int seed = (inputSeed != 0) ? inputSeed : scatterRotSeed;
@@ -254,7 +254,7 @@ namespace AFWB
 
         public void GenerateRandomExtraVarIndex(int inputSeed = 0)
         {
-            if (layer != LayerSet.extraLayerSet)
+            if (layer != LayerSet.extraLayer)
                 return;
 
             int seed = (inputSeed != 0) ? inputSeed : extraVarIndexSeed;
@@ -298,7 +298,7 @@ namespace AFWB
             for (int i = 0; i < count; i++)
             {
                 rHeight.Add(UnityEngine.Random.Range(min, max));
-                //if (i < 4 && layer == LayerSet.postLayerSet)
+                //if (i < 4 && layer == LayerSet.postLayer)
                 //Debug.Log($"Random Height  {layer.String()} {i}:   {rHeight[i]}\n");
             }
         }
@@ -355,7 +355,7 @@ namespace AFWB
         //---------------------------------------
         public void GenerateRandomPostSizeXZValues(int inputSeed = 0)
         {
-            if (layer != LayerSet.postLayerSet)
+            if (layer != LayerSet.postLayer)
                 return;
 
             int seed = (inputSeed != 0) ? inputSeed : postSizeXZSeed;
@@ -384,7 +384,7 @@ namespace AFWB
         //---------------------------------------
         public void GenerateRandomPostShiftXZ(int inputSeed = 0)
         {
-            if (layer != LayerSet.postLayerSet)
+            if (layer != LayerSet.postLayer)
                 return;
 
             int seed = (inputSeed != 0) ? inputSeed : postShiftXZSeed;
@@ -432,30 +432,30 @@ namespace AFWB
         }
         Vector3 GetSmallRandRotForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return af.smallRotationAmountRailA;
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
                 return af.smallRotationAmountRailB;
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 return af.smallRotationAmountPost;
-            //if (layer == LayerSet.extraLayerSet)
+            //if (layer == LayerSet.extraLayer)
             //return af.smallRotationAmountExtra;
-            if (layer == LayerSet.subpostLayerSet)
+            if (layer == LayerSet.subpostLayer)
                 return af.smallRotationAmountSubpost;
             return Vector3.zero;
         }
         //-------------------------------------
         public (float min, float max) GetRandomHeightRangeForLayer(LayerSet layer)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 return (af.minRandHeightRailA, af.maxRandHeightRailA);
-            if (layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railBLayer)
                 return (af.minRandHeightRailB, af.maxRandHeightRailB);
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
                 return (af.minRandHeightPost, af.maxRandHeightPost);
-            if (layer == LayerSet.extraLayerSet)
+            if (layer == LayerSet.extraLayer)
                 return (af.minRandHeightExtra, af.maxRandHeightExtra);
-            if (layer == LayerSet.subpostLayerSet)
+            if (layer == LayerSet.subpostLayer)
                 return (af.minRandHeightSubpost, af.maxRandHeightSubpost);
 
             return (0f, 0f);
@@ -529,11 +529,11 @@ namespace AFWB
             if (useDateTime)
                 seedValue = (int)System.DateTime.Now.Ticks;
 
-            railASeeds = new RandomSeededValuesAF(LayerSet.railALayerSet, this, seedValue);
-            railBSeeds = new RandomSeededValuesAF(LayerSet.railBLayerSet, this, seedValue);
-            postAndGlobalSeeds = new RandomSeededValuesAF(LayerSet.postLayerSet, this, seedValue);
-            extraSeeds = new RandomSeededValuesAF(LayerSet.extraLayerSet, this, seedValue);
-            subpostSeeds = new RandomSeededValuesAF(LayerSet.subpostLayerSet, this, seedValue);
+            railASeeds = new RandomSeededValuesAF(LayerSet.railALayer, this, seedValue);
+            railBSeeds = new RandomSeededValuesAF(LayerSet.railBLayer, this, seedValue);
+            postAndGlobalSeeds = new RandomSeededValuesAF(LayerSet.postLayer, this, seedValue);
+            extraSeeds = new RandomSeededValuesAF(LayerSet.extraLayer, this, seedValue);
+            subpostSeeds = new RandomSeededValuesAF(LayerSet.subpostLayer, this, seedValue);
         }
 
         /// <summary>
@@ -541,11 +541,11 @@ namespace AFWB
         /// </summary>
         public void ValidateAllSeeds()
         {
-            ValidateSeedsForLayer(LayerSet.railALayerSet);
-            ValidateSeedsForLayer(LayerSet.railBLayerSet);
-            ValidateSeedsForLayer(LayerSet.postLayerSet);
-            ValidateSeedsForLayer(LayerSet.extraLayerSet);
-            ValidateSeedsForLayer(LayerSet.subpostLayerSet);
+            ValidateSeedsForLayer(LayerSet.railALayer);
+            ValidateSeedsForLayer(LayerSet.railBLayer);
+            ValidateSeedsForLayer(LayerSet.postLayer);
+            ValidateSeedsForLayer(LayerSet.extraLayer);
+            ValidateSeedsForLayer(LayerSet.subpostLayer);
 
         }
 
@@ -553,33 +553,33 @@ namespace AFWB
         {
             switch (layer)
             {
-                case LayerSet.railALayerSet:
+                case LayerSet.railALayer:
                     if (railASeeds == null)
-                        railASeeds = new RandomSeededValuesAF(LayerSet.railALayerSet, this, 12345);
+                        railASeeds = new RandomSeededValuesAF(LayerSet.railALayer, this, 12345);
                     railASeeds.CheckSeedValues();
                     break;
 
-                case LayerSet.railBLayerSet:
+                case LayerSet.railBLayer:
                     if (railBSeeds == null)
-                        railBSeeds = new RandomSeededValuesAF(LayerSet.railBLayerSet, this, 12345);
+                        railBSeeds = new RandomSeededValuesAF(LayerSet.railBLayer, this, 12345);
                     railBSeeds.CheckSeedValues();
                     break;
 
-                case LayerSet.postLayerSet:
+                case LayerSet.postLayer:
                     if (postAndGlobalSeeds == null)
-                        postAndGlobalSeeds = new RandomSeededValuesAF(LayerSet.postLayerSet, this, 12345);
+                        postAndGlobalSeeds = new RandomSeededValuesAF(LayerSet.postLayer, this, 12345);
                     postAndGlobalSeeds.CheckSeedValues();
                     break;
 
-                case LayerSet.extraLayerSet:
+                case LayerSet.extraLayer:
                     if (extraSeeds == null)
-                        extraSeeds = new RandomSeededValuesAF(LayerSet.extraLayerSet, this, 12345);
+                        extraSeeds = new RandomSeededValuesAF(LayerSet.extraLayer, this, 12345);
                     extraSeeds.CheckSeedValues();
                     break;
 
-                case LayerSet.subpostLayerSet:
+                case LayerSet.subpostLayer:
                     if (subpostSeeds == null)
-                        subpostSeeds = new RandomSeededValuesAF(LayerSet.subpostLayerSet, this, 12345);
+                        subpostSeeds = new RandomSeededValuesAF(LayerSet.subpostLayer, this, 12345);
                     subpostSeeds.CheckSeedValues();
                     break;
                 default:
@@ -592,15 +592,15 @@ namespace AFWB
         {
             switch (layer)
             {
-                case LayerSet.railALayerSet:
+                case LayerSet.railALayer:
                     return railASeeds;
-                case LayerSet.railBLayerSet:
+                case LayerSet.railBLayer:
                     return railBSeeds;
-                case LayerSet.postLayerSet:
+                case LayerSet.postLayer:
                     return postAndGlobalSeeds;
-                case LayerSet.extraLayerSet:
+                case LayerSet.extraLayer:
                     return extraSeeds;
-                case LayerSet.subpostLayerSet:
+                case LayerSet.subpostLayer:
                     return subpostSeeds;
                 default:
                     return null;
@@ -610,24 +610,24 @@ namespace AFWB
         {
             switch (layer)
             {
-                case LayerSet.railALayerSet:
+                case LayerSet.railALayer:
                     railASeeds = seededVals;
                     railASeeds.af = this;
                     break;
 
-                case LayerSet.railBLayerSet:
+                case LayerSet.railBLayer:
                     railBSeeds = seededVals;
                     railBSeeds.af = this;
                     break;
-                case LayerSet.postLayerSet:
+                case LayerSet.postLayer:
                     postAndGlobalSeeds = seededVals;
                     postAndGlobalSeeds.af = this;
                     break;
-                case LayerSet.extraLayerSet:
+                case LayerSet.extraLayer:
                     extraSeeds = seededVals;
                     extraSeeds.af = this;
                     break;
-                case LayerSet.subpostLayerSet:
+                case LayerSet.subpostLayer:
                     subpostSeeds = seededVals;
                     subpostSeeds.af = this;
                     break;
@@ -639,15 +639,15 @@ namespace AFWB
         //---------------------------------------
         public void GenerateRandomSmallRotValuesForLayer(LayerSet layer, int inputSeed = 0)
         {
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 railASeeds.GenerateRandomSmallRotValues(inputSeed);
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 railBSeeds.GenerateRandomSmallRotValues(inputSeed);
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 postAndGlobalSeeds.GenerateRandomSmallRotValues(inputSeed);
-            else if (layer == LayerSet.extraLayerSet)
+            else if (layer == LayerSet.extraLayer)
                 extraSeeds.GenerateRandomSmallRotValues(inputSeed);
-            else if (layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.subpostLayer)
                 subpostSeeds.GenerateRandomSmallRotValues(inputSeed);
         }
 

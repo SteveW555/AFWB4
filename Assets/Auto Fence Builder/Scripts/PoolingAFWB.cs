@@ -34,20 +34,24 @@ namespace AFWB
         ///<summary>Calls Destroy() then Create() for each pool</summary>
         public void ResetAllPools()
         {
-            ResetPoolForLayer(LayerSet.railALayerSet);
-            ResetPoolForLayer(LayerSet.railBLayerSet);
-            ResetPoolForLayer(LayerSet.postLayerSet);
-            ResetPoolForLayer(LayerSet.subpostLayerSet);
-            ResetPoolForLayer(LayerSet.extraLayerSet);
+            ResetPoolForLayer(LayerSet.railALayer);
+            ResetPoolForLayer(LayerSet.railBLayer);
+            ResetPoolForLayer(LayerSet.postLayer);
+            ResetPoolForLayer(LayerSet.subpostLayer);
+            ResetPoolForLayer(LayerSet.extraLayer);
         }
 
         //---------------
+        /// <summary>
+        /// DestroyPoolForLayer, then CreatePoolForLayer. For Posts, will also reset the NodeMarkers
+        /// </summary>
+        /// <param name="layer"></param>
         public void ResetPoolForLayer(LayerSet layer)
         {
             DestroyPoolForLayer(layer);
             CreatePoolForLayer(layer);
 
-            if (layer == LayerSet.postLayerSet)
+            if (layer == LayerSet.postLayer)
             {
                 DestroyNodeMarkers();
                 ResetNodeMarkerPool();
@@ -59,7 +63,7 @@ namespace AFWB
         {
             bool enableDebugLogs = false;
             bool onlyCreateWhenLayerEnabled = false;
-            int requiredPoolSize = GetDefaultPoolSizeForLayer(LayerSet.postLayerSet);
+            int requiredPoolSize = GetDefaultPoolSizeForLayer(LayerSet.postLayer);
             bool append = true;
 
             if (caller == "OnInspectorGUI")
@@ -67,11 +71,11 @@ namespace AFWB
                 Debug.LogWarning("CreateAllPools() - Called by OnInspectorGUI");
             }
 
-            CreatePoolForLayer(LayerSet.postLayerSet, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
-            CreatePoolForLayer(LayerSet.subpostLayerSet, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
-            CreatePoolForLayer(LayerSet.railALayerSet, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
-            CreatePoolForLayer(LayerSet.railALayerSet, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
-            CreatePoolForLayer(LayerSet.extraLayerSet, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
+            CreatePoolForLayer(LayerSet.postLayer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
+            CreatePoolForLayer(LayerSet.subpostLayer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
+            CreatePoolForLayer(LayerSet.railALayer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
+            CreatePoolForLayer(LayerSet.railALayer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
+            CreatePoolForLayer(LayerSet.extraLayer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
         }
 
 
@@ -95,7 +99,7 @@ namespace AFWB
                         postPrefab = GetCurrentPrefabForLayer(layer);
 
                         //-- Set the Post Node or Ends override Prefab
-                        if (layer != LayerSet.subpostLayerSet)
+                        if (layer != LayerSet.subpostLayer)
                         {
                             postPrefab = GetNodePostsOverridePrefab(postIndex, postPrefab);
 
@@ -130,7 +134,7 @@ namespace AFWB
             //-- At this point the PostVector might not exist if it's for pool items in excess of the number of posts So test for clickpoint carefully
             bool poolItemIsMoreThanNeeded = postIndex >= allPostPositions.Count;
             if (poolItemIsMoreThanNeeded == false && allowNodePostsPrefabOverride && PostVector.IndexIsClickPointNode(postIndex))
-                postPrefab = GetMainPostOverridePrefabForLayer(LayerSet.postLayerSet);
+                postPrefab = GetMainPostOverridePrefabForLayer(LayerSet.postLayer);
             else
                 postPrefab = currPrefab;
             return postPrefab;
@@ -141,7 +145,7 @@ namespace AFWB
         {
             GameObject postPrefab = null;
             if (allowEndPostsPrefabOverride && (postIndex == 0 || postIndex == allPostPositions.Count - 1))
-                postPrefab = GetEndPostsOverridePrefabForLayer(LayerSet.postLayerSet);
+                postPrefab = GetEndPostsOverridePrefabForLayer(LayerSet.postLayer);
             else
                 postPrefab = currPrefab;
             return postPrefab;
@@ -162,12 +166,12 @@ namespace AFWB
 
             //      Rails
             //====================
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
                 pool = CreateRailsPool(layer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled);
 
             //      Post & Subposts
             //==========================
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            else if (layer == LayerSet.postLayer || layer == LayerSet.subpostLayer)
             {
                 CreatePostsPool(layer, requiredPoolSize, enableDebugLogs, caller, pool, append: false);
             }
@@ -175,7 +179,7 @@ namespace AFWB
             //      Extras
             //====================
             //-- Now called direct from BuildExtras() as it's a special case which might need frequent Mesh updates
-            /*else if (layer == LayerSet.extraLayerSet)
+            /*else if (layer == LayerSet.extraLayer)
                 pool = ex.CreateExtrasPool(requiredPoolSize, append, true);*/
 
 
@@ -272,11 +276,11 @@ namespace AFWB
         private SinglesContainer GetSinglesContainerForLayer(LayerSet layer)
         {
             SinglesContainer singlesContainer = null;
-            if (layer == LayerSet.railALayerSet)
+            if (layer == LayerSet.railALayer)
                 singlesContainer = railSinglesContainer[0];
-            else if (layer == LayerSet.railBLayerSet)
+            else if (layer == LayerSet.railBLayer)
                 singlesContainer = railSinglesContainer[1];
-            else if (layer == LayerSet.postLayerSet)
+            else if (layer == LayerSet.postLayer)
                 singlesContainer = postSinglesContainer;
 
             return singlesContainer;
@@ -328,23 +332,23 @@ namespace AFWB
 
             switch (layer)
             {
-                case LayerSet.railALayerSet:
+                case LayerSet.railALayer:
                     pool = railsAPool;
                     break;
 
-                case LayerSet.railBLayerSet:
+                case LayerSet.railBLayer:
                     pool = railsBPool;
                     break;
 
-                case LayerSet.postLayerSet:
+                case LayerSet.postLayer:
                     pool = postsPool;
                     break;
 
-                case LayerSet.extraLayerSet:
+                case LayerSet.extraLayer:
                     pool = ex.extrasPool;
                     break;
 
-                case LayerSet.subpostLayerSet:
+                case LayerSet.subpostLayer:
                     pool = subpostsPool;
                     break;
             }
@@ -367,23 +371,23 @@ namespace AFWB
         {
             switch (layer)
             {
-                case LayerSet.railALayerSet:
+                case LayerSet.railALayer:
                     railsAPool = pool;
                     break;
 
-                case LayerSet.railBLayerSet:
+                case LayerSet.railBLayer:
                     railsBPool = pool;
                     break;
 
-                case LayerSet.postLayerSet:
+                case LayerSet.postLayer:
                     postsPool = pool;
                     break;
 
-                case LayerSet.extraLayerSet:
+                case LayerSet.extraLayer:
                     ex.extrasPool = pool;
                     break;
 
-                case LayerSet.subpostLayerSet:
+                case LayerSet.subpostLayer:
                     subpostsPool = pool;
                     break;
             }
@@ -470,23 +474,23 @@ namespace AFWB
             int requiuredPoolSize = 0;
             switch (layer)
             {
-                case LayerSet.postLayerSet:
+                case LayerSet.postLayer:
                     requiuredPoolSize = defaultNumPosts;
                     break;
 
-                case LayerSet.railALayerSet:
+                case LayerSet.railALayer:
                     requiuredPoolSize = defaultNumPosts * (int)numStackedRails[kRailALayerInt] * 2;
                     break;
 
-                case LayerSet.railBLayerSet:
+                case LayerSet.railBLayer:
                     requiuredPoolSize = defaultNumPosts * (int)numStackedRails[kRailBLayerInt];
                     break;
 
-                case LayerSet.subpostLayerSet:
+                case LayerSet.subpostLayer:
                     requiuredPoolSize = defaultNumPosts * numSubpostsPerSection;
                     break;
 
-                case LayerSet.extraLayerSet:
+                case LayerSet.extraLayer:
                     //return numSubpostsPerSection * 10;
                     requiuredPoolSize = 5;
                     break;
@@ -503,7 +507,7 @@ namespace AFWB
             if (index >= subpostsPool.Count - 1)
             {
                 //CreateSubpostsPool((int)(subpostsPool.Count * 0.25f), true); // add 25% more, append is true
-                CreatePoolForLayer(LayerSet.subpostLayerSet, subpostsPool.Count);
+                CreatePoolForLayer(LayerSet.subpostLayer, subpostsPool.Count);
             }
             return subpostsPool[index];
         }
@@ -552,11 +556,11 @@ namespace AFWB
 
             try
             {
-                int destroyedPostsCount = DestroyPoolForLayer(LayerSet.postLayerSet);
-                destroyedPostsCount = DestroyPoolForLayer(LayerSet.railALayerSet);
-                destroyedPostsCount = DestroyPoolForLayer(LayerSet.railBLayerSet);
-                destroyedSubpostsCount = DestroyPoolForLayer(LayerSet.subpostLayerSet);
-                destroyedExtrasCount = DestroyPoolForLayer(LayerSet.extraLayerSet);
+                int destroyedPostsCount = DestroyPoolForLayer(LayerSet.postLayer);
+                destroyedPostsCount = DestroyPoolForLayer(LayerSet.railALayer);
+                destroyedPostsCount = DestroyPoolForLayer(LayerSet.railBLayer);
+                destroyedSubpostsCount = DestroyPoolForLayer(LayerSet.subpostLayer);
+                destroyedExtrasCount = DestroyPoolForLayer(LayerSet.extraLayer);
                 DestroyNodeMarkers();
             }
             catch (Exception ex)
@@ -594,11 +598,11 @@ namespace AFWB
         {
 
             // Validate and optionally update the pool for the rail A layer
-            ValidatePoolForLayer(LayerSet.railALayerSet, rebuildBadPool: true, warn, caller);
-            ValidatePoolForLayer(LayerSet.railBLayerSet, rebuildBadPool: true, warn, caller);
-            ValidatePoolForLayer(LayerSet.postLayerSet, rebuildBadPool: true, warn, caller);
-            ValidatePoolForLayer(LayerSet.extraLayerSet, rebuildBadPool: true, warn, caller);
-            ValidatePoolForLayer(LayerSet.subpostLayerSet, rebuildBadPool: true, warn, caller);
+            ValidatePoolForLayer(LayerSet.railALayer, rebuildBadPool: true, warn, caller);
+            ValidatePoolForLayer(LayerSet.railBLayer, rebuildBadPool: true, warn, caller);
+            ValidatePoolForLayer(LayerSet.postLayer, rebuildBadPool: true, warn, caller);
+            ValidatePoolForLayer(LayerSet.extraLayer, rebuildBadPool: true, warn, caller);
+            ValidatePoolForLayer(LayerSet.subpostLayer, rebuildBadPool: true, warn, caller);
 
         }
 
@@ -635,7 +639,7 @@ namespace AFWB
             //-- Check Count
             if ((pool.Count < defaultPoolSize) || pool.Count == 0)
             {
-                if (layer != LayerSet.extraLayerSet)
+                if (layer != LayerSet.extraLayer)
                     warnString += $"ValidatePoolForLayer() - {GetLayerNameAsString(layer)}  pool count ( {poolCount} ) " +
                         $"is less than default size ( {defaultPoolSize} )    Called by {caller}\n";
                 poolOK = false;
@@ -656,14 +660,14 @@ namespace AFWB
             if (rebuildBadPool == true)
                 CreatePoolForLayer(layer, defaultPoolSize, false, false, false, caller);
 
-            if (warn && poolOK == false && layer != LayerSet.extraLayerSet)
+            if (warn && poolOK == false && layer != LayerSet.extraLayer)
                 Debug.LogWarning(warnString);
 
             return poolOK;
         }
 
         //--------------
-        public void DeactivateEntirePoolForLayer(LayerSet layerSet = LayerSet.allLayerSet)
+        public void DeactivateEntirePoolForLayer(LayerSet layerSet = LayerSet.allLayer)
         {
             CheckAllPrefabsLists();
 
@@ -802,7 +806,7 @@ namespace AFWB
         }
 
         //---------------------------------------------
-        /// <summary>Prints debug information about the pools for each layer up to subpostLayerSet.</summary>
+        /// <summary>Prints debug information about the pools for each layer up to subpostLayer.</summary>
         /// <param name="msg">A message to include in the debug output.</param>
         public bool PrintPoolDebugInfo(string msg, bool printDetailed = true, bool noPrintOnSuccess = false)
         {
@@ -815,7 +819,7 @@ namespace AFWB
             int i = 0;
             foreach (LayerSet layer in Enum.GetValues(typeof(LayerSet)))
             {
-                if (layer > LayerSet.subpostLayerSet)
+                if (layer > LayerSet.subpostLayer)
                     break;
 
                 List<Transform> pool = GetPoolForLayer(layer);
@@ -954,7 +958,7 @@ namespace AFWB
             List<string> debugMessages = new List<string>();
 
             // Early return if only creating when layer is enabled and the layer is not enabled
-            if (onlyCreateWhenLayerEnabled && !IsLayerEnabled(LayerSet.subpostLayerSet))
+            if (onlyCreateWhenLayerEnabled && !IsLayerEnabled(LayerSet.subpostLayer))
             {
                 if (enableDebugLogs)
                     Debug.Log("CreateSubpostJoinerPool() - Layer is not enabled, returning early.");

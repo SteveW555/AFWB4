@@ -11,8 +11,8 @@ namespace AFWB
         private AutoFenceCreator af;
         private AutoFenceEditor ed;
         private const int kRailAIndex = 0, kRailBIndex = 1;
-        private LayerSet kRailALayer = LayerSet.railALayerSet, kRailBLayer = LayerSet.railBLayerSet, kPostLayer = LayerSet.postLayerSet;
-        private LayerSet kExtraLayer = LayerSet.extraLayerSet, kSubpostLayer = LayerSet.subpostLayerSet;
+        private LayerSet kRailALayer = LayerSet.railALayer, kRailBLayer = LayerSet.railBLayer, kPostLayer = LayerSet.postLayer;
+        private LayerSet kExtraLayer = LayerSet.extraLayer, kSubpostLayer = LayerSet.subpostLayer;
 
         public PresetFiles(AutoFenceCreator autoFenceCreator, AutoFenceEditor autoFenceEditor)
         {
@@ -180,21 +180,21 @@ namespace AFWB
                 if (postSeqItem.size.x == 0 && postSeqItem.size.y == 0 && postSeqItem.size.z == 0)
                     postSeqItem.size = Vector3.one;
             }
-            ed.seqEd.CreateOptimalSequenceForLayer(LayerSet.railALayerSet);
-            ed.seqEd.CreateOptimalSequenceForLayer(LayerSet.railBLayerSet);
-            ed.seqEd.CreateOptimalSequenceForLayer(LayerSet.postLayerSet);
+            ed.seqEd.CreateOptimalSequenceForLayer(LayerSet.railALayer);
+            ed.seqEd.CreateOptimalSequenceForLayer(LayerSet.railBLayer);
+            ed.seqEd.CreateOptimalSequenceForLayer(LayerSet.postLayer);
         }
 
         //-------------
-        // First sets each layer prefab with current****_PrefabIndex
-        // Then sets the menu index for each layer to match the prefab index. They are not necessarily the same due to Unity & List sorting etc.
+        // First sets each sourceLayerList prefab with current****_PrefabIndex
+        // Then sets the menu index for each sourceLayerList to match the prefab index. They are not necessarily the same due to Unity & List sorting etc.
         public void SyncPrefabMenus()
         {
-            af.SetMenuIndexFromPrefabIndexForLayer(af.currentRail_PrefabIndex[kRailAIndex], LayerSet.railALayerSet);
-            af.SetMenuIndexFromPrefabIndexForLayer(af.currentRail_PrefabIndex[kRailBIndex], LayerSet.railBLayerSet);
-            af.SetMenuIndexFromPrefabIndexForLayer(af.currentPost_PrefabIndex, LayerSet.postLayerSet);
-            af.SetMenuIndexFromPrefabIndexForLayer(af.currentExtra_PrefabIndex, LayerSet.extraLayerSet);
-            af.SetMenuIndexFromPrefabIndexForLayer(af.currentSubpost_PrefabIndex, LayerSet.subpostLayerSet);
+            af.SetMenuIndexFromPrefabIndexForLayer(af.currentRail_PrefabIndex[kRailAIndex], LayerSet.railALayer);
+            af.SetMenuIndexFromPrefabIndexForLayer(af.currentRail_PrefabIndex[kRailBIndex], LayerSet.railBLayer);
+            af.SetMenuIndexFromPrefabIndexForLayer(af.currentPost_PrefabIndex, LayerSet.postLayer);
+            af.SetMenuIndexFromPrefabIndexForLayer(af.currentExtra_PrefabIndex, LayerSet.extraLayer);
+            af.SetMenuIndexFromPrefabIndexForLayer(af.currentSubpost_PrefabIndex, LayerSet.subpostLayer);
         }
         //-------------------------------------------
         /// <summary> Loads the presets if needed, If they're already loaded and healthy, returns.
@@ -376,11 +376,11 @@ namespace AFWB
         public void CheckForBadValuesInPreset()
         {
             //-- These were broken in old presets
-            af.railASeeds.layer = LayerSet.railALayerSet;
-            af.railBSeeds.layer = LayerSet.railBLayerSet;
-            af.postAndGlobalSeeds.layer = LayerSet.postLayerSet;
-            af.extraSeeds.layer = LayerSet.extraLayerSet;
-            af.subpostSeeds.layer = LayerSet.subpostLayerSet;
+            af.railASeeds.layer = LayerSet.railALayer;
+            af.railBSeeds.layer = LayerSet.railBLayer;
+            af.postAndGlobalSeeds.layer = LayerSet.postLayer;
+            af.extraSeeds.layer = LayerSet.extraLayer;
+            af.subpostSeeds.layer = LayerSet.subpostLayer;
 
             if (af.numStackedRails[0] < 1 )
                 af.numStackedRails[0] = 1;
@@ -406,7 +406,7 @@ namespace AFWB
         {
 
 
-            //--  This copies all the parameters from the preset into the af current settings. No checks or modifications
+            //--  This copies all the parameters from the preset into all of the af.'CurrentS ettings'. No checks or modifications
             //seedsAF = af.railASeeds.af;
             ed.currPreset = preset;
             ed.currPreset.BuildFromPreset(af);
@@ -415,7 +415,7 @@ namespace AFWB
             //-- Deal with presets with bad, values, nulls, or obsolete presets missing required parameters
             CheckForBadValuesInPreset();
 
-            //-- Sets the main prefab for each layer and syncs the prefab menu iondex for that layer
+            //-- Sets the main prefab for each sourceLayerList and syncs the prefab menu iondex for that sourceLayerList
             SyncPrefabMenus();
             ed.af.presetSaveName = ed.currPreset.name;
             af.ex.UpdateExtrasFromExtraVariantsStruct(ed.currPreset.extraVarsStruct);

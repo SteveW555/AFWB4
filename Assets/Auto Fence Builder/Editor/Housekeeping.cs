@@ -20,6 +20,13 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 //
 //namespace Housekeeping
 
+public struct FoundPrefabs
+{
+    public GameObject prefab;
+    public LayerSet sourceLayerList;
+    public int index;
+}
+
 public static class Housekeeping
 {
     private static string targetPresetsFolder = "Assets/Auto Fence Builder/AFWB_Presets";
@@ -596,9 +603,155 @@ public static class Housekeeping
         }
         return found; // Return the list of foundPrefabs allPrefabs
     }
+    public static List<FoundPrefabs> GetPrefabsUsingMaterialInLists(Material mat, List<UnityEngine.GameObject> railPrefabs, List<UnityEngine.GameObject> postPrefabs, List<UnityEngine.GameObject> extraPrefabs)
+    {
+        List<FoundPrefabs> foundPrefabs = new List<FoundPrefabs>();
+
+        if (mat == null)
+        {
+            return foundPrefabs; // Return an empty list if no valid material name is provided
+        }
+
+        // Search in postPrefabs
+        FindPrefabsInList(mat, postPrefabs, foundPrefabs, LayerSet.postLayer);
+
+        // Search in railPrefabs
+        FindPrefabsInList(mat, railPrefabs, foundPrefabs, LayerSet.railALayer);
+
+        // Search in extraPrefabs
+        FindUniqueExtraPrefabsInList(mat, extraPrefabs, foundPrefabs, LayerSet.extraLayer);
+
+        return foundPrefabs;
+    }
+
+    private static void FindPrefabsInList(Material mat, List<UnityEngine.GameObject> prefabs, List<FoundPrefabs> foundPresets, LayerSet layer)
+    {
+        for (int i = 0; i < prefabs.Count; i++)
+        {
+            UnityEngine.GameObject prefab = prefabs[i];
+            if (prefab != null)
+            {
+                Renderer[] renderers = prefab.GetComponentsInChildren<Renderer>(true);
+                foreach (Renderer renderer in renderers)
+                {
+                    if (renderer != null)
+                    {
+                        Material[] materials = renderer.sharedMaterials;
+                        if (materials != null)
+                        {
+                            foreach (Material prefabMat in materials)
+                            {
+                                if (prefabMat != null && prefabMat == mat)
+                                {
+                                    foundPresets.Add(new FoundPrefabs
+                                    {
+                                        prefab = prefab,
+                                        sourceLayerList = layer,
+                                        index = i
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void FindUniqueExtraPrefabsInList(Material mat, List<UnityEngine.GameObject> extraPrefabs, List<FoundPrefabs> foundPresets, LayerSet layer)
+    {
+        HashSet<string> existingNames = new HashSet<string>(foundPresets.Select(fp => fp.prefab.name));
+
+        for (int i = 0; i < extraPrefabs.Count; i++)
+        {
+            UnityEngine.GameObject prefab = extraPrefabs[i];
+            if (prefab != null)
+            {
+                Renderer[] renderers = prefab.GetComponentsInChildren<Renderer>(true);
+                foreach (Renderer renderer in renderers)
+                {
+                    if (renderer != null)
+                    {
+                        Material[] materials = renderer.sharedMaterials;
+                        if (materials != null)
+                        {
+                            foreach (Material prefabMat in materials)
+                            {
+                                if (prefabMat != null && prefabMat == mat)
+                                {
+                                    string prefabName = prefab.name;
+                                    if (!(prefabName.EndsWith("_Post") || prefabName.EndsWith("_Rail") || prefabName.EndsWith("_Panel")) || !existingNames.Contains(prefabName))
+                                    {
+                                        foundPresets.Add(new FoundPrefabs
+                                        {
+                                            prefab = prefab,
+                                            sourceLayerList = layer,
+                                            index = i
+                                        });
+                                        existingNames.Add(prefabName);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     //--------------------------------------------------------------------------------
     /// <summary>
-    /// Loads each prefab of layer, and looks at main texture for a match
+    /// Finds all prefabs in the project that use a specific material.
+    /// </summary>
+    /// <param name="mat">The material to search for in prefabs.</param>
+    /// <returns>A list of GameObjects that use the specified material. Returns an empty list if the material is null or no prefabs are found.</returns>
+    public static List<GameObject> GetPrefabsUsingMaterial(Material mat)
+    {
+        if (mat == null) 
+        {
+            return new List<GameObject>(); // Return an empty list if no valid material name is provided
+        }
+
+        List<GameObject> found = new List<GameObject>();
+        string[] guids = AssetDatabase.FindAssets("t:Prefab"); // This searches all assets that are allPrefabs
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (prefab != null) // Check if the currPrefab is not null
+            {
+                Renderer[] renderers = prefab.GetComponentsInChildren<Renderer>(true);
+                foreach (Renderer renderer in renderers)
+                {
+                    if (renderer != null) // Check if renderer is not null
+                    {
+                        Material[] materials = renderer.sharedMaterials; // Get shared materials to avoid gizmoSingletonInstance-specific materials
+                        if (materials != null) // Check if materials array is not null
+                        {
+                            foreach (Material prefabMat in materials)
+                            {
+                                if (prefabMat != null && prefabMat == mat) // Check if material is not null and names match
+                                {
+                                    if (!found.Contains(prefab)) // Check if the currPrefab has already been added to avoid duplicates
+                                    {
+                                        found.Add(prefab);
+                                        break; // Break the innermost loop to stop checking once a match is foundPrefabs
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return found; 
+    }
+    //--------------------------------------------------------------------------------
+    /// <summary>
+    /// Loads each prefab of sourceLayerList, and looks at main texture for a match
     /// </summary>
     /// <param name="texName"></param>
     /// <returns>List<GameObject> using the named Texture</returns>
@@ -1059,7 +1212,7 @@ public static class Housekeeping
         Debug.Log($"Total Found = {totalFoundPresets}  ");
 
         if (totalFoundPresets > 0)
-            PrintUtilities.PrintList(foundPresets, allInOneLine:false);
+            PrintUtilities.PrintList(foundPresets, allInOneLine: false);
     }
 
     public static void PrintPresetsUsingGameObjectFromContextMenu(string prefabName)
@@ -1371,7 +1524,7 @@ public static class Housekeeping
     {
         af.ClearConsole();
 
-        //af.PrintSinglesForLayer(LayerSet.railALayerSet);
+        //af.PrintSinglesForLayer(LayerSet.railALayer);
         //ResourceUtilities.GetMeshNamesFromPrefabs();
         //PresetChecker.ChangePresetCategoryName(af, mainPresetList, "Barrier Conc", "Concrete", "Barriers");
 
@@ -1381,8 +1534,8 @@ public static class Housekeeping
 
         //Housekeeping.RenamePrefabAndUpdateAll("Stone_Low_WithConcTop_Panel", "Stone_LowTaperConcTop_Panel", af);
         //Housekeeping.RenamePrefabInFolder("TrackCurbing_Rail", "TrackCurbing_BlackWhite_Rail", af.currAutoFenceBuilderDir);
-        //Housekeeping.UpdatePresetComponentAssetName(LayerSet.railALayerSet, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails:false);
-        //Housekeeping.UpdatePresetComponentAssetName(LayerSet.railBLayerSet, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails: false);
+        //Housekeeping.UpdatePresetComponentAssetName(LayerSet.railALayer, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails:false);
+        //Housekeeping.UpdatePresetComponentAssetName(LayerSet.railBLayer, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails: false);
 
         //af.ResetPoolForLayer(AutoFenceCreator.kRailALayerInt);
         //af.ForceRebuildFromClickPoints();
@@ -1528,10 +1681,10 @@ public static class Housekeeping
     public static void UpdatePresetComponentAssetName(AFWB.LayerSet layer, string oldName, string newName, bool treatBothRails = true)
     {
         //-- It could be that even though we're dealing with a specific Layer, some variants could be using prefabs
-        //-- from another layer, e.g. a Post Prefab in an Extra layer. So we need to check all, but look in this layer first
+        //-- from another sourceLayerList, e.g. a Post Prefab in an Extra sourceLayerList. So we need to check all, but look in this sourceLayerList first
 
         GameObject newGo = null;
-        if (layer != LayerSet.extraLayerSet)
+        if (layer != LayerSet.extraLayer)
         {
             newGo = af.FindPrefabByNameAndType(layer.ToPrefabType(), newName, warnMissing: true, returnMissingDefault: false);
             if (newGo == null)
@@ -1563,21 +1716,21 @@ public static class Housekeeping
                     bool isDirty = false;
                     List<bool> itemsReplaced = null;
 
-                    if ((layer == LayerSet.railALayerSet || layer == LayerSet.railALayerSet) && treatBothRails == true)
+                    if ((layer == LayerSet.railALayer || layer == LayerSet.railALayer) && treatBothRails == true)
                     {
-                        isDirty = preset.ReplaceMainGoNameForLayer(oldName, newName, LayerSet.railALayerSet, af);
-                        isDirty = preset.ReplaceMainGoNameForLayer(oldName, newName, LayerSet.railBLayerSet, af);
+                        isDirty = preset.ReplaceMainGoNameForLayer(oldName, newName, LayerSet.railALayer, af);
+                        isDirty = preset.ReplaceMainGoNameForLayer(oldName, newName, LayerSet.railBLayer, af);
 
-                        if (preset.ReplaceSourceVariantGosByNameForLayer(oldName, newGo, LayerSet.railALayerSet, af).replaced.Count > 0)
+                        if (preset.ReplaceSourceVariantGosByNameForLayer(oldName, newGo, LayerSet.railALayer, af).replaced.Count > 0)
                             isDirty = true;
-                        if (preset.ReplaceSourceVariantGosByNameForLayer(oldName, newGo, LayerSet.railBLayerSet, af).replaced.Count > 0)
+                        if (preset.ReplaceSourceVariantGosByNameForLayer(oldName, newGo, LayerSet.railBLayer, af).replaced.Count > 0)
                             isDirty = true;
                     }
                     else
                     {
                         isDirty = preset.ReplaceMainGoNameForLayer(oldName, newName, layer, af);
 
-                        if (layer == LayerSet.extraLayerSet && newGo == null)
+                        if (layer == LayerSet.extraLayer && newGo == null)
                             newGo = af.FindPrefabByName(newName);
 
                         if (preset.ReplaceSourceVariantGosByNameForLayer(oldName, newGo, layer, af).isDirty == true)
@@ -2768,7 +2921,7 @@ public static class Housekeeping
 
             foreach (LayerSet layer in Enum.GetValues(typeof(LayerSet)))
             {
-                if (layer == LayerSet.subpostLayerSet)
+                if (layer == LayerSet.subpostLayer)
                     break;
 
                 // Your code here
@@ -2981,9 +3134,9 @@ public static class Housekeeping
     {
 
         List<ScriptablePresetAFWB> presetList = ed.mainPresetList;
-         List<GameObject> gameObjectsList = new List<GameObject> { gameObject };
-         List<List<string>> gameObjectPresetNames = FindPresetsUsingGameObjects(gameObjectsList);
-         return gameObjectPresetNames;
+        List<GameObject> gameObjectsList = new List<GameObject> { gameObject };
+        List<List<string>> gameObjectPresetNames = FindPresetsUsingGameObjects(gameObjectsList);
+        return gameObjectPresetNames;
     }
 
     // Same as above but by name
@@ -3100,20 +3253,20 @@ public static class Housekeeping
         //-- No ammend all the presets that use it
         if (oldName.Contains("_Rail") || oldName.Contains("_Panel"))
         {
-            UpdatePresetComponentAssetName(LayerSet.railALayerSet, oldName, newName, treatBothRails: true);
-            //UpdatePresetComponentAssetName(LayerSet.railALayerSet, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails: false);
-            //UpdatePresetComponentAssetName(LayerSet.railBLayerSet, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails: false);
+            UpdatePresetComponentAssetName(LayerSet.railALayer, oldName, newName, treatBothRails: true);
+            //UpdatePresetComponentAssetName(LayerSet.railALayer, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails: false);
+            //UpdatePresetComponentAssetName(LayerSet.railBLayer, "TrackCurbing_Rail", "TrackCurbing_Red_Rail", treatBothRails: false);
 
-            UpdatePresetComponentAssetName(LayerSet.extraLayerSet, oldName, newName, treatBothRails: false);
+            UpdatePresetComponentAssetName(LayerSet.extraLayer, oldName, newName, treatBothRails: false);
         }
         else if (oldName.Contains("_Post"))
         {
-            UpdatePresetComponentAssetName(LayerSet.postLayerSet, oldName, newName, treatBothRails: false);
-            UpdatePresetComponentAssetName(LayerSet.subpostLayerSet, oldName, newName, treatBothRails: false);
-            UpdatePresetComponentAssetName(LayerSet.extraLayerSet, oldName, newName, treatBothRails: false);
+            UpdatePresetComponentAssetName(LayerSet.postLayer, oldName, newName, treatBothRails: false);
+            UpdatePresetComponentAssetName(LayerSet.subpostLayer, oldName, newName, treatBothRails: false);
+            UpdatePresetComponentAssetName(LayerSet.extraLayer, oldName, newName, treatBothRails: false);
         }
         else if (oldName.Contains("_Extra"))
-            UpdatePresetComponentAssetName(LayerSet.extraLayerSet, oldName, newName, treatBothRails: false);
+            UpdatePresetComponentAssetName(LayerSet.extraLayer, oldName, newName, treatBothRails: false);
 
         //-- Rebuild the menus
         af.CreatePrefabMenuNames();

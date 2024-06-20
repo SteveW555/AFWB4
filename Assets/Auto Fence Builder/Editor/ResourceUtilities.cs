@@ -159,7 +159,7 @@ public class ResourceUtilities
     }*/
 
     //--------------------------------------------------
-    /*public static void ReloadPrefabsForLayer(LayerSet layer, AutoFenceCreator af, bool fixRailMeshes = true)
+    /*public static void ReloadPrefabsForLayer(LayerSet sourceLayerList, AutoFenceCreator af, bool fixRailMeshes = true)
     { //Debug.Log("LoadPrefabs()\n");
         af.postPrefabs.Clear();
 
