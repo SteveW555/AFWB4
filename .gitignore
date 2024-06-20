@@ -44,6 +44,10 @@ Thumbs.db
 
 # jpg files
 *.jpg
+*.jpeg
+
+# exr files
+*.exr
 
 # psd files
 *.psd
