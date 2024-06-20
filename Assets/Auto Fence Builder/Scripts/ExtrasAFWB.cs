@@ -333,7 +333,7 @@ public class ExtrasAFWB
         //              Create Pool   (do every build as the meshes get rotated and will compound)
         //=========================================================================================================
         int numToBuild = CalculateNumberOfExtrasToBuild(af.allPostPositions.Count);
-        CreateExtrasPool(numToBuild);
+        int numExtrasCreated = CreateExtrasPool(numToBuild);
         /*else if (extrasMode == ExtrasMode.scatter && (flipXProb > 0 || flipYProb > 0 || flipZProb > 0)) //Scatter mode
         {
             // Destroy and rebuild Extras as they have had their meshes modified
@@ -2842,20 +2842,20 @@ public class ExtrasAFWB
     }
     //-------------
     //BuildExtras(), RebuildPoolWithNewUserPrefab()
-    public List<Transform> CreateExtrasPool(int numToBuild, bool append = false, bool isDirty = false, [CallerMemberName] string caller = null)
+    public int CreateExtrasPool(int numToBuild, bool append = false, bool isDirty = false, [CallerMemberName] string caller = null)
     {
         //As there can be hundreds we want to avoid instantiating extrasPool as much as possible.
         //on the other hand, if they've had mesh changes, we need to reload them to prevent compounded changes
         //TODO - more aggresive isDirty check.
 
+        int multiArrayMultiplier = 1, numCreated = 0;
         if (af.useExtrasLayer == false || af.allPostPositions.Count == 0)
         {
             // This could be null if called at the start before anything has been built
             if (extrasPool == null)
                 extrasPool = new List<Transform>();
-            return extrasPool;
+            return numCreated;
         }
-        int multiArrayMultiplier = 1;
         if(makeMultiArray)
             multiArrayMultiplier = (int)multiArraySize.x * (int)multiArraySize.y * (int)multiArraySize.z;
 
@@ -2931,7 +2931,7 @@ public class ExtrasAFWB
         }
         af.ValidateSeedsForLayer(LayerSet.extraLayer);
 
-        int varIndex = 0, numCreated = 0, extraType = 0;
+        int varIndex = 0, extraType = 0;
 
         for (int i = start; i < start + numToBuild; i++)
         {
@@ -2964,11 +2964,11 @@ public class ExtrasAFWB
             extra.transform.parent = af.extrasFolder.transform;
         }
         numCreated = extrasPool.Count - currCount;
-        //Debug.Log($"Created   {numCreated}   extrasPool  for {caller} . Needed {numNeeded}\postNum");
+        Debug.Log($"Created   {numCreated}   extrasPool  for {caller} . Needed {numToBuild} \n");
         //Debug.Log("Num Extras = " + extrasPool.Count + "    Just numCreated " + numCreated + "    Required   " + numNeeded);
         poolTimer.End(print: false);
 
-        return extrasPool;
+        return numCreated;
     }
 
     private int CalculateNumberOfExtrasToBuild(int guideNumToBuild)

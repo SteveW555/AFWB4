@@ -495,8 +495,8 @@ public class SceneViewDebugDisplay
         int currPresetIndex = af.currPresetIndex;
         List<ScriptablePresetAFWB> presetList = ed.mainPresetList;
         ScriptablePresetAFWB currPreset = ed.currPreset;
-
-        GUI.Label(new Rect(xpt, panelYPos, 270, 20), $"Current Preset Index = {currPresetIndex}       {currPreset.name}", style);
+        if(currPreset != null)
+            GUI.Label(new Rect(xpt, panelYPos, 270, 20), $"Current Preset Index = {currPresetIndex}       {currPreset.name}", style);
     }
 
     public void ShowSceneViewDebugInfoPanel(LayerSet layer)

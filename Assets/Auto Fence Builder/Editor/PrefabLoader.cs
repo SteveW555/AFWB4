@@ -179,8 +179,8 @@ namespace AFWB
                                 string parentFolder = System.IO.Path.GetDirectoryName(filePath);
                                 prefabDetails.Add(new PrefabDetails(parentFolder)); 
                             }
-                            else
-                                Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                            //else
+                                //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
                         }
 
                         //      Posts
@@ -193,8 +193,8 @@ namespace AFWB
                                 string parentFolder = System.IO.Path.GetDirectoryName(filePath);
                                 prefabDetails.Add(new PrefabDetails(parentFolder));
                             }
-                            else
-                                Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                            //else
+                                //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
                         }
                         //      Extras
                         //=========================
@@ -208,8 +208,8 @@ namespace AFWB
 
                                 prefabDetails.Add(new PrefabDetails(parentFolder)); 
                             }
-                            else
-                               Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                            //else
+                               //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
                         }
                     }
                     else if (go == null)

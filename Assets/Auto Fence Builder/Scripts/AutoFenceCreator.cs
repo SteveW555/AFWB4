@@ -663,7 +663,7 @@ namespace AFWB
 
         //public PostVectorList postDirectionVectors = null;
 
-        public float buildTime = 0, railBuildTime = 0, postBuildTime = 0, subpostBuildTime = 0, extraBuildTime = 0;
+        public float buildTime = 0, railBuildTime = 0, postBuildTime = 0, subpostBuildTime = 0, extraBuildTime = 0, onInspectorGuiTime = 0;
         public bool showStackTrace = true;
         public bool useDB = false, utilsDebugObjectAvailable = false;
         public List<Transform> highlightedParts = new List<Transform>();
@@ -2774,8 +2774,6 @@ namespace AFWB
                 RandomisePostPositionsXZShift(allPostPositions);
             }
 
-            //ValidateAndUpdatePools();
-
             if (allPostsPositionsUnrandomized.Count != allPostPositions.Count)
                 Debug.Log("allPostsPositionsUnrandomized.Count != allPostPositions.Count  " + allPostsPositionsUnrandomized.Count + "   " + allPostPositions.Count);
             if (allPostsPositionsUnrandomized[0] != allPostPositions[0])
@@ -2787,12 +2785,8 @@ namespace AFWB
             RebuildFromFinalList(layerSet);
             centralizeRails = false;
 
-            //RemoveAllCollidersForAllLayers(); ?//??
-            //AddBoxCollidersToPostAndRailsForSceneVieweDetection(); // ???
-            //CheckCollidersAfterBuild();
             SetIgnoreClickMarkers(false);
             buildTime = t.End(print: false);
-
 
         }
         //--------------------------
@@ -4579,7 +4573,7 @@ namespace AFWB
             else
                 return;
 
-            Vector3 markerScale = new Vector3(0.3f, 0.3f, 0.3f);
+            Vector3 markerScale = new Vector3(0.45f, 0.45f, 0.45f);
 
             //-- Variation might need to know the size of the Mesh
             GameObject go = GetCurrentPrefabForLayer(LayerSet.postLayer);
@@ -5731,8 +5725,8 @@ namespace AFWB
 
                 if (i < prefabDetailsList.Count)
                     prefabDetails = prefabDetailsList[i];
-                else
-                    Debug.LogWarning($"PrefabDetailsList is shorter than the number of prefabs in the list for layer {layer.String()}");
+                //else
+                    //Debug.LogWarning($"PrefabDetailsList is shorter than the number of prefabs in the list for layer {layer.String()}");
 
                 parentFolderName = prefabDetails.parentFolderName;
                 category = AssignPresetOrPrefabCategoryByName(menuName, parentFolderName);

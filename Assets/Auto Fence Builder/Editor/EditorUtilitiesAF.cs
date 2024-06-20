@@ -1378,4 +1378,551 @@ so = ed.serializedObject;
             // Debug.Log(i + "   svBackToFront: " + seqStep.svBackToFront + "   svMirrorZ: " + seqStep.svMirrorZ + "   svInvert: " + seqStep.svInvert);
         }
     }
+    //====================================================
+    // Prints the name of the Class and the Method that called it
+    // There is also a version of this in AutoFenceCreator, it's just convenient to have it here too to avoid extra referencing
+    // Useage:  Stack(this.GetType().Name) or Stack(T()); 
+    public void StackLog(string classType, bool verbose = true, [CallerMemberName] string caller = null)
+    {
+        bool show = false;
+        if (af != null)
+            show = af.showStackTrace;
+        if (caller == "Awake")
+            show = true;
+        if (show)
+        {
+            if (verbose == true)
+                Debug.Log($"                         _____   [{classType}]  :  {caller}( )   _____\n");
+            else
+                Debug.Log($"{caller}( )\n");
+        }
+    }
+    //====================================================
+    public static List<ScriptablePresetAFWB> GetPrestsListStaticCopy()
+    {
+        return mainPresetListStaticCopy;
+    }
+
+    //--------------------------
+    /*private static void InitializeGizmoDrawManager()
+    {
+        if (GizmoDrawManager.gizmoSingletonInstance == null)
+        {
+            GameObject gizmoManager = GameObject.Find("GizmoDrawManager");
+            if (gizmoManager == null)
+            {
+                gizmoManager = new GameObject("GizmoDrawManager");
+                gizmoManager.AddComponent<GizmoDrawManager>();
+                Debug.Log("GizmoDrawManager created in the scene.");
+            }
+            else
+            {
+                Debug.Log("GizmoDrawManager already exists in the scene.");
+            }
+        }
+
+        EditorApplication.update -= InitializeGizmoDrawManager;
+    }*/
+    //--------------------------
+    void InitializeGizmoDrawManager()
+    {
+        /*if (af.gizmoManager == null)
+        {
+            af.gizmoManager = new GizmoDrawManager(af);
+            //Debug.Log("GizmoDrawManager created.\n");
+        }*/
+        //EditorApplication.update -= InitializeGizmoDrawManager;
+    }
+
+    public void ResetState()
+    {
+        Debug.Log("AutoFenceCreator ResetState");
+
+        //-- Clear and Init Prefab Lists
+        if (af.postPrefabs != null)
+        {
+            af.postPrefabs.Clear();
+            af.postPrefabs = null;
+        }
+        if (af.railPrefabs != null)
+        {
+            af.railPrefabs.Clear();
+            af.railPrefabs = null;
+        }
+        if (af.extraPrefabs != null)
+        {
+            af.extraPrefabs.Clear();
+            af.extraPrefabs = null;
+        }
+        //-- Clear and Init Pools
+        if (af.postsPool != null)
+        {
+            af.postsPool.Clear();
+            af.postsPool = null;
+        }
+        if (af.railsAPool != null)
+        {
+            af.railsAPool.Clear();
+            af.railsAPool = null;
+        }
+        if (af.railsBPool != null)
+        {
+            af.railsBPool.Clear();
+            af.railsBPool = null;
+        }
+        if (af.ex.extrasPool != null)
+        {
+            af.ex.extrasPool.Clear();
+            af.ex.extrasPool = null;
+        }
+        if (af.subpostsPool != null)
+        {
+            af.subpostsPool.Clear();
+            af.subpostsPool = null;
+        }
+
+        //-- Clear scriptable presets
+        if (mainPresetList != null)
+        {
+            mainPresetList.Clear();
+            mainPresetList = null;
+        }
+
+        af.CreateAllObjectsLists();
+    }
+
+    void SimulateFirstEnable()
+    {
+        ResetState();
+        PostVector.LinkPostVectorParentList(af.postVectors);
+        SetupEditor();
+        af.CheckPostDirectionVectors(logMissing: true);
+        af.ForceRebuildFromClickPoints();
+    }
+    //-------------------------------
+    /// <summary>Registed to EditorApplication.update in OnEnable to check something every frame 
+    /// We subscribe and unsubscribe to it depending on situation. If nothing subscribed to it, it won't be called
+    /// Currently this used to stop showing the Unlock Mouse Button after a few seconds
+    /// </summary>
+    /// 
+    private void OnCustomUpdate()
+    {
+        //-- Stop showing the Unlock Mouse Button after a few seconds
+        //Debug.Log($"unlockMouseButtonTimer {unlockMouseButtonTimer.GetTime()} \n");
+        /*if (unlockMouseButtonTimer.GetTime() > 3000)
+        {
+            showingUnlockMouseFromAFButton = false;
+            dblClickScreenPoint = Vector2.zero;
+            EditorApplication.update -= OnCustomUpdate;
+            SceneView.RepaintAll();
+            EditorWindow.GetWindow<SceneView>().Repaint();
+        }*/
+    }
+    private void SetAndSyncInitialPresetIndices()
+    {
+
+        int launchPresetIndex = 0, currPresetIndex = af.currPresetIndex;
+        if (currPresetIndex == 0)
+        {
+            launchPresetIndex = AssignLaunchPreset();
+            //-- Note: CreatePools() via SetupPreset here.
+            presetsEd.SetupPreset(launchPresetIndex, forceRebuild: false);
+        }
+        //Get the preset Menu Index for the current preset
+        for (int i = 0; i < presetMenuNames.Count; i++)
+        {
+            if (presetMenuNames[i] == null)
+                continue;
+            string name = presetMenuNames[i];
+            if (name.Contains(af.currPresetName))
+                af.presetMenuIndexInDisplayList = i;
+        }
+        // find a preset in mainPresetList that matches the current preset name and return the index
+        for (int i = 0; i < mainPresetList.Count; i++)
+        {
+            if (mainPresetList[i] == null)
+                continue;
+            string name = mainPresetList[i].name;
+            if (name == af.currPresetName)
+                af.currPresetIndex = i;
+        }
+    }
+    //---------------------------------------
+    //-- Assign/Changes the preset to "Template  1 Post and 1 Wall
+    //-- Do this on first launch, but obviously not after hierarchy re-emable or compile
+    int AssignLaunchPreset()
+    {
+        if (launchPresetIndex == -1)
+            launchPresetIndex = FindPresetIndexByName("Template  1 Post and 1 Wall");
+        if (launchPresetIndex == -1)
+            launchPresetIndex = 0;
+
+        int presetIndex = 0;
+        if (af.launchPresetAssigned == false)
+        {
+            presetIndex = launchPresetIndex;
+            if (af.allowContentFreeUse == true)
+                presetIndex = 0;
+            af.launchPresetAssigned = true;
+        }
+        return presetIndex;
+    }
+    //---------------------------------------
+    public void ReloadPrefabsAndPresets(bool rebuild = true)
+    {
+        if (af.allowContentFreeUse == true)
+        {
+            LoadPrefabs(true);
+            presetsEd.LoadAllScriptablePresets(true);
+
+            af.currPresetIndex = 0;
+            af.currentPost_PrefabIndex = 0;
+            af.currentRail_PrefabIndex[0] = 0;
+            af.currentRail_PrefabIndex[1] = 0;
+            af.currentSubpost_PrefabIndex = 0;
+            af.currentExtra_PrefabIndex = 0;
+        }
+        else
+        {
+            LoadPrefabs(false);
+            presetsEd.LoadAllScriptablePresets(af.allowContentFreeUse);
+        }
+
+        if (rebuild)
+        {
+            af.ResetAllPools();
+            af.ForceRebuildFromClickPoints();
+
+        }
+    }
+    //----------
+    public int FindPresetIndexByName(string name)
+    {
+        if (mainPresetList == null)
+        {
+            Debug.LogError("mainPresetList is null in FindPresetIndexByName()\n");
+            return -1;
+        }
+        for (int i = 0; i < mainPresetList.Count; i++)
+        {
+            if (mainPresetList[i].name == name)
+                return i;
+        }
+        return -1;
+    }
+
+    //----------------
+    public void DrawUILine(Color color, int widthStartPadding, int widthEndPadding, int thickness = 2, int padding = 10)
+    {
+        Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
+        r.height = thickness;
+        r.y += padding / 2;
+        r.x -= 2;
+        r.x += widthStartPadding;
+        r.width -= widthEndPadding;
+        EditorGUI.DrawRect(r, color);
+    }
+    //----------------
+    public static void DrawUILine2(Color color, int widthStartPadding, int widthEndPadding, int thickness = 2, int heightPadding = 0)
+    {
+        Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(heightPadding + thickness));
+        r.height = thickness;
+        r.y += heightPadding / 2;
+        r.x += widthStartPadding;
+        r.x -= 1;
+        r.width -= (widthStartPadding + widthEndPadding);
+        EditorGUI.DrawRect(r, color);
+    }
+
+    public void TidyUp()
+    {
+        //========================
+        //  Tidy up after Undo
+        //========================
+        if (Event.current.commandName == "UndoRedoPerformed")
+        {
+            af.ResetAllPools();
+            af.ForceRebuildFromClickPoints();
+        }
+        if (isDark)
+        {
+            GUI.backgroundColor = new Color(0.75f, 0.75f, 0.75f);
+        }
+
+
+    }
+
+    //---------------------------------------
+    // Reversing the order also has the effect of making all objects face 180 the other way.
+    void ReverseClickPoints()
+    {
+        af.clickPoints.Reverse();
+        af.handles.Reverse();
+        af.clickPointFlags.Reverse();
+        af.ForceRebuildFromClickPoints();
+    }
+
+    LayerSet GetLayerSetFromToolbarChoice()
+    {
+        //create a switch statment for all the values of ComponentToolbar
+        LayerSet layer = LayerSet.railALayer;
+        switch (af.componentToolbar)
+        {
+            case ComponentToolbar.railsA:
+                layer = LayerSet.railALayer;
+                break;
+            case ComponentToolbar.railsB:
+                layer = LayerSet.railBLayer;
+                break;
+            case ComponentToolbar.posts:
+                layer = LayerSet.postLayer;
+                break;
+            case ComponentToolbar.extras:
+                layer = LayerSet.extraLayer;
+                break;
+            case ComponentToolbar.subposts:
+                layer = LayerSet.subpostLayer;
+                break;
+        }
+        return layer;
+    }
+    //-------------------------------------------
+    private void SwitchToolbarComponentViewOnClick(Event currentEvent, LayerSet hoveredLayer)
+    {
+        if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0 && currentEvent.shift == false && currentEvent.control == false)
+        {
+            if (hoveredLayer == LayerSet.railALayer)
+                ShowRailAControls();
+            else if (hoveredLayer == LayerSet.railBLayer)
+                ShowRailBControls();
+            else if (hoveredLayer == LayerSet.postLayer)
+                ShowPostControls();
+            else if (hoveredLayer == LayerSet.extraLayer)
+                ShowExtraControls();
+            else if (hoveredLayer == LayerSet.subpostLayer)
+                ShowSubpostControls();
+        }
+    }
+    //-------------------------------------------
+    private void SwitchToolbarComponentView(LayerSet layer)
+    {
+        switch (layer)
+        {
+            case LayerSet.railALayer:
+                ShowRailAControls();
+                break;
+            case LayerSet.railBLayer:
+                ShowRailBControls();
+                break;
+            case LayerSet.postLayer:
+                ShowPostControls();
+                break;
+            case LayerSet.extraLayer:
+                ShowExtraControls();
+                break;
+            case LayerSet.subpostLayer:
+                ShowSubpostControls();
+                break;
+            default:
+                return;
+        }
+    }
+
+    //---------------------------------
+    private void ShowRailAControls()
+    {
+        af.componentToolbar = ComponentToolbar.railsA;
+        componentToolbarProp.enumValueIndex = (int)af.componentToolbar;
+    }
+    private void ShowRailBControls()
+    {
+        af.componentToolbar = ComponentToolbar.railsB;
+        componentToolbarProp.enumValueIndex = (int)af.componentToolbar;
+    }
+    private void ShowPostControls()
+    {
+        af.componentToolbar = ComponentToolbar.posts;
+        componentToolbarProp.enumValueIndex = (int)af.componentToolbar;
+    }
+    private void ShowExtraControls()
+    {
+        af.componentToolbar = ComponentToolbar.extras;
+        componentToolbarProp.enumValueIndex = (int)af.componentToolbar;
+    }
+    private void ShowSubpostControls()
+    {
+        af.componentToolbar = ComponentToolbar.subposts;
+        componentToolbarProp.enumValueIndex = (int)af.componentToolbar;
+    }
+    public static void CreateClickPointAtPostPosition(Vector3 position, AutoFenceCreator af, bool rebuild = true)
+    {
+        af.InsertPost(position);
+        af.ResetPoolForLayer(LayerSet.postLayer);
+        if (rebuild)
+            af.ForceRebuildFromClickPoints();
+    }
+    public static void ConvertToClickPoint(Vector3 position, AutoFenceCreator af)
+    {
+        CreateClickPointAtPostPosition(position, af);
+    }
+    //-----------------------------------------------
+
+    // Section Index is the sequential position of the part along the whole fence length
+    // It's found by parsing the name of the GameObject which had the section num added during Build.
+    private static int GetSectionIndexFromName(GameObject go)
+    {
+
+        //--  Rail
+        int sectStart = go.name.IndexOf("_Rail[");
+
+        //--  Post
+        if (FindLayerFromParentName(go) == LayerSet.postLayer)
+            sectStart = go.name.IndexOf("_Post[");
+
+        if (sectStart == -1)
+            return -1;
+
+        string sectionStr = go.name.Substring(sectStart + 6);
+        int sectEnd = sectionStr.IndexOf("v");
+        sectionStr = sectionStr.Remove(sectEnd - 1);
+        int sectionIndex = int.Parse(sectionStr);
+        return sectionIndex;
+    }
+
+    private static LayerSet FindLayerFromParentName(GameObject go)
+    {
+        GameObject parent = go.transform.parent.gameObject;
+        LayerSet layerSet = LayerSet.railALayer;
+
+        if (parent.name.Contains("RailsAGrouped"))
+            layerSet = LayerSet.railALayer;
+        else if (parent.name.Contains("RailsBGrouped"))
+            layerSet = LayerSet.railBLayer;
+        if (parent.name.Contains("PostsGrouped"))
+            layerSet = LayerSet.postLayer;
+
+        return layerSet;
+    }
+
+    //------------------------------------------
+    public Vector3 EnforceVectorNonZero(Vector3 inVec, float nonZeroValue)
+    {
+        if (inVec.x == 0) inVec.x = nonZeroValue;
+        if (inVec.y == 0) inVec.y = nonZeroValue;
+        if (inVec.z == 0) inVec.z = nonZeroValue;
+        return inVec;
+    }
+    public Vector3 EnforceVectorMinimums(Vector3 inVec, Vector3 mins)
+    {
+        if (inVec.x < mins.x) inVec.x = mins.x;
+        if (inVec.y < mins.y) inVec.y = mins.y;
+        if (inVec.z < mins.z) inVec.z = mins.z;
+        return inVec;
+    }
+    public Vector3 EnforceRange360(Vector3 inVec)
+    {
+        inVec.x = inVec.x % 360;
+        inVec.y = inVec.y % 360;
+        inVec.z = inVec.z % 360;
+        return inVec;
+    }
+    public Vector3 EnforceVectorMaximums(Vector3 inVec, Vector3 maxs)
+    {
+        if (inVec.x > maxs.x) inVec.x = maxs.x;
+        if (inVec.y > maxs.y) inVec.y = maxs.y;
+        if (inVec.z > maxs.z) inVec.z = maxs.z;
+        return inVec;
+    }
+    public Vector3 EnforceVectorMinMax(Vector3 inVec, float globalMin, float globalMax)
+    {
+        if (inVec.x < globalMin) inVec.x = globalMin;
+        if (inVec.y < globalMin) inVec.y = globalMin;
+        if (inVec.z < globalMin) inVec.z = globalMin;
+
+        if (inVec.x > globalMax) inVec.x = globalMax;
+        if (inVec.y > globalMax) inVec.y = globalMax;
+        if (inVec.z > globalMax) inVec.z = globalMax;
+        return inVec;
+    }
+    public Vector3 EnforceVectorMinMax(Vector3 inVec, Vector3 minsXYZ, Vector3 maxs)
+    {
+        inVec.x = Mathf.Clamp(inVec.x, minsXYZ.x, maxs.x);
+        inVec.y = Mathf.Clamp(inVec.y, minsXYZ.y, maxs.y);
+        inVec.z = Mathf.Clamp(inVec.z, minsXYZ.z, maxs.z);
+        return inVec;
+    }
+
+    //---------------------------------------------------------------------
+    Vector3 SnapHandles(Vector3 inVec, float val)
+    {
+        Vector3 snapVec = Vector3.zero;
+        snapVec.y = inVec.y;
+
+        snapVec.x = Mathf.Round(inVec.x / val) * val;
+        snapVec.z = Mathf.Round(inVec.z / val) * val;
+
+        return snapVec;
+    }
+    //---------------------------------------------------------------------
+    // move the folder handles out of the way of the real moveable handles
+    void RepositionFolderHandles(Vector3 clickPoint)
+    {
+        Vector3 pos = clickPoint;
+        if (af.clickPoints.Count > 0)
+        {
+            pos = af.clickPoints[0];
+        }
+        af.gameObject.transform.position = pos + new Vector3(0, 4, 0);
+    }
+
+    //================================================================================
+    //
+    //                  Checks & Pre-fligh2
+    //
+    //================================================================================
+
+    /// <summary> will get called every frameFreq that OnInspectorGUI is called
+    /// Currently used ti check for new prefabs and to check the folder locations, and to remove the unlock-mouse button
+    /// </summary>
+    /// <param name="frameFreq"></param>
+    private void CheckPeriodicallyFromOnInspectorGUI(int frameFreq)
+    {
+        // print frame count
+        //Debug.Log($"frameCount: {frameCount}");
+        if (frameCount > frameFreq)
+        {
+            frameCount = 0;
+            CheckFolderLocations(true);
+            //af.ClearConsole();
+        }
+        if (frameCount % 200 == 0)
+        {
+            CheckForNewPrefabs();
+            frameCount = 0;
+        }
+        //showingUnlockMouseFromAFButton = false;
+    }
+
+
+    //-----------------------------------------
+    void UnloadUnusedAssets()
+    {
+        af.postPrefabs.Clear();
+        af.railPrefabs.Clear();
+        af.subPrefabs.Clear();
+        af.subJoinerPrefabs.Clear();
+        af.extraPrefabs.Clear();
+        userUnloadedAssets = true;
+        af.needsReloading = true;
+    }
+    //-----------------------------------------
+    void RemoveUnusedAssetsFromProject()
+    {
+        if (removingAssets == true)
+        {
+            GUILayout.Label("'Unload Unused Assets' LABEL");
+        }
+    }
+
+
 }
