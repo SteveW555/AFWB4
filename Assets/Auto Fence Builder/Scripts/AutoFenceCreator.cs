@@ -3113,7 +3113,6 @@ namespace AFWB
                 P = posA;
                 Q = posB;
 
-
                 Vector3 currDirectionEuler = VectorUtilitiesTCT.GetRotationAnglesFromDirection(posB, posA);
                 Vector3 currDirectionVector = (posB - posA).normalized;
                 Vector3 prevDirection = Vector3.zero;

@@ -11,9 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using TCT.PrintUtils;
 using UnityEditor;
-
 using UnityEngine;
-
 
 //--------------------------
 [CustomEditor(typeof(AutoFenceCreator))]
