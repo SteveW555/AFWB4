@@ -60,6 +60,11 @@ Thumbs.db
 # Material files
 *.mat
 
+# Prefab files
+*.prefab
+
+# Asset files
+*.asset
 
 # Log files
 Logs/*.log
