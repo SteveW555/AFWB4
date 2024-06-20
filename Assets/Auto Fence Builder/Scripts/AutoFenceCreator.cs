@@ -3125,9 +3125,9 @@ namespace AFWB
                 float Z_Shift = railPositionOffset.z; //--an alias for the railPositionOffset.z
 
                 //-- Experimental Parallel Mode repurposes the stackedRails gap to be the Z offset for the rail
-                float shiftTest = stackGap;
+                /*float shiftTest = stackGap;
                 float shiftGap = shiftTest * stackIdx;
-                Z_Shift = shiftGap;
+                Z_Shift = shiftGap;*/
 
 
                 if (offsetMode == RailOffsetMode.joined)
