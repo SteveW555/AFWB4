@@ -66,6 +66,9 @@ Thumbs.db
 # Asset files
 *.asset
 
+# C4D files
+*.c4d
+
 # Log files
 Logs/*.log
 

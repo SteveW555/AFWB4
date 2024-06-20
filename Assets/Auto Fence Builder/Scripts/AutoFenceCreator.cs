@@ -466,7 +466,7 @@ namespace AFWB
         public bool scaleInterpolationAlso = true; // this can be annoying if you want your postsPool to stay where they are.
         public Vector3 addIntersStartPoint = Vector3.zero;
         public Vector3 addIntersEndPoint = Vector3.zero;
-        List<Vector3> gaps = new List<Vector3>(); // stores the location of gap start & ends: {start0, end0, start1, end1} etc.
+        List<Vector3> gaps = new List<Vector3>(); // stores the location of stackGap start & ends: {start0, end0, start1, end1} etc.
         [Tooltip(AFBTooltipsText.allowGaps)]
         public bool allowGaps = true, showDebugGapLine = true; // draws a blue line to fill gaps, only in Editor
 
@@ -1041,7 +1041,7 @@ namespace AFWB
         public SinglesContainer singlesContainer = null; // this is an empty container, for convenience in calling static-like functions using af
         public bool[] railSinglesEnabled = { true, true };
         public bool postSinglesEnabled = true;
-        public const int kSingleSkipIndex = 9999; // denotes a 'single' replacement should be skipped (similar to a gap)
+        public const int kSingleSkipIndex = 9999; // denotes a 'single' replacement should be skipped (similar to a stackGap)
         public List<string> extraMenuNames = new List<string>();
 
         //=====================================================
@@ -1746,7 +1746,7 @@ namespace AFWB
             ForceRebuildFromClickPoints();
         }
         //--------------------
-        // If there are multiple contiguous gaps found, merge them in to 1 gap by deleting the previous point
+        // If there are multiple contiguous gaps found, merge them in to 1 stackGap by deleting the previous point
         void MergeClickPointGaps()
         {
             for (int i = 2; i < clickPointFlags.Count(); i++)
@@ -2980,7 +2980,7 @@ namespace AFWB
 
             float distanceToNextPost = 0, halfRailThickness;
             float alternateHeightDelta = 0;
-            float thisRailSpread = railSpread[layerIndex], gap = globalScale.y * gs; // gs = Global Scale
+            float thisRailSpread = railSpread[layerIndex], stackGap = globalScale.y * gs; // gs = Global Scale
             RailSpreadMode spreadMode = railSpreadMode[layerIndex];
             Vector3 nativeScale = nativeRailAScale, railPositionOffset = railAPositionOffset, railRotation = railARotation, P, Q;
             //float railThickness = 0, railMeshLength = 0, railMeshHeight = 0;
@@ -3096,19 +3096,13 @@ namespace AFWB
                 float spread = 0;
                 Vector3 totalSize = prefabMeshWithTransformsSize[layerIndex];
                 if (spreadMode == 0)//total mode
-                    gap = thisRailSpread / (numStackedRailsInThisSet - 1);
+                    stackGap = thisRailSpread / (numStackedRailsInThisSet - 1);
                 else
-                    gap = thisRailSpread;
+                    stackGap = thisRailSpread;
             }
             else
-                gap = 0;
-            gap *= globalScale.y * gs;
-            float shiftTest = gap;
-
-
-
-
-            //==
+                stackGap = 0;
+            stackGap *= globalScale.y * gs;
 
             //==========================================================================
             //            Start looping through for each stacked Rail in the section, 
@@ -3116,17 +3110,10 @@ namespace AFWB
             GameObject thisRail = null;
             for (int stackIdx = 0; stackIdx < numStackedRailsInThisSet; stackIdx++)
             {
-                float shiftGap = shiftTest * stackIdx;
-
-
-                /*posA.x += (shiftTest * stackIdx);
-                posB.x += (shiftTest * stackIdx);
-                posC.x += (shiftTest * stackIdx);*/
-
                 P = posA;
                 Q = posB;
 
-                
+
                 Vector3 currDirectionEuler = VectorUtilitiesTCT.GetRotationAnglesFromDirection(posB, posA);
                 Vector3 currDirectionVector = (posB - posA).normalized;
                 Vector3 prevDirection = Vector3.zero;
@@ -3135,7 +3122,11 @@ namespace AFWB
 
                 bool lastSection = false;
                 offsetMode = RailOffsetMode.joined;
-                float Z_Shift = railPositionOffset.z;
+                float Z_Shift = railPositionOffset.z; //--an alias for the railPositionOffset.z
+
+                //-- Experimental Parallel Mode repurposes the stackedRails gap to be the Z offset for the rail
+                float shiftTest = stackGap;
+                float shiftGap = shiftTest * stackIdx;
                 Z_Shift = shiftGap;
 
 
@@ -3481,7 +3472,7 @@ namespace AFWB
                     //Debug.Log("simple forward " + thisGO.transform.svRotation.eulerAngles + "\n");
 
                     //-- Position basically in the world
-                    thisRail.transform.position = posA + new Vector3(0, (gap * stackIdx * 0) + alternateHeightDelta, 0);
+                    thisRail.transform.position = posA + new Vector3(0, (stackGap * stackIdx * 0) + alternateHeightDelta, 0);
 
 
                     //====================================
@@ -3561,7 +3552,7 @@ namespace AFWB
                     distanceToNextPost = Vector3.Distance(newPivotPoint, posB);
 
                     //-- Position - Use Translate for x & z to keep it local relative
-                    thisRail.transform.position = newPivotPoint + new Vector3(0, (gap * stackIdx) + alternateHeightDelta, 0);
+                    thisRail.transform.position = newPivotPoint + new Vector3(0, (stackGap * stackIdx) + alternateHeightDelta, 0);
                     if (offsetMode == RailOffsetMode.basic)
                         thisRail.transform.Translate(railPositionOffset.x, 0, railPositionOffset.z);
                     else if (offsetMode == RailOffsetMode.joined)
@@ -5564,7 +5555,7 @@ namespace AFWB
             }
 
             float startHeight = 0, totalHeight = gs * postScale.y;
-            float singleGapSize = totalHeight / ((numRails - 1) + 2); // +2 because we have a gap at maxGoTop and bottom
+            float singleGapSize = totalHeight / ((numRails - 1) + 2); // +2 because we have a stackGap at maxGoTop and bottom
 
             if (numStackedRails[kRailALayerInt] > 1)
             {
