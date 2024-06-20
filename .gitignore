@@ -51,8 +51,20 @@ Thumbs.db
 # unity scene files
 *.unity
 
+# FBX files
+*.fbx
+
+# Meta files
+*.meta
+
+# Material files
+*.mat
+
+
 # Log files
 Logs/*.log
+
+
 
 # Ignore Package Manager packages
 # To avoid ignoring everything in /Packages, which would break Package Manager
