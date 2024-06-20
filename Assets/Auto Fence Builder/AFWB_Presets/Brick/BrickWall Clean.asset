@@ -178,6 +178,7 @@ MonoBehaviour:
   stretchPostWidthAtMitreJoint: 1
   postQuantizeRotAxis: 1
   postQuantizeRotProb: 0.1
+  postRandomScope: 2
   usePostVariations: 0
   postVariants:
   - enabled: 1
@@ -478,8 +479,8 @@ MonoBehaviour:
   - enabled: 1
     inUse: 1
     probability: 0.5
-    goName: Brick_WallHighClean_Panel
-    go: {fileID: 5604026001320905141, guid: 493a5740442316342ba5004276bce869, type: 3}
+    goName: Brick_WallHigh_Panel
+    go: {fileID: 1688264242992932, guid: 329e795fa3e4a4ecfbfb465d8af7ef18, type: 3}
   - enabled: 1
     inUse: 1
     probability: 0.5
@@ -2099,11 +2100,6 @@ MonoBehaviour:
     stepEnabled: 1
     probability: 1
     layer: 6
-  railBRandRec:
-    sequenceShuffle: 0
-    heightVariation: 0
-    smallRotVariation: 0
-    quantRotVariation: 0
   useRailBSequencer: 1
   useRailSequencer: 0001
   numRailVariants: 0200000002000000

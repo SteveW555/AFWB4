@@ -434,7 +434,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         preset.railAName = af.railPrefabs[af.currentRail_PrefabIndex[0]].name;
         preset.numStackedRailsA = (int)af.numStackedRails[AutoFenceCreator.kRailALayerInt];
         preset.railASpread = af.railSpread[AutoFenceCreator.kRailALayerInt];
-        preset.spreadModeRailA = af.railSpreadMode[AutoFenceCreator.kRailALayerInt];
+        preset.spreadModeRailA = (int)af.railSpreadMode[AutoFenceCreator.kRailALayerInt];
         preset.railAPositionOffset = af.railAPositionOffset;
         preset.railASize = af.railAScale;
         preset.railARotation = af.railARotation;
@@ -449,7 +449,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         preset.railBName = af.railPrefabs[af.currentRail_PrefabIndex[1]].name;
         preset.numStackedRailsB = (int)af.numStackedRails[AutoFenceCreator.kRailBLayerInt];
         preset.railBSpread = af.railSpread[AutoFenceCreator.kRailBLayerInt];
-        preset.spreadModeRailB = af.railSpreadMode[AutoFenceCreator.kRailBLayerInt];
+        preset.spreadModeRailB = (int)af.railSpreadMode[AutoFenceCreator.kRailBLayerInt];
         preset.railBPositionOffset = af.railBPositionOffset;
         preset.railBSize = af.railBScale;
         preset.railBRotation = af.railBRotation;
@@ -638,7 +638,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.allFollowPostRaiseLower = allFollowPostRaiseLower;
 
         //==  Posts  ==
-        af.currentPost_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, postName);
+        af.currentPost_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, postName, $"ScriptablePreset.BuildFromPreset({categoryName}/{name})  postName ");
         af.usePostsLayer = usePosts;
         af.postHeightOffset = postHeightOffset;
         af.postScale = postSize;
@@ -678,12 +678,12 @@ public class ScriptablePresetAFWB : ScriptableObject
 
 
         //==  Rails A  ==
-        af.currentRail_PrefabIndex[0] = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, railAName);
+        af.currentRail_PrefabIndex[0] = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, railAName, $"ScriptablePreset.BuildFromPreset({categoryName}//{name})  railA Name ");
         af.useRailLayer[0] = useRailsA;
         af.SetRailPrefab(af.currentRail_PrefabIndex[0], LayerSet.railALayerSet, false, false);
         af.numStackedRails[kRailALayerInt] = numStackedRailsA;
         af.railSpread[kRailALayerInt] = railASpread;
-        af.railSpreadMode[kRailALayerInt] = spreadModeRailA;
+        af.railSpreadMode[kRailALayerInt] = (RailSpreadMode)spreadModeRailA;
         af.railAPositionOffset = railAPositionOffset;
         af.railAScale = railASize;
         af.railARotation = railARotation;
@@ -726,12 +726,12 @@ public class ScriptablePresetAFWB : ScriptableObject
         //af.railARandRec = railARandRec;
 
         //==  Rails B  ==
-        af.currentRail_PrefabIndex[1] = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, railBName);
+        af.currentRail_PrefabIndex[1] = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, railBName, $"ScriptablePreset.BuildFromPreset({categoryName}/{name})  railB Name ");
         af.useRailLayer[1] = useRailsB;
         af.SetRailPrefab(af.currentRail_PrefabIndex[1], LayerSet.railBLayerSet, false, false);
         af.numStackedRails[kRailBLayerInt] = numStackedRailsB;
         af.railSpread[kRailBLayerInt] = railBSpread;
-        af.railSpreadMode[kRailBLayerInt] = spreadModeRailB;
+        af.railSpreadMode[kRailBLayerInt] = (RailSpreadMode)spreadModeRailB;
 
         af.railBPositionOffset = railBPositionOffset;
         af.railBScale = railBSize;
@@ -778,7 +778,7 @@ public class ScriptablePresetAFWB : ScriptableObject
 
         //==  Extras  ==
         af.useExtrasLayer = useExtras;
-        af.currentExtra_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, extraName);
+        af.currentExtra_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, extraName, $"ScriptablePreset.BuildFromPreset({categoryName}/{name})  Extra Name ");
         af.ex.relativeMovement = relativeMovement;
         af.ex.relativeScaling = relativeScaling;
         af.ex.extraTransformPositionOffset = extraPositionOffset;
@@ -813,7 +813,7 @@ public class ScriptablePresetAFWB : ScriptableObject
         af.SetSeededValuesForLayer(LayerSet.extraLayerSet, extraSeeds);
 
         //==  SubPosts  ==
-        af.currentSubpost_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, subpostName);
+        af.currentSubpost_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, subpostName, $"ScriptablePreset.BuildFromPreset({categoryName}/{name})  subpostName ");
         af.useSubpostsLayer = useSubposts;
         af.subsSpacingMode = (SubSpacingMode)subsFixedOrProportionalSpacing;
         af.subSpacing = subSpacing;
@@ -938,19 +938,19 @@ public class ScriptablePresetAFWB : ScriptableObject
 
         //      Save to UserAssets_AFWB Folder. Create Folder if needed
         //================================================================
-        /*if (saveUserAlso)
+        //if (saveUserAlso)
         {
             var userClone = Instantiate(preset);
-            string userFolderPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/User_Presets" + "/" + preset.categoryName;
+            string userFolderPath = af.currAutoFenceBuilderDir + "/AFWB_Presets/User Recently Saved";
             bool folderExists = AssetDatabase.IsValidFolder(userFolderPath);
             if (folderExists == false)
             {
-                string guid = AssetDatabase.CreateFolder(af.currAutoFenceBuilderDir + "/UserAssets_AFWB/User_Presets", preset.categoryName);
+                string guid = AssetDatabase.CreateFolder(af.currAutoFenceBuilderDir + "/AFWB_Presets", "User Recently Saved");
                 userFolderPath = AssetDatabase.GUIDToAssetPath(guid);
             }
-            string userSavePath = userFolderPath + "/" + preset.presetName + ".asset";
+            string userSavePath = userFolderPath + "/" + preset.name + ".asset";
             AssetDatabase.CreateAsset(userClone, userSavePath); 
-        }*/
+        }
 
         AssetDatabase.SaveAssets();
         return true;

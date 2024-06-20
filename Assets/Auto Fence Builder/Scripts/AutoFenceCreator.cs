@@ -90,8 +90,11 @@ namespace AFWB
     /// Joined: behaves as if the Posts were in the translated positions, then moves & scales to form a continuous rail
     /// </summary>
     public enum RailOffsetMode { basic = 0, joined = 1 };
+    public enum RailSpreadMode { Total = 0, PerRail = 1, Gap = 2 };
 
-    public enum RandomScope { main = 0, variations = 1, all=2};
+
+
+    public enum RandomScope { main = 0, variations = 1, all = 2 };
 
     /// <summary>A basic upright tall box to act as a marker in debugging</summary>
 
@@ -182,12 +185,17 @@ namespace AFWB
         }
     }
     //---------------------------------
-    //This can be any arbitrary five-sided poly, doesn't have to be a regular pentagon
+    /// <summary>
+    /// Represents a 2D pentagon defined by five Vector2 vertices.
+    /// </summary>
     public class Pentagon2D
     {
-        public Vector2[] v;
+        private const int VertexCount = 5;
+        public Vector2[] v = new Vector2[VertexCount];
 
-        /// <summary>Constructor with four points.</summary>
+        /// <summary>Constructor with five points.</summary>
+        /// <param name="pt0">First point.</param>
+
         public Pentagon2D(Vector2 pt0, Vector2 pt1, Vector2 pt2, Vector2 pt3, Vector2 pt4)
         {
             v = new Vector2[5];
@@ -198,7 +206,9 @@ namespace AFWB
             v[4] = pt4;
         }
 
-        /// <summary>Constructor with an array of points. Optionally offsets each vertex by a given Vector2 offset.</summary>
+        /// <summary>
+        /// Constructor with an array of points. Optionally offsets each vertex by a given Vector2 offset.
+        /// </summary>
         /// <param name="pts">Array of points to initialize the pentagon. Only the first 5 points are used if the array is longer.</param>
         /// <param name="optionalOffset">Optional offset to apply to each vertex. Default is Vector2.zero.</param>
         public Pentagon2D(Vector2[] pts, Vector2 optionalOffset = default)
@@ -219,22 +229,35 @@ namespace AFWB
         }
 
         /// <summary>Wrapper for Pentagon2D constructor using constructor chaining</summary>
+        /// <param name="pts">Array of points to initialize the pentagon. Only the first 5 points are used if the array is longer.</param>
+        /// <param name="optionalOffset">Optional offset to apply to each vertex. Default is Vector2.zero.</param>
         public Pentagon2D(Vector2[] pts, Vector3 optionalOffset)
             : this(pts, new Vector2(optionalOffset.x, optionalOffset.z)) { }
 
-        /// <summary>Offsets each vertex of the pentagon by a given Vector2 offset. This is typically used to position the pentagon in world space.</summary>
+        /// <summary>
+        /// Offsets each vertex of the pentagon by a given Vector2 offset. This is typically used to position the pentagon in world space.
+        /// </summary>
         /// <param name="offset">The Vector2 offset to apply to each vertex.</param>
         public void OffsetPentagon(Vector2 offset)
         {
             for (int i = 0; i < v.Length; i++)
                 v[i] += offset;
         }
-        /// <summary>Offsets the vertices of the pentagon by the given x and yz (y or z depending if using v2 or v3).</summary>
+
+        /// <summary>
+        /// Offsets the vertices of the pentagon by the given x and yz (y or z depending on if using v2 or v3).
+        /// </summary>
+        /// <param name="x">The x offset.</param>
+        /// <param name="yz">The y or z offset.</param>
         public void OffsetPentagon(float x, float yz)
         {
             OffsetPentagon(new Vector2(x, yz));
         }
-        //--------
+
+        /// <summary>
+        /// Offsets each vertex of the pentagon by a given Vector3 offset. This is typically used to position the pentagon in world space.
+        /// </summary>
+        /// <param name="offset">The Vector3 offset to apply to each vertex.</param>
         public void OffsetPentagon(Vector3 offset)
         {
             for (int i = 0; i < v.Length; i++)
@@ -243,8 +266,10 @@ namespace AFWB
                 v[i].y += offset.z;
             }
         }
-        //--------------------------------------------------------
-        /// <summary>Converts the pentagon vertices to a Vector3 array with the y value set to a fixed value.</summary>
+
+        /// <summary>
+        /// Converts the pentagon vertices to a Vector3 array with the y value set to a fixed value.
+        /// </summary>
         /// <param name="yValue">The y value to use for the Vector3 array.</param>
         /// <returns>An array of Vector3 where each Vector3 is a vertex of the pentagon with the y value set to the specified value.</returns>
         public Vector3[] ToVector3Array(float yValue = 0)
@@ -255,6 +280,10 @@ namespace AFWB
 
             return vector3s;
         }
+
+        /// <summary>
+        /// Prints the vertices of the pentagon to the console.
+        /// </summary>
         public void Print()
         {
             Debug.Log("\n");
@@ -262,7 +291,9 @@ namespace AFWB
                 Debug.Log($"Vertex {i}: {v[i]}\n\n");
         }
 
-        /// <summary>Expands the pentagon by moving each vertex away from the center by the given scale factor.</summary>
+        /// <summary>
+        /// Expands the pentagon by moving each vertex away from the center by the given scale factor.
+        /// </summary>
         /// <param name="scaleFactor">The factor by which to scale the distance of each vertex from the center.</param>
         public void ExpandPentagon(float scaleFactor)
         {
@@ -274,6 +305,11 @@ namespace AFWB
                 v[i] = center + direction * Vector2.Distance(center, v[i]) * scaleFactor;
             }
         }
+
+        /// <summary>
+        /// Expands the pentagon by moving each vertex away from the center by the given extra distance.
+        /// </summary>
+        /// <param name="extra">The extra distance to add to each vertex from the center.</param>
         public void ExpandPentagonByDistance(float extra)
         {
             Vector2 center = CalculateCenter();
@@ -285,7 +321,9 @@ namespace AFWB
             }
         }
 
-        /// <summary>Calculates the center of the pentagon based on its vertices.</summary>
+        /// <summary>
+        /// Calculates the center of the pentagon based on its vertices.
+        /// </summary>
         /// <returns>The center point of the pentagon.</returns>
         private Vector2 CalculateCenter()
         {
@@ -296,8 +334,6 @@ namespace AFWB
             }
             return sum / v.Length;
         }
-
-
     }
 
 
@@ -505,7 +541,14 @@ namespace AFWB
         public bool showControls = false, showHelp = true, showDebugInfo = true;
 
         public int currPresetIndex = 0;
+        /// <summary>
+        /// This name is stored with the Category "Brick/MyWall" as that is how they must be displayed in the menu
+        /// The presets themselves in mainPresetList do not have the category in the name, as presets store name and Category as two values
+        /// So be careful when going between the two. Use the defined methods which do the necessary conversion of with/without category
+        /// PresetUIEd.GetPresetNameWithoutCategory()
+        /// </summary>
         public string currPresetName = "";
+        public int currPresetMenuIndex = 2, presetMenuIndexInDisplayList = 0; // because the List we're displaying nmight not be the full List
         public Vector3 lastDeletedPoint = Vector3.zero;
         public int lastDeletedIndex = 0;
 
@@ -561,7 +604,7 @@ namespace AFWB
         public string autoFenceBuilderDefaultDir = "Assets/Auto Fence Builder";
         public string currPrefabsDir, currExtraPrefabsDir, currPostPrefabsDir, currRailPrefabsDir, currMeshesDir, currPresetsDir;
         public string currAutoFenceBuilderDir, currTexturesDir, currMaterialsDir;
-        public string scrPresetSaveName = "New Fence Preset_001";
+        public string presetSaveName = "New Fence Preset_001";
 
         public bool autoScaleImports = true, autoRotateImports = true;
         public bool addScalingToSizeYAfterUserObjectImport = true;//???
@@ -821,7 +864,7 @@ namespace AFWB
         public RandomScope railARandomScope = RandomScope.all, railBRandomScope = RandomScope.all;
         public int[] currentRail_PrefabIndex = { 1, 1 }; // RailA, RailB
         public int[] currentRail_PrefabMenuIndex = { 0, 0 }; // RailA, RailB
-        public int[] railSpreadMode = { 0, 0 }; // 0: DistanceTCT is the total spread, 1: distanceToNextPost per singleVarGO
+        public RailSpreadMode[] railSpreadMode = { RailSpreadMode.Total, RailSpreadMode.Total }; // 0: DistanceTCT is the total spread, 1: distanceToNextPost per singleVarGO
         [Range(1, 12)]
         public float[] numStackedRails = { 1, 1 }; //float because slider value box isn't automatically typable with int
 
@@ -993,7 +1036,7 @@ namespace AFWB
         //=====================================================
         //                  Singles
         //=====================================================
-        public SinglesContainer[] railSinglesContainer = {null, null};
+        public SinglesContainer[] railSinglesContainer = { null, null };
         public SinglesContainer postSinglesContainer = null;
         public SinglesContainer singlesContainer = null; // this is an empty container, for convenience in calling static-like functions using af
         public bool[] railSinglesEnabled = { true, true };
@@ -1069,7 +1112,7 @@ namespace AFWB
         public int quantizeRotAxisSubpost = 1;
         public DuplicateMode subpostDuplicateMode = DuplicateMode.single;
         public Vector3 resizedPrefabSize = Vector3.zero;
-        public int currPresetMenuIndex = 7, presetMenuIndexInDisplayList = 0; // because the List we're displaying nmight not be the full List
+
         public Mesh railACustomColliderMesh, railBCustomColliderMesh, postCustomColliderMesh, extraCustomColliderMesh, subpostCustomColliderMesh;
         public RailOffsetMode[] railOffsetMode = { RailOffsetMode.basic, RailOffsetMode.basic };
         public bool showOptionalPostPrefabsProp = false;
@@ -1115,7 +1158,7 @@ namespace AFWB
         void OnEnable()
         {
             // Ensure the parent list is set when the object is enabled
-            PostVector.LinkParentList(postVectors);
+            PostVector.LinkPostVectorParentList(postVectors);
             // TODO - duplicate some other inits here.
         }
         //==============================
@@ -1186,7 +1229,7 @@ namespace AFWB
             railPrefabs = new List<GameObject>();
             subJoinerPrefabs = new List<GameObject>();
             extraPrefabs = new List<GameObject>();
-            
+
             //-- Pool Lists
             postsPool = new List<Transform>();
             railsAPool = new List<Transform>();
@@ -1693,7 +1736,7 @@ namespace AFWB
         {
             int indexOfNewUserPost = FindPrefabIndexByName(layer, newUserPrefab.name);
 
-            SetCurrentPrefabIndexForLayer(layer, indexOfNewUserPost);
+            SetCurrentPrefabIndexForLayer(indexOfNewUserPost, layer);
 
             SetFirstSourceVariantToMainForLayer(layer);
             DestroyPoolForLayer(layer);
@@ -2938,7 +2981,7 @@ namespace AFWB
             float distanceToNextPost = 0, halfRailThickness;
             float alternateHeightDelta = 0;
             float thisRailSpread = railSpread[layerIndex], gap = globalScale.y * gs; // gs = Global Scale
-            int spreadMode = railSpreadMode[layerIndex];
+            RailSpreadMode spreadMode = railSpreadMode[layerIndex];
             Vector3 nativeScale = nativeRailAScale, railPositionOffset = railAPositionOffset, railRotation = railARotation, P, Q;
             //float railThickness = 0, railMeshLength = 0, railMeshHeight = 0;
             Bounds bounds;
@@ -2946,7 +2989,7 @@ namespace AFWB
 
             Vector3 railScale = railAScale;// the adjustedNativeScale transform of the rail layer
 
-            bool allowRailRand = allowRailRandomization[kRailALayerInt];
+            bool allowRailRand = allowRailRandomization[layer.Int()];
             bool allowIndependentSubmeshVariation = false, allowRailHeightVariation = false, allowRandRailRotationVariation = false;
             bool jitterRailVerts = false, rotateFromBase = false;
             List<SeqItem> currSeq = null;
@@ -3060,125 +3103,10 @@ namespace AFWB
             else
                 gap = 0;
             gap *= globalScale.y * gs;
+            float shiftTest = gap;
 
 
-            P = posA;
-            Q = posB;
-            Vector3 currDirectionEuler = VectorUtilitiesTCT.GetRotationAnglesFromDirection(posB, posA);
-            Vector3 currDirectionVector = (posB - posA).normalized;
-            //currentVectorDir = (posB - posA);
-            Vector3 prevDirection = Vector3.zero;
-            float currHeading = currDirectionEuler.y, prevHeading = prevDirection.y;
-            float horizDistance = Vector3.Distance(P, Q);
 
-            //if (dual)
-            //railPositionOffset.z = -railPositionOffset.z;
-            bool lastSection = false;
-            offsetMode = RailOffsetMode.joined;
-
-            if (offsetMode == RailOffsetMode.joined)
-            {
-                //   Calculate new positions for Posts A B C based on the railPositionOffset
-                Vector3 offsetPosA = posA;
-                Vector3 offsetPosB = posB;
-                Vector3 offsetPosC = posC;
-                Vector3 offsetPrevPost = prevPostPos;
-
-                //if(postVectors.Count <= sectionIndex + 2)
-                //Debug.Log($"Not enough PostVectors in BuildRailsForSection()   {postVectors.Count} / {sectionIndex + 2}");
-                PostVector postVectorA = postVectors[sectionIndex];
-                PostVector postVectorB = postVectorA.GetNext();
-                PostVector postVectorC = postVectorB.GetNext();
-
-                PostVector postVectorPrev = postVectorA.GetPrevious();
-
-                //Get dirVectors for A B C
-                Vector3 dirAFwd = postVectorA.Forward;
-                Vector3 shiftFwd = Vector3.Scale(dirAFwd, railPositionOffset);
-
-                Vector3 dirARight = postVectorA.DirRight;
-                Vector3 shiftRight = dirARight * railPositionOffset.z;
-                offsetPosA = posA + shiftRight;
-
-                if (sectionIndex + 1 < allPostPositions.Count - 1)
-                {
-                    Vector3 dirBRight = postVectorB.DirRight;
-                    shiftRight = dirBRight * railPositionOffset.z;
-                    offsetPosB = posB + shiftRight;
-                }
-                else
-                {
-                    lastSection = true;
-                    shiftRight = dirARight * railPositionOffset.z;
-                    offsetPosB = posB + shiftRight;
-                }
-
-                if (sectionIndex + 2 < allPostPositions.Count - 1)
-                {
-                    Vector3 dirCRight = postVectorC.DirRight;
-                    shiftRight = dirCRight * railPositionOffset.z;
-                    offsetPosC = posC + shiftRight;
-                }
-                if (sectionIndex > 0)
-                {
-                    Vector3 dirPrevRight = postVectorPrev.DirRight;
-                    shiftRight = dirPrevRight * railPositionOffset.z;
-                    offsetPrevPost = prevPostPos + shiftRight;
-                }
-
-                //-- Check if the Offset is non-zero, if so use these as the post positions (but ignoring Y offset)
-                if (railPositionOffset.XZGreaterThan(.001f))
-                {
-                    offsetPosA.y = posA.y; offsetPosB.y = posB.y; offsetPosC.y = posC.y;
-                    bool isNode = postVectorA.IsClickPointNode, isNextNode = postVectorB.IsClickPointNode;
-                    float currShiftLength = shiftRight.magnitude, newShiftLength = 0;
-                    Vector3 newElbowPos = Vector3.zero;
-                    if (isNode && sectionIndex > 0)
-                    {
-                        //Get the extended elbow width
-                        Vector2 elbowOffset = postVectorA.CalculateOuterElbowOffset2D(railPositionOffset.z);
-                        offsetPosA.x = posA.x + elbowOffset.x;
-                        offsetPosA.z = posA.z + elbowOffset.y;
-
-                    }
-                    if (isNextNode && lastSection == false)
-                    {
-                        Vector2 elbowOffset = postVectorB.CalculateOuterElbowOffset2D(railPositionOffset.z);
-                        offsetPosB.x = posB.x + elbowOffset.x;
-                        offsetPosB.z = posB.z + elbowOffset.y;
-                    }
-                    posA = offsetPosA;
-                    posB = offsetPosB;
-                    posC = offsetPosC;
-                    prevPostPos = offsetPrevPost;
-                    P.y = Q.y = 0;
-                }
-
-                P = posA;
-                Q = posB;
-                horizDistance = Vector3.Distance(P, Q);
-                distanceToNextPost = Vector3.Distance(posA, posB);
-                // currentVectorDir = (posB - posA);
-                //currDirectionVector = (posB - posA).normalized;
-                currDirectionEuler = VectorUtilitiesTCT.GetRotationAnglesFromDirection(posB, posA);
-                currDirectionVector = (posB - posA).normalized;
-                prevDirection = Vector3.zero;
-                currHeading = currDirectionEuler.y;
-                prevHeading = prevDirection.y;
-
-                /*if (gizmoManager == null)
-                {
-                    gizmoManager = new GizmoDrawManager(this);
-                    Debug.LogWarning("GizmoDrawManager was null in BuildRailsForSection).");
-                }*/
-
-                Color col = Color.red;
-                if (sectionIndex == 0)
-                    col = Color.green;
-
-                //gizmoManager.DrawPost(posA, size: new Vector3(0.3f, 4f, 0.3f), color: col);
-                //if (lastSection == true) gizmoManager.DrawPost(posB, size: new Vector3(0.3f, 4f, 0.3f), color: Color.green); 
-            }
 
             //==
 
@@ -3188,6 +3116,164 @@ namespace AFWB
             GameObject thisRail = null;
             for (int stackIdx = 0; stackIdx < numStackedRailsInThisSet; stackIdx++)
             {
+                float shiftGap = shiftTest * stackIdx;
+
+
+                /*posA.x += (shiftTest * stackIdx);
+                posB.x += (shiftTest * stackIdx);
+                posC.x += (shiftTest * stackIdx);*/
+
+                P = posA;
+                Q = posB;
+
+                
+                Vector3 currDirectionEuler = VectorUtilitiesTCT.GetRotationAnglesFromDirection(posB, posA);
+                Vector3 currDirectionVector = (posB - posA).normalized;
+                Vector3 prevDirection = Vector3.zero;
+                float currHeading = currDirectionEuler.y, prevHeading = prevDirection.y;
+                float horizDistance = Vector3.Distance(P, Q);
+
+                bool lastSection = false;
+                offsetMode = RailOffsetMode.joined;
+                float Z_Shift = railPositionOffset.z;
+                Z_Shift = shiftGap;
+
+
+                if (offsetMode == RailOffsetMode.joined)
+                {
+                    //   Calculate new positions for Posts A B C based on the railPositionOffset
+                    Vector3 offsetPosA = posA;
+                    Vector3 offsetPosB = posB;
+                    Vector3 offsetPosC = posC;
+                    Vector3 offsetPrevPost = prevPostPos;
+                    //Debug.Log($"Not enough PostVectors in BuildRailsForSection()   {postVectors.Count} / {sectionIndex + 2}");
+                    PostVector postVectorA = postVectors[sectionIndex];
+                    PostVector postVectorB = postVectorA.GetNext();
+                    PostVector postVectorC = postVectorB.GetNext();
+                    PostVector postVectorPrev = postVectorA.GetPrevious();
+                    //Get dirVectors for A B C
+                    Vector3 dirAFwd = postVectorA.Forward;
+                    Vector3 shiftFwd = Vector3.Scale(dirAFwd, railPositionOffset);
+                    Vector3 dirARight = postVectorA.DirRight;
+                    Vector3 shiftRight = dirARight * Z_Shift;
+                    offsetPosA = posA + shiftRight;
+
+                    if (sectionIndex + 1 < allPostPositions.Count - 1)
+                    {
+                        Vector3 dirBRight = postVectorB.DirRight;
+                        shiftRight = dirBRight * Z_Shift;
+                        offsetPosB = posB + shiftRight;
+                    }
+                    else
+                    {
+                        lastSection = true;
+                        shiftRight = dirARight * Z_Shift;
+                        offsetPosB = posB + shiftRight;
+                    }
+
+                    if (sectionIndex + 2 < allPostPositions.Count - 1)
+                    {
+                        Vector3 dirCRight = postVectorC.DirRight;
+                        shiftRight = dirCRight * Z_Shift;
+                        offsetPosC = posC + shiftRight;
+                    }
+                    if (sectionIndex > 0)
+                    {
+                        Vector3 dirPrevRight = postVectorPrev.DirRight;
+                        shiftRight = dirPrevRight * Z_Shift;
+                        offsetPrevPost = prevPostPos + shiftRight;
+                    }
+                    //-- Check if the Offset is non-zero, if so use these as the post positions (but ignoring Y offset)
+                    if (railPositionOffset.XZGreaterThan(.001f))
+                    {
+                        offsetPosA.y = posA.y; offsetPosB.y = posB.y; offsetPosC.y = posC.y;
+                        bool isNode = postVectorA.IsClickPointNode, isNextNode = postVectorB.IsClickPointNode;
+                        float currShiftLength = shiftRight.magnitude, newShiftLength = 0;
+                        Vector3 newElbowPos = Vector3.zero;
+                        float cornerAngle = postVectorA.CornerAngle;
+                        if (isNode && sectionIndex > 0)
+                        {
+                            Debug.Log($"cornerAngle A =  {cornerAngle}\n");
+
+                            //Get the extended elbow width
+                            Vector2 elbowOffset = postVectorA.CalculateOuterElbowOffset2D(Z_Shift);
+                            if (cornerAngle < 0)
+                            {
+                                offsetPosA.x = posA.x + elbowOffset.x;
+                                offsetPosA.z = posA.z + elbowOffset.y;
+                            }
+                            else
+                            {
+                                offsetPosA.x = posA.x - elbowOffset.x;
+                                offsetPosA.z = posA.z - elbowOffset.y;
+                            }
+                        }
+                        if (isNextNode && lastSection == false)
+                        {
+                            cornerAngle = postVectorB.CornerAngle;
+                            Debug.Log($"cornerAngle B =  {cornerAngle}\n");
+                            Vector2 elbowOffset = postVectorB.CalculateOuterElbowOffset2D(Z_Shift);
+                            if (cornerAngle < 0)
+                            {
+                                offsetPosB.x = posB.x + elbowOffset.x;
+                                offsetPosB.z = posB.z + elbowOffset.y;
+                            }
+                            else
+                            {
+                                offsetPosB.x = posB.x - elbowOffset.x;
+                                offsetPosB.z = posB.z - elbowOffset.y;
+                            }
+                        }
+                        posA = offsetPosA;
+                        posB = offsetPosB;
+                        posC = offsetPosC;
+                        prevPostPos = offsetPrevPost;
+                        P.y = Q.y = 0;
+                    }
+                    P = posA;
+                    Q = posB;
+                    horizDistance = Vector3.Distance(P, Q);
+                    distanceToNextPost = Vector3.Distance(posA, posB);
+                    // currentVectorDir = (posB - posA);
+                    //currDirectionVector = (posB - posA).normalized;
+                    currDirectionEuler = VectorUtilitiesTCT.GetRotationAnglesFromDirection(posB, posA);
+                    currDirectionVector = (posB - posA).normalized;
+                    prevDirection = Vector3.zero;
+                    currHeading = currDirectionEuler.y;
+                    prevHeading = prevDirection.y;
+                    /*if (gizmoManager == null)
+                    {
+                        gizmoManager = new GizmoDrawManager(this);
+                        Debug.LogWarning("GizmoDrawManager was null in BuildRailsForSection).");
+                    }*/
+                    Color col = Color.red;
+                    if (sectionIndex == 0)
+                        col = Color.green;
+                    //gizmoManager.DrawPost(posA, size: new Vector3(0.3f, 4f, 0.3f), color: col);
+                    //if (lastSection == true) gizmoManager.DrawPost(posB, size: new Vector3(0.3f, 4f, 0.3f), color: Color.green); 
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 bool omit = false;
                 if (SkipChanceOfMissing(sectionIndex, layer, seeds, chanceOfMissing, stackIdx))
                     continue;
@@ -3395,12 +3481,13 @@ namespace AFWB
                     //Debug.Log("simple forward " + thisGO.transform.svRotation.eulerAngles + "\n");
 
                     //-- Position basically in the world
-                    thisRail.transform.position = posA + new Vector3(0, (gap * stackIdx) + alternateHeightDelta, 0);
+                    thisRail.transform.position = posA + new Vector3(0, (gap * stackIdx * 0) + alternateHeightDelta, 0);
 
 
                     //====================================
                     //      Transform Position Offset 
                     //====================================
+                    offsetMode = RailOffsetMode.joined;
                     if (offsetMode == RailOffsetMode.basic)
                         thisRail.transform.Translate(railPositionOffset.x, 0, railPositionOffset.z);
                     else if (offsetMode == RailOffsetMode.joined)
@@ -3457,6 +3544,12 @@ namespace AFWB
                         float prevRailRealLength = railMeshLength * prevRail.transform.localScale.x;
                         float newPrevRailLength = prevRailRealLength + adjacentExtraVector.magnitude;
                         float prevRailLengthScalar = newPrevRailLength / prevRailRealLength;
+
+                        float extra = prevRailLengthScalar - 1;
+                        float adjExtra = extra * (3.0f / interPostDist);
+                        prevRailLengthScalar = prevRailLengthScalar - extra + adjExtra;
+
+
                         Vector3 newPrevRailScale = Vector3.Scale(prevRail.transform.localScale, new Vector3(prevRailLengthScalar, 1, 1));
                         prevRail.transform.localScale = newPrevRailScale;
                     }
@@ -3620,29 +3713,19 @@ namespace AFWB
 
                 //adjustedNativeScale.x *= newScale;
 
-                //-- Apply scaling ----
+                //      Apply Transform Box Scaling
+                //=====================================
                 if (useMeshDeformation == false)
                 {
                     thisRail.transform.localScale = adjustedNativeScale;
-
                 }
                 else
                     MeshUtilitiesAFWB.ScaleAllMeshesInGO(thisRail, adjustedNativeScale);
 
                 //=============   Calculate Centre   =================
-                float totalQuantRotAmount = 0;
-                Vector3 axisRight = currDirectionVector;
-                Vector3 f = thisRail.transform.forward;
-                Vector3 railUp = thisRail.transform.up;
-                Vector3 g = thisRail.transform.TransformDirection(thisRail.transform.forward);
-                Vector3 railFwd = new Vector3(-f.z, f.y, f.x); //swap x & z
-                Vector3 r = thisRail.transform.right;
-                Vector3 railRight = new Vector3(r.z, r.y, -r.x);
-                Vector3 railMeshSize = MeshUtilitiesAFWB.GetMeshSize(thisRail);
-                Vector3 railPos = thisRail.transform.localPosition;
-                Vector3 rCentre = railPos;
-                rCentre.x += railFwd.x * railMeshSize.x / 2f * thisRail.transform.localScale.x;
-                rCentre.y += (-thisRail.transform.right.y) * railMeshSize.x / 2f * thisRail.transform.localScale.y;
+                float totalQuantRotAmount;
+                Vector3 railMeshSize, rCentre;
+                CalculateCenter(currDirectionVector, thisRail, out totalQuantRotAmount, out railMeshSize, out rCentre);
 
                 //rCentre.y = (thisGO.transform.localScale.y * railMeshSize.y) / 2f;
                 rCentre.z += (-thisRail.transform.right.z) * (railMeshSize.x / 2f) * thisRail.transform.localScale.x;
@@ -3659,13 +3742,12 @@ namespace AFWB
                     alternateHeightDelta = (sectionIndex % 2) * 0.001f;
 
 
-                //============== Move for Var if needed  ==============
+                //     Move Position for Var if needed 
+                //===============================
                 if (useRailVariations[layerIndex])
                     thisRail.transform.Translate(new Vector3(varPosOffset.x * gs, 0, varPosOffset.z * gs));
 
                 Vector3 railCentre = CalculateCentreOfRail(thisRail);
-
-
 
                 //=====================================================
                 //           Quantized & Small Random Rotations
@@ -3678,16 +3760,17 @@ namespace AFWB
                     quantRotAxis, allowQuantRot, seeds, stackIdx, thisRail, randomScopeIsValid, totalQuantRotAmount, rCentre, railCentre, totalQuantRot);
                 totalUserModdedRotation += totalQuantRot;
 
-                //=====================================================
-                //        Rail Rotation from User Settings
-                //=====================================================
-                // we have to invert some axis if the rail has been flipped, mirrored or turned 180
+                //-- W
+                //e have to invert some axis if the rail has been flipped, mirrored or turned 180
                 Vector3 adjustedUserRotForFlipsAnd180 = railRotation;
                 if (totalQuantRot.y == 180)
                 {
                     adjustedUserRotForFlipsAnd180.x *= -1;
                     adjustedUserRotForFlipsAnd180.z *= -1;
                 }
+                //=====================================================
+                //        Rail Rotation from User Settings
+                //=====================================================
                 if (railRotation.x != 0)
                     thisRail.transform.RotateAround(rCentre, thisRail.transform.right, adjustedUserRotForFlipsAnd180.x);
                 if (railRotation.y != 0)
@@ -3711,20 +3794,15 @@ namespace AFWB
                     for (int m = 0; m < meshCount; m++)
                     {
                         thisModdedMesh = mfList[m].sharedMesh;
-
-
                         if (VectorUtilitiesTCT.GetMaxAbsVector3Element(totalUserModdedRotation) >= 0.1f)
                         {
                             //Pivot must be at centre for normal rotations to work
                             Vector3 shift = MeshUtilitiesAFWB.RecentreMesh(thisModdedMesh);
-
                             MeshUtilitiesAFWB.RotateMeshAndNormals(thisModdedMesh, new Vector3(0, 0, totalUserModdedRotation.z), recentre: false);
                             MeshUtilitiesAFWB.RotateMeshAndNormals(thisModdedMesh, new Vector3(totalUserModdedRotation.x, 0, 0), recentre: false);
                             MeshUtilitiesAFWB.RotateMeshAndNormals(thisModdedMesh, new Vector3(0, totalUserModdedRotation.y, 0), recentre: false);
-
                             // Put the pivot back
                             MeshUtilitiesAFWB.TranslateMesh(thisModdedMesh, -shift);
-
                             thisModdedMesh.RecalculateTangents();
                         }
                     }
@@ -3733,61 +3811,8 @@ namespace AFWB
                 //=====================================
                 //      Mirror & Invert Variations
                 //=====================================
-                bool backToFront = false, mirrorZ = false, invert = false;
-                if (useRailVariations[layerIndex] && currSourceVariant != null && (useRailSeq || useSingles))
-                {
-                    if (variationMode == VariationMode.sequenced)
-                    {
-                        backToFront = currSeqStepItem.backToFront;
-                        mirrorZ = currSeqStepItem.mirrorZ;
-                        invert = currSeqStepItem.invert;
-                    }
-                    for (int m = 0; m < meshCount; m++)
-                    {
-                        thisModdedMesh = mfList[m].sharedMesh;
-                        if (m > 0 && allowIndependentSubmeshVariation)
-                        {
-                            backToFront = (currSeqStepItem.backToFront ? 1f : 0f) > UnityEngine.Random.value;
-                            mirrorZ = (currSeqStepItem.mirrorZ ? 1f : 0f) > UnityEngine.Random.value;
-                            invert = (currSeqStepItem.invert ? 1f : 0f) > UnityEngine.Random.value;
-                        }
-                        /*if (mirrorZ)
-                        {
-                            thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh(thisModdedMesh, new Vector3(-1, 1, 1), adjustForPivot: true);
-                            thisModdedMesh = MeshUtilitiesAFWB.ReverseNormals(thisModdedMesh);
-                            thisModdedMesh.RecalculateNormals();
-                            thisModdedMesh.RecalculateTangents();
-                        }
-                        if (invert)
-                        {
-                            thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh(thisModdedMesh, new Vector3(1, -1, 1));
-                            thisModdedMesh = MeshUtilitiesAFWB.ReverseNormals(thisModdedMesh);
-                            thisModdedMesh.RecalculateNormals();
-                            thisModdedMesh.RecalculateTangents();
-                        }
-                        if (backToFront)
-                        {
-                            thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh(thisModdedMesh, new Vector3(1, 1, -1));
-                            thisModdedMesh = MeshUtilitiesAFWB.ReverseNormals(thisModdedMesh);
-                            thisModdedMesh.RecalculateNormals();
-                            thisModdedMesh.RecalculateTangents();
-                        }*/
-                    }
-                }
-                if (allowMirrorX && (sectionIndex + 1) % mirrorXFreqRail[layerIndex] == 0)
-                {
-                    thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh2(thisModdedMesh, new Vector3(-1, 1, 1));
-                    //-- This is necessary otherwise the mesh will be to the left, and hidden by the previous rail
-                    thisModdedMesh = MeshUtilitiesAFWB.SetRailMeshPivotToLeftCentre(thisModdedMesh);
-                }
-                if (allowMirrorY && (sectionIndex + 1) % mirrorYFreqRail[layerIndex] == 0)
-                {
-                    thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh2(thisModdedMesh, new Vector3(1, -1, 1));
-                }
-                if (allowMirrorZ && (sectionIndex + 1) % mirrorZFreqRail[layerIndex] == 0)
-                {
-                    thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh2(thisModdedMesh, new Vector3(1, 1, -1));
-                }
+                thisModdedMesh = MirrorAndInvert(sectionIndex, layerIndex, allowIndependentSubmeshVariation, variationMode, useSingles, allowMirrorX, allowMirrorY, allowMirrorZ, useRailSeq, currSourceVariant, currSeqStepItem, mfList, thisModdedMesh, meshCount);
+
 
                 //-- Omit rails that would intersect with ground/other objects(Hide Colliding Rails) 
                 omit = OmitBuriedRails(currDirectionVector, distanceToNextPost, railScale, omit, thisRail);
@@ -3854,6 +3879,84 @@ namespace AFWB
             }
             railBuildTime += railTimer.End(print: false);
             return thisRail;
+        }
+
+        private Mesh MirrorAndInvert(int sectionIndex, int layerIndex, bool allowIndependentSubmeshVariation, VariationMode variationMode, bool useSingles, bool allowMirrorX, bool allowMirrorY, bool allowMirrorZ, bool useRailSeq, SourceVariant currSourceVariant, SeqItem currSeqStepItem, List<MeshFilter> mfList, Mesh thisModdedMesh, int meshCount)
+        {
+            bool backToFront = false, mirrorZ = false, invert = false;
+            if (useRailVariations[layerIndex] && currSourceVariant != null && (useRailSeq || useSingles))
+            {
+                if (variationMode == VariationMode.sequenced)
+                {
+                    backToFront = currSeqStepItem.backToFront;
+                    mirrorZ = currSeqStepItem.mirrorZ;
+                    invert = currSeqStepItem.invert;
+                }
+                for (int m = 0; m < meshCount; m++)
+                {
+                    thisModdedMesh = mfList[m].sharedMesh;
+                    if (m > 0 && allowIndependentSubmeshVariation)
+                    {
+                        backToFront = (currSeqStepItem.backToFront ? 1f : 0f) > UnityEngine.Random.value;
+                        mirrorZ = (currSeqStepItem.mirrorZ ? 1f : 0f) > UnityEngine.Random.value;
+                        invert = (currSeqStepItem.invert ? 1f : 0f) > UnityEngine.Random.value;
+                    }
+                    /*if (mirrorZ)
+                    {
+                        thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh(thisModdedMesh, new Vector3(-1, 1, 1), adjustForPivot: true);
+                        thisModdedMesh = MeshUtilitiesAFWB.ReverseNormals(thisModdedMesh);
+                        thisModdedMesh.RecalculateNormals();
+                        thisModdedMesh.RecalculateTangents();
+                    }
+                    if (invert)
+                    {
+                        thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh(thisModdedMesh, new Vector3(1, -1, 1));
+                        thisModdedMesh = MeshUtilitiesAFWB.ReverseNormals(thisModdedMesh);
+                        thisModdedMesh.RecalculateNormals();
+                        thisModdedMesh.RecalculateTangents();
+                    }
+                    if (backToFront)
+                    {
+                        thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh(thisModdedMesh, new Vector3(1, 1, -1));
+                        thisModdedMesh = MeshUtilitiesAFWB.ReverseNormals(thisModdedMesh);
+                        thisModdedMesh.RecalculateNormals();
+                        thisModdedMesh.RecalculateTangents();
+                    }*/
+                }
+            }
+            if (allowMirrorX && (sectionIndex + 1) % mirrorXFreqRail[layerIndex] == 0)
+            {
+                thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh2(thisModdedMesh, new Vector3(-1, 1, 1));
+                //-- This is necessary otherwise the mesh will be to the left, and hidden by the previous rail
+                thisModdedMesh = MeshUtilitiesAFWB.SetRailMeshPivotToLeftCentre(thisModdedMesh);
+            }
+            if (allowMirrorY && (sectionIndex + 1) % mirrorYFreqRail[layerIndex] == 0)
+            {
+                thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh2(thisModdedMesh, new Vector3(1, -1, 1));
+            }
+            if (allowMirrorZ && (sectionIndex + 1) % mirrorZFreqRail[layerIndex] == 0)
+            {
+                thisModdedMesh = MeshUtilitiesAFWB.ScaleMesh2(thisModdedMesh, new Vector3(1, 1, -1));
+            }
+
+            return thisModdedMesh;
+        }
+
+        private static void CalculateCenter(Vector3 currDirectionVector, GameObject thisRail, out float totalQuantRotAmount, out Vector3 railMeshSize, out Vector3 rCentre)
+        {
+            totalQuantRotAmount = 0;
+            Vector3 axisRight = currDirectionVector;
+            Vector3 f = thisRail.transform.forward;
+            Vector3 railUp = thisRail.transform.up;
+            Vector3 g = thisRail.transform.TransformDirection(thisRail.transform.forward);
+            Vector3 railFwd = new Vector3(-f.z, f.y, f.x); //swap x & z
+            Vector3 r = thisRail.transform.right;
+            Vector3 railRight = new Vector3(r.z, r.y, -r.x);
+            railMeshSize = MeshUtilitiesAFWB.GetMeshSize(thisRail);
+            Vector3 railPos = thisRail.transform.localPosition;
+            rCentre = railPos;
+            rCentre.x += railFwd.x * railMeshSize.x / 2f * thisRail.transform.localScale.x;
+            rCentre.y += (-thisRail.transform.right.y) * railMeshSize.x / 2f * thisRail.transform.localScale.y;
         }
 
         /*private GameObject GetSinglesInfo(int sectionIndex, LayerSet layer, ref SourceVariant currVariantForSeqStep, List<SourceVariant> rail_Variants, SinglesContainer singlesContainer, ref GameObject thisRail, ref int currVariantIndex, ref bool isSingle, ref SourceVariant sourceVariantForSingle, ref int meshIndex, ref SourceVariant currSourceVariant, out SinglesItem currSingleItem)
@@ -4964,7 +5067,7 @@ namespace AFWB
             {
                 float cY = clickPoints[i].y;
                 //Debug.Log($"{i}  pos.y = {pos.y}       clickPoints[i] = {cY}\n");
-                
+
                 float distSqr = Vector3.Magnitude(pos - clickPoints[i]);
                 if (distSqr < .01f)
                     return i;
@@ -5125,6 +5228,8 @@ namespace AFWB
 
             else if (go.transform.name.Contains("_Extra"))
                 layer = LayerSet.extraLayerSet;
+            else if (go.transform.name.Contains("_Ex")) //--TODO. This is a temporary fix for shortening the name to _Ex during Extra pool creation
+                layer = LayerSet.extraLayerSet;
             else if (go.transform.name.Contains("_Sub"))
                 layer = LayerSet.subpostLayerSet;
 
@@ -5142,7 +5247,10 @@ namespace AFWB
             if (go == null || go.transform.parent == null)
                 return prefabType;
 
-            prefabType = InferLayerFromGoName(go).ToPrefabType();
+            LayerSet layer = InferLayerFromGoName(go);
+            prefabType = layer.ToPrefabType();
+            if (prefabType != PrefabTypeAFWB.nonePrefab)
+                prefabType = PrefabTypeAFWB.extraPrefab; //TODO. Assuming Extra for now, but need more robust plan
             return prefabType;
         }
         public PrefabTypeAFWB GetPrefabTypeFromName(string goName)
@@ -5166,8 +5274,11 @@ namespace AFWB
         /// Full name including layer suffix
         /// </summary>
         /// <returns>int Prefab Index</returns>
-        public int FindPrefabIndexByNameForLayer(PrefabTypeAFWB prefabType, string prefabName, bool warnMissing = true, bool replaceMissingWithDefault = true)
+        public int FindPrefabIndexByNameForLayer(PrefabTypeAFWB prefabType, string prefabName, string message = "",
+            bool warnMissing = true, bool replaceMissingWithDefault = true)
         {
+
+            //-- First Look in the default Layer prefabs
             List<GameObject> prefabs = GetPrefabsForPrefabType(prefabType);
             int prefabsCount = prefabs.Count;
 
@@ -5181,7 +5292,7 @@ namespace AFWB
                 if (name == prefabName)
                     return i;
             }
-            //-- If a Post wasn't found, maybe the Post is using an Extra
+            //-- If a Post wasn't found in Posts, maybe the Post is using an Extra
             if (prefabType == PrefabTypeAFWB.postPrefab)
             {
                 prefabs = GetPrefabsForLayer(LayerSet.extraLayerSet);
@@ -5194,7 +5305,6 @@ namespace AFWB
                         return i;
                 }
             }
-
             //-- If an Extra wasn't found, maybe the Extra is using a Post
             if (prefabType == PrefabTypeAFWB.extraPrefab)
             {
@@ -5211,11 +5321,9 @@ namespace AFWB
 
             if ((warnMissing || replaceMissingWithDefault) && prefabName != "-")
             {
-                string warningStr = $"FindPrefabIndexByNameForLayer():   Couldn't find prefab with name: {prefabName} . " +
-                    $"Is it a User Object that's been deleted or re-named?  ( {prefabType} )" +
-                    $"\n Unable to use presets that rely on this prefab.\n";
+                string warningStr = $"FindPrefabIndexByNameForLayer(  {prefabType}  ):   \nCouldn't find prefab with name: {prefabName}.  {message}";
                 if (replaceMissingWithDefault && prefabName != "-")
-                    warningStr += $"Replacing with default {prefabType.ToString()} prefab\n";
+                    warningStr += $" | Replacing with default {prefabType.ToString()} prefab\n";
                 else
                     warningStr += $"Null Prefab was returned\n";
 
@@ -5514,7 +5622,7 @@ namespace AFWB
                     prefabIndex = GetPrefabIndexForLayerByName(LayerSet.railALayerSet, "ABasicConcrete_Panel");
                 if (prefabIndex == -1)
                     prefabIndex = 0;
-                SetCurrentPrefabIndexForLayer(layer, prefabIndex);
+                SetCurrentPrefabIndexForLayer(prefabIndex, layer);
                 SetMenuIndexFromPrefabIndexForLayer(prefabIndex, layer);
                 ResetPoolForLayer(layer);
                 ForceRebuildFromClickPoints();
@@ -5625,8 +5733,8 @@ namespace AFWB
                 GameObject prefab = prefabs[i];
                 if (CheckShouldSkip(prefab, layer))
                     continue;
-                
-                
+
+
                 menuName = prefab.name;
                 CheckIfSaveCopyInUser(menuName, PrefabTypeAFWB.postPrefab);
 
@@ -5656,9 +5764,9 @@ namespace AFWB
         /// <returns></returns>
         private bool CheckShouldSkip(GameObject prefab, LayerSet layer)
         {
-            if ((layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet )&& prefab.name.Contains("_Extra"))
+            if ((layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet) && prefab.name.Contains("_Extra"))
                 return true;
-            
+
             if (layer == LayerSet.extraLayerSet && prefab.name.Contains("_Post"))
                 return true;
 
@@ -5713,7 +5821,7 @@ namespace AFWB
 
             for (int i = 0; i < postMenuNames.Count; i++)
             {
-                if(postMenuNames[i].Contains("_Extra") == false)
+                if (postMenuNames[i].Contains("_Extra") == false)
                     extraMenuNames.Add($" - Posts/{postMenuNames[i]}");
             }
         }
@@ -5760,22 +5868,10 @@ namespace AFWB
                 extraPrefabs[currentExtra_PrefabIndex] = go;
 
         }
-        public GameObject GetUserObjectForLayer(LayerSet layerSet)
-        {
-            GameObject customObject = null;
-            if (layerSet == LayerSet.postLayerSet)
-                customObject = userPrefabPost;
-            else if (layerSet == LayerSet.railALayerSet)
-                customObject = userPrefabRail[kRailALayerInt];
-            else if (layerSet == LayerSet.railBLayerSet)
-                customObject = userPrefabRail[kRailBLayerInt];
-            else if (layerSet == LayerSet.extraLayerSet)
-                customObject = userPrefabExtra;
 
-            return customObject;
-        }
 
-        
+
+
 
         public LayerMask GetIgnoreLayerMask()
         {

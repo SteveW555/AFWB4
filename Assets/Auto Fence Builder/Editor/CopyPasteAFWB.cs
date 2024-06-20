@@ -52,7 +52,8 @@ public class CopyPasteAFWB
 
         //==  Extras  ==
         af.useExtrasLayer = presetCopy.useExtras;
-        af.currentExtra_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, presetCopy.extraName);
+        af.currentExtra_PrefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, presetCopy.extraName, 
+            $"PasteExtraParametersFromScriptablePreset()  Preset {presetCopy.name} extraName");
         af.ex.relativeMovement = presetCopy.relativeMovement;
         af.ex.relativeScaling = presetCopy.relativeScaling;
         af.ex.extraTransformPositionOffset = presetCopy.extraPositionOffset;

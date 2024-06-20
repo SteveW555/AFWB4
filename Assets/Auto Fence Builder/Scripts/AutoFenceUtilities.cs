@@ -155,7 +155,7 @@ namespace AFWB
         }
         //--------------------------------
 
-        public  Vector3 GetRotationTransformForLayer(LayerSet layer)
+        public Vector3 GetRotationTransformForLayer(LayerSet layer)
         {
             if (layer == LayerSet.postLayerSet)
                 return postRotation;
@@ -167,11 +167,11 @@ namespace AFWB
                 return subpostRotation;
             else if (layer == LayerSet.extraLayerSet)
                 return ex.extraTransformRotation;
-            
+
             return Vector3.zero;
         }
 
-        public void SetScaleTransformForLayer(Vector3 scale,  LayerSet layer)
+        public void SetScaleTransformForLayer(Vector3 scale, LayerSet layer)
         {
             if (layer == LayerSet.postLayerSet)
                 postScale = scale;
@@ -447,8 +447,8 @@ namespace AFWB
             for (int i = 0; i < sourcePrefabs.Count(); i++)
             {
                 if (sourcePrefabs[i] == null)
-                { 
-                    Debug.LogWarning("curr prefab was missing.Index: " + i + " in BackupPrefabMeshes \n");
+                {
+                    Debug.LogWarning("curr inPrefab was missing.Index: " + i + " in BackupPrefabMeshes \n");
                     continue;
                 }
                 submeshList = MeshUtilitiesAFWB.GetAllMeshesFromGameObject(sourcePrefabs[i]);
@@ -1061,7 +1061,7 @@ namespace AFWB
                 namesList = railMenuNames;
             if (prefabType == PrefabTypeAFWB.extraPrefab)
                 namesList = extraMenuNames;
-            //Its a Post or Railor Extra prefab, look for it in their lists
+            //Its a Post or Railor Extra inPrefab, look for it in their lists
             if (prefabType != PrefabTypeAFWB.anyPrefab)
             {
                 for (int stackIdx = 0; stackIdx < namesList.Count; stackIdx++)
@@ -1074,7 +1074,7 @@ namespace AFWB
                 }
             }
             //if(warnMissing)
-            // re-enable print ("Couldn't find prefab with menuName: " + prefabName + ".Is it a User Object that'stackIdx been deleted? currPost default prefab will be used instead.\n");
+            // re-enable print ("Couldn't find inPrefab with menuName: " + prefabName + ".Is it a User Object that'stackIdx been deleted? currPost default inPrefab will be used instead.\n");
             return 0;
         }*/
         //---------------------------
@@ -1176,6 +1176,9 @@ namespace AFWB
             }
             return formattedString;
         }
+        
+
+
         //---------------------------
         // If the input index is -1, we know it's bad, otherwise check index first
         // if the prefabName is not empty, check from that first
@@ -1191,12 +1194,20 @@ namespace AFWB
 
             }
 
-            Debug.LogWarning($"Couldn't find prefab for layer: {GetLayerNameAsString(layer)}. Setting Prefab index to 0\n");
+            Debug.LogWarning($"Couldn't find inPrefab for layer: {GetLayerNameAsString(layer)}. Setting Prefab index to 0\n");
+        }
+        //---------
+        public void ClearAllPrefabs()
+        {
+            postPrefabs.Clear();
+            railPrefabs.Clear();
+            subJoinerPrefabs.Clear();
+            extraPrefabs.Clear();
         }
         //---------------------------
         public int FindPrefabIndexByName(LayerSet layer, string prefabName, bool warnMissing = true, bool returnMissingDefault = true, string msg = "")
         {
-            return FindPrefabIndexByNameForLayer(GetPrefabTypeFromLayer(layer), prefabName, warnMissing, returnMissingDefault);
+            return FindPrefabIndexByNameForLayer(GetPrefabTypeFromLayer(layer), prefabName, msg, warnMissing, returnMissingDefault);
         }
         //---------------------------
         /*public GameObject FindPrefabByNameAndType(string prefabName, bool warnMissing = true, bool returnMissingDefault = true, string msg = "")
@@ -1213,10 +1224,10 @@ namespace AFWB
                 return go;
 
             if (warnMissing && prefabName != "-")
-                print("Couldn't find prefab with menuName: " + prefabName + " of any type. Is it a User Object that'stackIdx been deleted? " + msg + "\n");
+                print("Couldn't find inPrefab with menuName: " + prefabName + " of any type. Is it a User Object that'stackIdx been deleted? " + msg + "\n");
             if (returnMissingDefault && prefabName != "-")
             {
-                Debug.LogWarning($"Replacing with default prefab\n");
+                Debug.LogWarning($"Replacing with default inPrefab\n");
                 GameObject defaultPrefab = GetPrefabAtIndexForLayer(0, layer);
                 return defaultPrefab;
             }
@@ -1225,7 +1236,7 @@ namespace AFWB
             return null;
         }*/
         //---------------------------
-        // Find a prefab by menuName, but only in the given prefabType
+        // Find a inPrefab by menuName, but only in the given prefabType
         //[MethodImpl(MethodImplOptions.NoInlining)]
         public GameObject FindPrefabByNameAndType(PrefabTypeAFWB prefabType, string prefabName, bool warnMissing = true, bool returnMissingDefault = true, string msg = "")
         {
@@ -1242,7 +1253,7 @@ namespace AFWB
         }
         //---------------------------
         //[MethodImpl(MethodImplOptions.NoInlining)]
-        // Find a prefab by menuName, but only in the given layerType
+        // Find a inPrefab by menuName, but only in the given layerType
         public GameObject FindPrefabByName(LayerSet layer, string prefabName, bool warnMissing = true, bool returnMissingDefault = true, string msg = "", [CallerMemberName] string caller = null)
         {
             List<GameObject> prefabs = GetPrefabsForLayer(layer);
@@ -1274,10 +1285,10 @@ namespace AFWB
                 string warningStr;
                 if (warnMissing)
                 {
-                    warningStr = $"FindPrefabByNameAndType():   Couldn't find prefab with menuName: {prefabName}. " +
+                    warningStr = $"FindPrefabByNameAndType():   Couldn't find inPrefab with menuName: {prefabName}. " +
                                        $"Is it a User Object that has been deleted or re-named? ({GetLayerNameAsString(layer)}:  {msg})\n";
                     if (returnMissingDefault)
-                        warningStr += $"Replacing with default {GetLayerNameAsString(layer)} prefab";
+                        warningStr += $"Replacing with default {GetLayerNameAsString(layer)} inPrefab";
                     else
                         warningStr += $"Null Prefab was returned";
                     warningStr += $"   Called from:   {caller}()";
@@ -1294,11 +1305,11 @@ namespace AFWB
         }
         //---------------------------
         /// <summary>
-        /// Find a prefab in any layer by menuName
+        /// Find a inPrefab in any layer by menuName
         /// </summary>
-        /// <param menuName="prefabName   name of the prefab to search for"></param>
+        /// <param menuName="prefabName   name of the inPrefab to search for"></param>
         /// <returns>GameObject if found, else null</returns>
-        /// <remarks>There are no warnings because it is likely that a prefab might not be in a specific layer</remarks>
+        /// <remarks>There are no warnings because it is likely that a inPrefab might not be in a specific layer</remarks>
         public GameObject FindPrefabByName(string prefabName)
         {
             List<GameObject> prefabs = GetAllPrefabs();
@@ -1313,6 +1324,28 @@ namespace AFWB
             }
             return null;
         }
+        /// <summary>
+        /// Finds the index of the given prefab in the list of prefabs for the specified layer.
+        /// </summary>
+        /// <param name="inPrefab">The GameObject representing the prefab to find.</param>
+        /// <param name="layer">The layer set to search within.</param>
+        /// <returns>The index of the prefab if found; otherwise, -1.</returns>
+        /// <remarks>Useful after saving a prefab to find it in the Lists</remarks>
+        public int FindPrefabForLayer(GameObject inPrefab, LayerSet layer)
+        {
+            List<GameObject> prefabs = GetAllPrefabs();
+            GameObject prefab = null;
+            for (int i = 0; i < prefabs.Count; i++)
+            {
+                prefab = GetPrefabAtIndexForLayer(i, layer);
+                if (prefab == null)
+                    continue;
+                if (prefab == inPrefab)
+                    return i;
+            }
+            return -1;
+        }
+
         //---------------------------
         // If canContain == true, a partial match with string.Comtains() is good enough
         // because of this there is the potential to find many matches, so we return a list
@@ -1359,16 +1392,16 @@ namespace AFWB
         {
             if (prefabName == null)
             {
-                Debug.LogWarning("FindPrefabIndexInMenuNamesList: prefabName is null. Unable to get prefab. \n");
+                Debug.LogWarning("FindPrefabIndexInMenuNamesList: prefabName is null. Unable to get inPrefab. \n");
                 return -1;
             }
 
             //if(prefabName.Contains("RockAA"))
-                //Debug.LogWarning("\n");
+            //Debug.LogWarning("\n");
 
-            
-            
-            //-- First search through the correct layer type, e.g. assuming that a Post uses a _Post prefab
+
+
+            //-- First search through the correct layer type, e.g. assuming that a Post uses a _Post inPrefab
             if (prefabType == PrefabTypeAFWB.railPrefab)
             {
                 for (int i = 0; i < railMenuNames.Count; i++)
@@ -1420,7 +1453,7 @@ namespace AFWB
 
             if (warnMissing && prefabName != "-")
             {
-                print("Couldn't find prefab with menuName: " + prefabName + ".Is it a User Object that's been deleted?  (" + prefabType + ")\n");
+                print("Couldn't find inPrefab with menuName: " + prefabName + ".Is it a User Object that's been deleted?  (" + prefabType + ")\n");
             }
             return -1;
         }
@@ -1657,7 +1690,7 @@ namespace AFWB
             GameObject userPrefab = null;
 
             if (layer == LayerSet.railALayerSet)
-                userPrefab =  userPrefabRail[0];
+                userPrefab = userPrefabRail[0];
             else if (layer == LayerSet.railBLayerSet)
                 userPrefab = userPrefabRail[1];
             else if (layer == LayerSet.postLayerSet)
@@ -1677,9 +1710,9 @@ namespace AFWB
             else if (layer == LayerSet.extraLayerSet)
                 userPrefabExtra = userPrefab;
         }
-            //------------
-            // This is only used when we are Finishing a fence with no postsPool. We need to save the click-points as postsPool so that the finished fence can be re-edited
-            void CreateClickPointPostsForFinishedFence(int n, Vector3 postPoint)
+        //------------
+        // This is only used when we are Finishing a fence with no postsPool. We need to save the click-points as postsPool so that the finished fence can be re-edited
+        void CreateClickPointPostsForFinishedFence(int n, Vector3 postPoint)
         {
             bool isClickPoint = false;
             if (clickPoints.Contains(postPoint))
@@ -1835,8 +1868,39 @@ namespace AFWB
             int lastPostIndex = allPostPositions.Count - 1;
             return lastPostIndex;
         }
+        public int GetMenuIndexFromQuantizedRotAngle(float quantAngle)
+        {
+            int index = 0;
+            switch (quantAngle)
+            {
+                case 30:
+                    index = 1; break;
+                case 45:
+                    index = 2; break;
+                case 60:
+                    index = 3; break;
+                case 90:
+                    index = 4; break;
+                case 120:
+                    index = 5; break;
+                case 180:
+                    index = 6; break;
+                case -90:
+                    index = 7; break;
+                case -180:
+                    index = 8; break;
+                case -1:
+                    index = 9; break;
+
+                default:
+                    index = 0; break;
+            }
+            return index;
+        }
     }
 
+
+    //================================================================================================
     public static class PrefabTypeAFWBExtensions
     {
         public static LayerSet ToLayer(this PrefabTypeAFWB prefabType)
@@ -1867,7 +1931,10 @@ namespace AFWB
             else if (layerSet == LayerSet.subpostLayerSet)
                 return PrefabTypeAFWB.postPrefab;
             else
-                throw new ArgumentOutOfRangeException(nameof(layerSet), layerSet, null);
+            {
+                Debug.LogError($"LayerSetExtensions.ToPrefabType()  Unknown LayerSet: {layerSet}");
+            }
+            return PrefabTypeAFWB.nonePrefab;
         }
         /// <summary>
         ///  Returns the string menuName of the LayerSet enum.

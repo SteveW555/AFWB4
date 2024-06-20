@@ -213,7 +213,7 @@ public class ExtrasAFWB
         extraVarsStruct = evs;
         for (int i = 0; i < numExtraVars; i++)
         {
-            int prefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, extraVarsStruct.varNames[i]);
+            int prefabIndex = af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, extraVarsStruct.varNames[i], "UpdateExtrasFromExtraVariantsStruct()");
             prefabVars[i] = af.extraPrefabs[prefabIndex];
             extraScatterVarFreq[i] = extraVarsStruct.varProbs[i];
             extraVarScale[i] = extraVarsStruct.varScales[i];
@@ -2855,8 +2855,13 @@ public class ExtrasAFWB
                 extrasPool = new List<Transform>();
             return extrasPool;
         }
+        int multiArrayMultiplier = 1;
+        if(makeMultiArray)
+            multiArrayMultiplier = (int)multiArraySize.x * (int)multiArraySize.y * (int)multiArraySize.z;
+
+
         //-- Do one last safety check
-        if (extrasMode == ExtrasMode.normal && numToBuild < af.allPostPositions.Count * ((int)multiArraySize.x * (int)multiArraySize.y * (int)multiArraySize.z))
+        if (extrasMode == ExtrasMode.normal && numToBuild < af.allPostPositions.Count * multiArrayMultiplier)
             Debug.LogWarning("CreateExtrasPool(): numToBuild ExtrasMode.normal is less than the number of posts in the fence. This will result in missing extras");
         else if (extrasMode == ExtrasMode.scatter && numToBuild < numGridX * (numGridZ + 1) * (af.allPostPositions.Count + 1))
             Debug.LogWarning("CreateExtrasPool(): numToBuild ExtrasMode.scatter is not enough");

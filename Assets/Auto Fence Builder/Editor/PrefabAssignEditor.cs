@@ -1,20 +1,16 @@
 ﻿//#pragma warning disable 0219 // disbale unused variables warnings. Most of them needed ready for updates
 //#pragma warning disable 0414
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-using System.IO;
 using AFWB;
-using MeshUtils;
 using System;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using TCT.PrintUtils;
-using UnityEngine.Rendering;
-using System.Linq;
+using System.Collections.Generic;
+using System.Diagnostics;
+using UnityEditor;
+using UnityEngine;
+using Debug = UnityEngine.Debug; // Alias UnityEngine.Debug to Debug
 
-public class PrefabAssignEditor
+[DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
+public partial class PrefabAssignEditor
 {
 
     AutoFenceCreator af;
@@ -91,6 +87,72 @@ public class PrefabAssignEditor
         }
         return categoryList;
     }
+    /// <summary>
+    /// Loops through all items in the list and compares each item with the search string.
+    /// </summary>
+    /// <param name="searchString">The search string to compare against.</param>
+    /// <param name="list">The list of strings to search through.</param>
+    private int CompareStringWithList(string searchString, List<string> list)
+    {
+        bool found = false;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            string listItem = list[i];
+
+            // Compare the strings character by character
+            if (searchString == listItem)
+            {
+                Debug.Log($"Exact match found at index {i}: '{listItem}'");
+                found = true;
+                return i;
+                break;
+            }
+            else
+            {
+                CompareStringsCharacterByCharacter(searchString, listItem);
+            }
+        }
+
+        if (!found)
+        {
+            Debug.Log("No exact match found in the list.");
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Compares two strings character by character and prints out any differences.
+    /// </summary>
+    /// <param name="str1">The first string to compare.</param>
+    /// <param name="str2">The second string to compare.</param>
+    private bool CompareStringsCharacterByCharacter(string str1, string str2)
+    {
+        // Print lengths
+        //Debug.Log($"String 1 Length: {str1.Length}");
+        //Debug.Log($"String 2 Length: {str2.Length}");
+
+        // Compare characters
+        for (int i = 0; i < Math.Max(str1.Length, str2.Length); i++)
+        {
+            char char1 = i < str1.Length ? str1[i] : '\0';
+            char char2 = i < str2.Length ? str2[i] : '\0';
+            if (char1 != char2)
+            {
+                //Debug.Log($"Difference at index {i}: char1='{char1}' (U+{(int)char1:X4}), char2='{char2}' (U+{(int)char2:X4})");
+            }
+        }
+
+        // Print message if no differences found
+        if (str1.Equals(str2))
+        {
+            Debug.Log("Strings are identical.");
+            return true;
+        }
+        return false;
+    }
+
+    
 
     //===================================
     public MeshCollider ChooseMainPrefab(LayerSet layer)
@@ -108,7 +170,7 @@ public class PrefabAssignEditor
         {
             currMenuIndex = af.currentPost_PrefabMenuIndex;
             numMenuNames = af.postMenuNames.Count;
-            ed.userObjectProp = ed.userObjectPostProp;
+            ed.usePrefabProp = ed.userPrefabPostProp;
             ed.importScaleModeProp = ed.postImportScaleModeProp;
         }
         else if (layer == kRailALayer || layer == kRailBLayer)
@@ -116,7 +178,7 @@ public class PrefabAssignEditor
             currMenuIndex = af.currentRail_PrefabMenuIndex[layerIndex];
             numMenuNames = af.railMenuNames.Count;
             int prefabIndex = af.currentRail_PrefabIndex[layerIndex];
-            ed.userObjectProp = ed.userObjectRailProp[layerIndex];
+            ed.usePrefabProp = ed.userPrefabRailProp[layerIndex];
             ed.importScaleModeProp = ed.railAImportScaleModeProp;
             if (layer == kRailBLayer)
                 ed.importScaleModeProp = ed.railBImportScaleModeProp;
@@ -130,8 +192,16 @@ public class PrefabAssignEditor
         {
             currMenuIndex = af.currentExtra_PrefabMenuIndex;
             numMenuNames = af.extraMenuNames.Count;
-            ed.userObjectProp = ed.userObjectExtraProp;
+            ed.usePrefabProp = ed.userPrefabExtraProp;
             ed.importScaleModeProp = ed.extraImportScaleModeProp;
+        }
+        //    Current prefab is no longer the user prefab, use the placeholder and disable the import controls
+        //========================================================================================================
+        if (af.GetMainPrefabForLayer(layer) != af.GetUserPrefabForLayer(layer))
+        {
+            //Debug.Log("User Prefab != current prefab\n");
+            af.userPrefabPost = af.userPrefabPlaceholder;
+
         }
 
         //========================================================================
@@ -154,7 +224,6 @@ public class PrefabAssignEditor
         if (prefabFilterString != "")
         {
             filteredMenuNames.AddRange(fullPrefabMenuNames);
-
         }
         else
         {
@@ -245,8 +314,9 @@ public class PrefabAssignEditor
             mainPrefabChanged = true;
             //-- If we're using a filtered list, find the name of the selected in the full list of prefabs
             string currSelectedPrefabName = displayMenuNames[ed.af.componentDisplayMenuIndex];
-            int indexForName = fullPrefabMenuNames.IndexOf(currSelectedPrefabName);
-            af.SetMainPrefabMenuIndexForLayer(layer, indexForName);
+            //int indexForName = fullPrefabMenuNames.IndexOf(currSelectedPrefabName);
+            int menuIndexForName = CompareStringWithList(currSelectedPrefabName, fullPrefabMenuNames);
+            af.SetMainPrefabMenuIndexForLayer(layer, menuIndexForName);
         }
         MeshCollider userMeshCol = null;
         bool importAttempted = false;
@@ -254,38 +324,74 @@ public class PrefabAssignEditor
         //===============================================================
         //                      User Custom Prefab
         //===============================================================
+
+        //-- savedUserPrefab is the one saved in the prefabs folder and which will be loaded into the prefab lists from LoadPrefabs() below 
+        GameObject savedUserPrefab = HandleUserImport(layer, ref mainPrefabChanged, layerIndex, out importAttempted, out userMeshCol);
+        ShowImportMessage(layer, savedUserPrefab);
+        bool addedUserPrefab = false;
+        int indexOfNewPrefab = -1;
         
-        GameObject newUserObject = HandleUserImport(layer, ref mainPrefabChanged, layerIndex, out importAttempted, out userMeshCol);
-        if(newUserObject != null)
-            Debug.Log ($"User Object: {newUserObject.name}\n");
-        
-        
-        //Debug.Log($"{af.userPrefabRail[0]} \n");
-        if (newUserObject != null && af.GetUserPrefabForLayer(layer) != null && af.GetUserPrefabForLayer(layer) != af.userPrefabPlaceholder )
+        //     Do necessary setup for a succesfully added User Prefab
+        //===============================================================
+        if (savedUserPrefab != null)
         {
-            GameObject userPrefab = af.GetUserPrefabForLayer(layer);
+            ed.LoadPrefabs();
+            addedUserPrefab = true;
+            
+            //-- Get the index of the newly added prefab in the prefab list
+            int prefabIndex = af.FindPrefabIndexByNameForLayer(layer.ToPrefabType(), savedUserPrefab.name, "Looking for just-saved User Prefab inPrefabAssignEdotor ChooseMainPrefab()", 
+                warnMissing: true, replaceMissingWithDefault: false);
+            Debug.Log("prefabIndex: " + prefabIndex + "\n");
+            af.RebuildPoolWithNewUserPrefab(savedUserPrefab, layer);
 
+            //-- Get the index of the new prefab in the reloaded List
+            indexOfNewPrefab = af.FindPrefabForLayer(savedUserPrefab, layer);
+            
+            //-- Set this as the current index 
+            af.SetCurrentPrefabIndexForLayer(indexOfNewPrefab, layer);
 
-            if (userPrefab != null)
-                EditorGUILayout.LabelField(new GUIContent($"{userPrefab.name} was successfully added to {layer.String()}"), ed.smallOrangeItalicLabelStyle, GUILayout.Width(300));
-            else
-                EditorGUILayout.LabelField(new GUIContent($"Import of {userPrefab.name} Failed for {layer.String()}"), ed.smallOrangeItalicLabelStyle, GUILayout.Width(300));
+            //-- Update the menu index from this
+            af.SetMenuIndexFromPrefabIndexForLayer(indexOfNewPrefab, layer);
+
+            //-- Update the properties
+            if (layer == kPostLayer)
+            {
+                af.userPrefabPost = savedUserPrefab;
+                ed.userPrefabPostProp = ed.serializedObject.FindProperty("userPrefabPost");
+            }
         }
+        if (af.GetMainPrefabForLayer(layer) != af.GetUserPrefabForLayer(layer))
+        {
+            //Debug.Log("User Prefab != current prefab\n");
+            af.userPrefabPost = af.userPrefabPlaceholder;
+
+        }
+
+
         if (layer == kPostLayer)
             EditorGUI.DrawRect(GUILayoutUtility.GetRect(1, 1, 1, 1), ed.uiLineGreyCol2);
-        //-- If we've added a new object, then early exit
-        //if (newUserObject != null)
-            //return userMeshCol;
+
 
         //================================================================
         //              Optional Prefab Override for Posts
         //================================================================
 
         PostPrefabOverrides(currMenuIndex, numMenuNames, layer);
-
         //--------------------------
         if (mainPrefabChanged)
         {
+            
+            if (addedUserPrefab == true)
+            {
+                //-- As the prefabs were reloaded after saving, the new one should now be in the prefab Lists
+                //indexOfNewPrefab = af.FindPrefabForLayer(savedUserPrefab, layer);
+
+                //-- Usually we choose a prefabfrom the menu, then have to sync the prebIndex with it.
+                //-- But as we added a known custom prefab directly, we have to do the reverse and sync the menu index with the prefab index
+                //af.SetCurrentPrefabIndexForLayer(indexOfNewPrefab, layer);
+                //af.SetMenuIndexFromPrefabIndexForLayer(indexOfNewPrefab, layer);
+                //ed.postprop
+            }
             if (layer == kPostLayer)
             {
                 int prefabIndex = af.currentPost_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentPost_PrefabMenuIndex, PrefabTypeAFWB.postPrefab);
@@ -317,303 +423,28 @@ public class PrefabAssignEditor
         else
             GUILayout.Space(3);
 
-
-
+        
 
         return userMeshCol;
     }
 
+    private void ShowImportMessage(LayerSet layer, GameObject newUserObject)
+    {
+        if (newUserObject != null)
+            Debug.Log($"User Object: {newUserObject.name}\n");
+
+        //Debug.Log($"{af.userPrefabRail[0]} \n");
+        if (newUserObject != null && af.GetUserPrefabForLayer(layer) != null && af.GetUserPrefabForLayer(layer) != af.userPrefabPlaceholder)
+        {
+            GameObject userPrefab = af.GetUserPrefabForLayer(layer);
+            if (userPrefab != null)
+                EditorGUILayout.LabelField(new GUIContent($"{userPrefab.name} was successfully added to {layer.String()}"), ed.smallOrangeItalicLabelStyle, GUILayout.Width(300));
+            else
+                EditorGUILayout.LabelField(new GUIContent($"Import of {userPrefab.name} Failed for {layer.String()}"), ed.smallOrangeItalicLabelStyle, GUILayout.Width(300));
+        }
+    }
 
     //--------------------------
-    private GameObject HandleUserImport(LayerSet layer, ref bool mainPrefabChanged, int layerIndex, out bool importAttempted, out MeshCollider userMeshCol)
-    {
-        importAttempted = false;
-        if (ed.userObjectProp == null)
-        {
-            userMeshCol = null;
-            return null;
-        }
-
-        // Create a GUIStyle with a faint color
-        GUILayout.Space(4);
-
-        EditorGUI.DrawRect(GUILayoutUtility.GetRect(1, 1, 1, 1), ed.uiLineGreyCol2);
-
-        GUI.backgroundColor = new Color(0.8f, 0.88f, 1f);
-        GameObject userAddedPrefab = af.userPrefabPost;
-        userMeshCol = null;
-        if (layer != kPostLayer)
-            userAddedPrefab = af.userPrefabRail[kRailAIndex];
-
-        GUILayout.Space(2);
-
-        EditorGUI.BeginChangeCheck();
-        GUILayout.BeginHorizontal();
-        string layerStr = af.GetLayerNameAsString(layer);
-
-        //  Custom Import Label
-        //=======================
-        GUIStyle subtleBlueLabelStyle = new GUIStyle(EditorStyles.label);
-        //subtleBlueLabelStyle.fontSize = 12;
-        subtleBlueLabelStyle.normal.textColor = new Color(0.75f, 0.84f, 1f);
-        EditorGUILayout.LabelField(new GUIContent("Custom Import - Drag: ",
-            $"Drag a GameObject from the Hierarchy in to this slot to use as a {layerStr}" +
-            $"\n\n This custom prefab can then be found in the prefab menu under 'User'. \n\nYour original asset will be left unaltered, and the copy" +
-            $"that AFWB will use can be found in the UserAssets_AFWB Folder"), subtleBlueLabelStyle, GUILayout.Width(152));
-
-        //===============================
-        //          Drag Box
-        //===============================
-
-        //-- userObjectProp links to the userPrefabPost, or userPrefabRail[2], or userPrefabExtra
-        EditorGUILayout.PropertyField(ed.userObjectProp, new GUIContent(""), GUILayout.Width(189));
-
-        //      User Scale Options
-        //================================
-        GUILayout.Space(8);
-        string[] scaleNames = System.Enum.GetNames(typeof(UserObjectImportOptions));
-        EditorGUILayout.LabelField(new GUIContent("Size:", $"Determines how the model is scaled to fit within the fence. The scaling will not affect your" +
-            $" original mesh, only the AutoFence copy.\nWhichever option is chosen, the scaling can still be adjusted in the {layer.String()} Scale box below.\n\n" +
-            $"Match:   Approximates the size and scale of the existing {layer.String()} in use" +
-            $"\n\nAutoFit:   Scales to fit within the existing section size, while trying to keep some of the overall scale" +
-            $"\n\nRaw Size:   This will not scale the mesh. \nFor large meshes this can create problems when they are substantially bigger " +
-            $"than what would fit in the section size.\n For example, adding a house model to a regular fence will" +
-            $"result in a mass of overlapping meshes. " +
-            $"\nThis can be corrected for in the components Scale box below, but will initially be difficult to work with."), GUILayout.Width(31));
-        ed.importScaleModeProp.intValue = EditorGUILayout.Popup(new GUIContent("", "bobobobob"), ed.importScaleModeProp.intValue,
-            scaleNames, GUILayout.Width(56));
-
-        GameObject importedPrefab = null;
-        if (EditorGUI.EndChangeCheck())
-        {
-            ed.serializedObject.ApplyModifiedProperties();
-            userAddedPrefab = (GameObject)ed.userObjectProp.objectReferenceValue;
-
-            if (layer == kPostLayer)
-            {
-                importedPrefab = ed.resEd.HandleImportedCustomPrefab(userAddedPrefab, kPostLayer);
-            }
-            else if (layer == kRailALayer || layer == kRailBLayer)
-            {
-                importedPrefab = ed.resEd.HandleImportedCustomPrefab(userAddedPrefab, layer);
-                af.keepRailGrounded[(int)layer] = false;
-                af.slopeMode[(int)layer] = SlopeMode.shear;
-                af.GroundRails(layer);
-                // Centralize
-                if (MeshUtilitiesAFWB.GetMeshSize(af.userPrefabRail[layerIndex]).y < 0.25f)
-                    af.railAPositionOffset.y = 0.25f;
-            }
-            else if (layer == kExtraLayer)
-            {
-                //=============== User-Added Custom Extra ================
-                //userAddedPrefab = (GameObject)ed.userObjectExtraProp.objectReferenceValue;
-                importedPrefab = ed.resEd.HandleImportedCustomPrefab(userAddedPrefab, kExtraLayer);
-            }
-            mainPrefabChanged = true;
-            importAttempted = true;
-            if(importedPrefab != null)
-            {
-                //-- remove any transform scaling and set it to the Layer controls transdfor box instead
-                //af.SetPositionTransformForLayer(importedPrefab.transform.localPosition, layer);
-                //af.SetRotationTransformForLayer(importedPrefab.transform.rotation.eulerAngles, layer);
-                af.SetScaleTransformForLayer(importedPrefab.transform.localScale, layer);
-                
-                importedPrefab.transform.localScale = Vector3.one;
-                //importedPrefab.transform.localPosition = Vector3.zero;
-                //importedPrefab.transform.localRotation = Quaternion.identity;
-
-                AutoRotateImportedMesh(importedPrefab, layer, af, true);
-
-            }
-            return importedPrefab;
-        }
-
-        GUILayout.Space(10);
-        //    Rotate Label
-        //=======================
-        EditorGUILayout.LabelField(new GUIContent("Rotate:", $"Rotates the mesh to best suit the intended use\n\n" +
-            $"For example, a tall pole imported as a Rail will probably need to be rotated on its Z axis to create a horizontal fence Rail\n\n" +
-            $"This is also necessary when models from Blender/Cinema4D/Max etc. have different orientation conventions.\n" +
-            $"Some Asset Store models may need to be adjusted."), GUILayout.Width(41));
-
-        //    Rotate Buttons
-        //=======================
-        if (GUILayout.Button(new GUIContent($"X", "Rotate on X-axis in 90 increments"), GUILayout.Width(26)))
-            MeshUtilitiesAFWB.RotateMesh(ed.af.userPrefabPost, new Vector3(90, 0, 0), recalcBounds: true, recalcNormals: true);
-        if (GUILayout.Button(new GUIContent($"Y", "Rotate on Y-axis in 90 increments"), GUILayout.Width(26)))
-            MeshUtilitiesAFWB.RotateMesh(ed.af.userPrefabPost, new Vector3(0, 90, 0), recalcBounds: true, recalcNormals: true);
-        if (GUILayout.Button(new GUIContent($"Z", "Rotate on Z-axis in 90 increments"), GUILayout.Width(26)))
-            MeshUtilitiesAFWB.RotateMesh(ed.af.userPrefabPost, new Vector3(0, 0, 90), recalcBounds: true, recalcNormals: true);
-
-        //      Adjust Mesh Button
-        //===================================
-        /*bool hasCustomObject = LayerHasUserObject(layer);
-        EditorGUI.BeginDisabledGroup(hasCustomObject == false);
-        if (GUILayout.Button(new GUIContent("Adjust Mesh...", "The custom mesh rotation & scaling can be adjusted and baked-in. " +
-            "\nIf the custom object is rotated incorrectly, you can fix it by applying scaling & rotations, " +
-            "either automatically or by specifying rotations to be baked in to the mesh.\n" +
-            "Although you can apply rotations in the Inspector, it becomes difficult and unintuitive to apply " +
-            "creative rotations when you also have to compensate for the source being in the wrong orientation." +
-            "\n\nThe scale does not have to be perfect as you will shape it in the Controls section." +
-            "\n\nAs AFWB works on copies, it will not affect your original mesh."),
-                EditorStyles.miniButton, GUILayout.ExpandWidth(false), GUILayout.Width(90)))
-        {
-            ed.rotWindow = (BakeRotationsWindow)ScriptableObject.CreateInstance(typeof(BakeRotationsWindow));
-            ed.rotWindow.Init(ed, layer);
-            ed.rotWindow.minSize = new Vector2(690, 500); ed.rotWindow.maxSize = new Vector2(720, 550);
-            ed.rotWindow.ShowUtility();
-        }*/
-        EditorGUI.EndDisabledGroup();
-        GUILayout.Space(2);
-        GUILayout.EndHorizontal();
-
-        /*if (EditorGUI.EndChangeCheck())
-        {
-            //ed.serializedObject.ApplyModifiedProperties();
-            if (af.autoRotateImports)
-                af.railBakeRotationMode = 1;
-            else
-                af.railBakeRotationMode = 2;
-        }*/
-        GUI.backgroundColor = Color.white;
-        GUILayout.Space(5);
-
-        return importedPrefab;
-
-    }
-    /// <summary>
-    /// Automatically rotates an imported mesh based on its prefab type, bakes the transform scale, adjusts the pivot for posts and rails, and returns its effective size.
-    /// </summary>
-    /// <param name="go">The GameObject containing the mesh.</param>
-    /// <param name="layer">The layer set to determine the prefab type.</param>
-    /// <param name="af">The AutoFenceCreator instance.</param>
-    /// <param name="incChildren">Whether to include children in the size calculation.</param>
-    /// <returns>The effective size of the GameObject after rotation.</returns>
-    public static Vector3 AutoRotateImportedMesh(GameObject go, LayerSet layer, AutoFenceCreator af, bool incChildren = true)
-    {
-        PrefabTypeAFWB prefabType = layer.ToPrefabType();
-
-        //--Reset the GameObject's rotation to identity
-        go.transform.rotation = Quaternion.identity;
-
-        //--Calculate the initial effective size of the GameObject
-        Vector3 effectiveSize = MeshUtilitiesAFWB.GetWorldSizeOfGameObject(go, layer, af, incChildren);
-
-        //--Determine the necessary rotation to align the prefab
-        Vector3 rotation = Vector3.zero;
-
-        if (prefabType == PrefabTypeAFWB.postPrefab)
-        {
-            //--Align longest axis with y=up
-            if (effectiveSize.x > effectiveSize.y && effectiveSize.x > effectiveSize.z)
-            {
-                rotation = new Vector3(0, 0, 90); //--Rotate around Z axis
-                Debug.Log("Rotating around Z axis by 90 degrees to align the longest axis (x) with Y for postPrefab.\n");
-            }
-            else if (effectiveSize.z > effectiveSize.y && effectiveSize.z > effectiveSize.x)
-            {
-                rotation = new Vector3(90, 0, 0); //--Rotate around X axis
-                Debug.Log("Rotating around X axis by 90 degrees to align the longest axis (z) with Y for postPrefab.\n");
-            }
-            else
-                Debug.Log("No rotation needed for postPrefab as the longest axis is already aligned with Y.\n");
-        }
-        else if (prefabType == PrefabTypeAFWB.railPrefab)
-        {
-            //--Align longest axis along the x axis
-            if (effectiveSize.y > effectiveSize.x && effectiveSize.y > effectiveSize.z)
-            {
-                rotation = new Vector3(0, 0, 90); //--Rotate around Z axis
-                Debug.Log("Rotating around Z axis by 90 degrees to align the longest axis (y) with X for railPrefab.\n");
-            }
-            else if (effectiveSize.z > effectiveSize.x && effectiveSize.z > effectiveSize.y)
-            {
-                rotation = new Vector3(90, 0, 0); //--Rotate around X axis
-                Debug.Log("Rotating around X axis by 90 degrees to align the longest axis (z) with X for railPrefab.\n");
-            }
-            else
-                Debug.Log("No rotation needed for railPrefab as the longest axis is already aligned with X.\n");
-        }
-
-        //--Apply the rotation to the mesh and its normals
-        MeshFilter meshFilter = go.GetComponent<MeshFilter>();
-        Mesh prefabMesh = meshFilter.sharedMesh;
-        MeshUtilitiesAFWB.RotateMeshAndNormals(prefabMesh, rotation, recentre: false);
-
-        //--Bake the transform scale into the mesh
-        Vector3 originalScale = go.transform.localScale;
-        Vector3[] vertices = prefabMesh.vertices;
-        for (int i = 0; i < vertices.Length; i++)
-            vertices[i] = Vector3.Scale(vertices[i], originalScale);
-        prefabMesh.vertices = vertices;
-        prefabMesh.RecalculateBounds();
-        prefabMesh.RecalculateNormals();
-
-        //--Reset the GameObject's scale to Vector3.one
-        go.transform.localScale = Vector3.one;
-
-        //--Move the pivot for postPrefab to the bottom
-        if (prefabType == PrefabTypeAFWB.postPrefab)
-        {
-            float minY = float.MaxValue;
-            float offsetX = 0;
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                if (vertices[i].y < minY)
-                    minY = vertices[i].y;
-                offsetX += vertices[i].x;
-            }
-            offsetX /= vertices.Length; //-- Average x-offset
-
-            for (int i = 0; i < vertices.Length; i++)
-                vertices[i] = new Vector3(vertices[i].x - offsetX, vertices[i].y - minY, vertices[i].z);
-
-            prefabMesh.vertices = vertices;
-            prefabMesh.RecalculateBounds();
-            prefabMesh.RecalculateNormals();
-
-            Debug.Log("Adjusted pivot to the bottom for postPrefab.\n");
-        }
-        //--Move the pivot for railPrefab to the right edge (max x) and center y and z, scale to 3m length
-        else if (prefabType == PrefabTypeAFWB.railPrefab)
-        {
-            float maxX = float.MinValue;
-            float sumY = 0, sumZ = 0;
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                if (vertices[i].x > maxX)
-                    maxX = vertices[i].x;
-                sumY += vertices[i].y;
-                sumZ += vertices[i].z;
-            }
-            float centerY = sumY / vertices.Length;
-            float centerZ = sumZ / vertices.Length;
-
-            float length = maxX - vertices.Min(v => v.x);
-            float scaleFactor = 3f / length;
-
-            for (int i = 0; i < vertices.Length; i++)
-                vertices[i] = new Vector3((vertices[i].x - maxX) * scaleFactor, vertices[i].y - centerY, vertices[i].z - centerZ);
-
-            prefabMesh.vertices = vertices;
-            prefabMesh.RecalculateBounds();
-            prefabMesh.RecalculateNormals();
-
-            Debug.Log("Adjusted pivot to the right edge, centered y and z, and scaled to 3m length for railPrefab.\n");
-        }
-
-        //--Recalculate the effective size after rotation and scaling
-        effectiveSize = MeshUtilitiesAFWB.GetWorldSizeOfGameObject(go, layer, af, incChildren);
-
-        Debug.Log($"Effective size after rotation and baking scale: {effectiveSize}\n");
-
-        return effectiveSize;
-    }
-
-
-
-
-
 
     private void PostPrefabOverrides(int currMenuIndex, int numMenuNames, LayerSet layer)
     {
@@ -785,64 +616,9 @@ public class PrefabAssignEditor
         return hasCustomObject;
     }
 
-    public void SetExtraMainParameters()
+
+    private string GetDebuggerDisplay()
     {
-        GUILayout.Space(10);
-        EditorGUI.BeginChangeCheck();
-
-        EditorShowTransforms.ShowTransformEditor(LayerSet.extraLayerSet, ed);
-
-        if (EditorGUI.EndChangeCheck())
-        {
-            ed.extraSizeProp.vector3Value = ed.EnforceVectorMinimums(ed.extraSizeProp.vector3Value, new Vector3(0.01f, 0.01f, 0.01f));
-            ed.serializedObject.ApplyModifiedProperties();
-            af.ForceRebuildFromClickPoints();
-        }
+        return ToString();
     }
-    //------------------------------------
-    public void SetSubpostMainParameters()
-    {
-        GUILayout.Space(10);
-
-        EditorGUI.BeginChangeCheck();
-        EditorShowTransforms.ShowTransformEditor(LayerSet.subpostLayerSet, ed);
-
-        if (EditorGUI.EndChangeCheck())
-        {
-            ed.subpostScaleProp.vector3Value = ed.EnforceVectorMinimums(ed.subpostScaleProp.vector3Value, new Vector3(0.01f, 0.01f, 0.01f));
-            ed.serializedObject.ApplyModifiedProperties();
-            af.ForceRebuildFromClickPoints();
-        }
-    }
-
-    public int GetMenuIndexFromQuantizedRotAngle(float quantAngle)
-    {
-        int index = 0;
-        switch (quantAngle)
-        {
-            case 30:
-                index = 1; break;
-            case 45:
-                index = 2; break;
-            case 60:
-                index = 3; break;
-            case 90:
-                index = 4; break;
-            case 120:
-                index = 5; break;
-            case 180:
-                index = 6; break;
-            case -90:
-                index = 7; break;
-            case -180:
-                index = 8; break;
-            case -1:
-                index = 9; break;
-
-            default:
-                index = 0; break;
-        }
-        return index;
-    }
-
 }

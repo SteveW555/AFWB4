@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 
 using UnityEditor;
+using UnityEditor.Presets;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
@@ -16,18 +17,38 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public partial class AutoFenceEditor
 {
     private string presetFilterString = ""; // to filter the preset list
-    private List<string> filteredPresetNames = new List<string>(); //-- the allPresetMenuNames after filtering with presetFilterString
+    private List<string> filteredPresetNames = new List<string>(); //-- the presetMenuNames after filtering with presetFilterString
     List<string> displayMenuNames = new List<string>();
     int realPresetMenuIndexForLayer = 0;
-    public void ShowPresetsUI()
+    //AutoFenceEditor ed = null;
+    public void ShowPresetsUI(AutoFenceEditor ed)
     {
+        //this.ed = ed;
         //============================================================================================================================
         //
         //                         Presets:      Choose or Save Scriptable Main Fence/Wall Preset
         //
         //============================================================================================================================
-        if (allPresetMenuNames != null && allPresetMenuNames.Count > 0 && mainPresetList != null && mainPresetList.Count > 0)
+        if (presetMenuNames != null && presetMenuNames.Count > 0 && mainPresetList != null && mainPresetList.Count > 0)
         {
+            //-- Sanity check as tif this gets currupted it wont get reset until a new preset is changed which might be impossible if Inspector is bugged
+            //Find index oSf af.currPresetName in  presetMenuNames
+            af.currPresetMenuIndex = presetMenuNames.IndexOf(af.currPresetName); //-- Menu names include the Category
+            if (af.currPresetMenuIndex == -1)
+            {
+                af.currPresetMenuIndex = 0;
+                Debug.LogWarning("currPresetMenuIndex was -1. Setting to 0\n");
+                
+                af.currPresetIndex = GetPresetIndexByNameFromMainPresets(af.currPresetName);
+                if (af.currPresetIndex == -1)
+                    Debug.LogWarning("currPresetIndex was -1. Setting to 0\n");
+            }
+            else
+                af.currPresetIndex = GetPresetIndexByNameFromMainPresets(af.currPresetName);
+
+
+
+
             GUILayout.Space(3);
             if (isDark)
             {
@@ -78,7 +99,7 @@ public partial class AutoFenceEditor
             //      Filter Calculation
             //==============================
             realPresetMenuIndexForLayer = af.currPresetMenuIndex;
-            List<string> fullPresetMenuNames = allPresetMenuNames;
+            List<string> fullPresetMenuNames = presetMenuNames;
             List<string> filteredMenuNames = new List<string>();
             for (int i = 0; i < fullPresetMenuNames.Count; i++)
             {
@@ -141,34 +162,45 @@ public partial class AutoFenceEditor
             GUILayout.Space(2);
             if (isDark)
                 GUI.backgroundColor = new Color(.67f, .67f, .67f);
-            //af.currPresetIndex = EditorGUILayout.Popup(af.currPresetIndex, allPresetMenuNames.ToArray(), greenPopupStyle, GUILayout.Width(338));
+            //af.currPresetIndex = EditorGUILayout.Popup(af.currPresetIndex, presetMenuNames.ToArray(), greenPopupStyle, GUILayout.Width(338));
             af.presetDisplayMenuIndex = EditorGUILayout.Popup(af.presetDisplayMenuIndex, displayMenuNames.ToArray(), greenPopupStyle, GUILayout.Width(338));
 
 
-            //-- Finf the preset withis name from the filtered list
-            string scriptablePresetName = displayMenuNames[af.presetDisplayMenuIndex];
-            scriptablePresetName = GetPresetNameWithoutCategory(scriptablePresetName);
-            //ScriptablePresetAFWB currPreset = mainPresetList.Find(p => p.name == scriptablePresetName);
+            //-- Find the preset with this name from the filtered Menu Names List
+            string presetMenuName = displayMenuNames[af.presetDisplayMenuIndex];
+            //-- Remove the category name from the preset name
+            string presetMenuNameNoCat = GetPresetNameWithoutCategory(presetMenuName);
+            
+            //-- Get the index of the preset with this name from mainPresetList. This is our main presetIndex into the main preset List
+            af.currPresetIndex = GetPresetIndexByNameFromMainPresets(presetMenuName);
+            af.currPresetMenuIndex = GetPresetMenuIndexByNameFromMainPresetMenu(presetMenuName);
+            af.currPresetName = presetMenuName;
 
-            af.currPresetIndex = mainPresetList.FindIndex(p => p.name == scriptablePresetName);
-            //ScriptablePresetAFWB currPreset = presetIndex != -1 ? mainPresetList[presetIndex] : null;
-
+            //-- We now have the:
+            //-- 1. presetMenuName - the local name of the preset, the same in both the Global and Display menus
+            //-- 2. presetDisplayMenuIndex - the index of the preset in the Display menu
+            //-- 3. af.currPresetIndex - the index of the preset in the MainPresetList
+            //-- 4. af.currPresetMenuIndex - the index of the preset in the Global presetMenuNames menu
+            //-- 5. af.currPresetName - the af name of the preset in the MainPresetList
+            //-- 6. presetMenuNameNoCat - the name of the preset without the category name
+            //-- Note: The preset ARE with Categories, onviously to display them sub-menu style
 
 
             GUI.backgroundColor = Color.white;
-            if (af.currPresetIndex < allPresetMenuNames.Count)
-                scriptablePresetName = allPresetMenuNames[af.currPresetIndex];
+            //if (af.currPresetMenuIndex < presetMenuNames.Count)
+                //presetMenuName = presetMenuNames[af.currPresetMenuIndex];
             GUILayout.Space(7);
             GUI.backgroundColor = moduleBgColor;
 
-       
+
             //-- Favourite. Resave a copy in Favorites folder
+            bool savedFave = false;
             if (GUILayout.Button("Fave", GUILayout.Width(40)))
             {
-                if (scriptablePresetName.Contains("/"))
-                    scriptablePresetName = scriptablePresetName.Replace("/", "-");
-                af.scrPresetSaveName = "Favorite/" + af.scrPresetSaveName;
-                presetsEd.SavePreset(true);
+                if (presetMenuName.Contains("/"))
+                    presetMenuName = presetMenuName.Replace("/", "-");
+                af.presetSaveName = "Favorite/" + af.presetSaveName;
+                savedFave = presetsEd.SavePreset(true);
             }
             GUILayout.Space(1);
 
@@ -185,7 +217,7 @@ public partial class AutoFenceEditor
 
             GUILayout.BeginHorizontal();
 
-            
+
 
             //===============================================================
             //                      Filter Display Box
@@ -214,7 +246,7 @@ public partial class AutoFenceEditor
             //      Edit Notes
             //========================
             GUILayout.Space(2);
-            if(af.presetNotes != "")
+            if (af.presetNotes != "")
                 GUI.backgroundColor = new Color(0.6f, 1f, 0.6f);
             else
                 GUI.backgroundColor = new Color(.95f, .94f, 1f); ;
@@ -235,12 +267,21 @@ public partial class AutoFenceEditor
 
 
             //======================================
-            //      Setup Loaded Preset
+            //      EndChangeCheck - Setup Loaded Preset
             //======================================
             if (EditorGUI.EndChangeCheck())
             {
-                af.currPresetName = scriptablePresetName;
+                //af.currPresetName = presetMenuName;
                 presetsEd.SetupPreset(af.currPresetIndex, forceRebuild: false);
+
+                //find the index of af.currPresetName in the presetMenuNames list
+
+                //af.currPresetMenuIndex = presetMenuNames.IndexOf(presetMenuName);
+                af.currPresetMenuIndex = GetPresetMenuIndexByNameFromMainPresetMenu(presetMenuName);
+                af.currPresetIndex = GetPresetIndexByNameFromMainPresets(presetMenuName);
+
+                //af.currPresetMenuIndex = af.presetMen
+
                 af.ForceRebuildFromClickPoints();
             }
             GUILayout.Space(8);
@@ -249,10 +290,33 @@ public partial class AutoFenceEditor
             //                             Save Preset
             //===========================================================================
             bool saved = DisplaySavePresetControls();
-            if (saved)
+
+            if (saved || savedFave)
             {
+                //-- Reload the Presets Including the new one. This will also invoke the menu renaming
+                presetsEd.LoadAllScriptablePresets(af.allowContentFreeUse);
+
+                string savedName = af.presetSaveName;
+                string savedCategoryName = af.categoryNames[af.categoryIndex];
+                //-- This is the menu name of the new preset
+                string savedMenuName = savedCategoryName + "/" + savedName;
+                //-- This is the new Menu index of the new preset
+                int savedMenuIndex = ed.presetMenuNames.IndexOf(savedMenuName);
+                af.currPresetMenuIndex  = savedMenuIndex;
+                if (savedMenuIndex != -1)
+                {
+                    af.currPresetIndex = GetPresetIndexByNameFromMainPresets(savedName);
+                    presetsEd.SetupPreset(af.currPresetIndex);
+                    //af.ForceRebuildFromClickPoints();
+                }
+
+                af.presetDisplayMenuIndex = af.currPresetIndex;
                 af.ForceRebuildFromClickPoints();
             }
+            //else
+            //{
+                
+            //}
 
             GUILayout.Space(10);
             GUILayout.EndVertical();
@@ -288,7 +352,7 @@ public partial class AutoFenceEditor
             saved = presetsEd.SavePreset(false);
         }
 
-        //      Name Preset 
+        //      Name Preset Label
         //==============================
         saveLabelColor = bgColor;
         saveLabelColor.r += 0.95f;
@@ -298,11 +362,28 @@ public partial class AutoFenceEditor
         GUI.backgroundColor = saveLabelColor;
         EditorGUILayout.LabelField("  Name Preset: ", GUILayout.Width(85));
 
+        //      Name Preset TextField - Save on Return/Enter
+        //====================================================
         GUIStyle greenLabelStyle = new GUIStyle(EditorStyles.textField);
         greenLabelStyle.normal.textColor = new Color(0.77f, .81f, .73f);
         GUI.backgroundColor = bgColor;
-        af.scrPresetSaveName = EditorGUILayout.TextField(af.scrPresetSaveName, greenLabelStyle, GUILayout.Width(215));
 
+        //-- Set the control name before the TextField
+        GUI.SetNextControlName("PresetNameTextField");
+
+        //    TextField
+        //=================
+        //af.presetSaveName = EditorGUILayout.TextField(af.presetSaveName, greenLabelStyle, GUILayout.Width(215));
+        af.presetSaveName = EditorGUILayout.TextField(af.presetSaveName, greenLabelStyle, GUILayout.Width(215));
+
+        Event e = Event.current;
+        // Check if the TextField is focused and the Return/Enter key is pressed
+        if (GUI.GetNameOfFocusedControl() == "PresetNameTextField" && e.type == EventType.KeyDown && (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter))
+        {
+            saved = presetsEd.SavePreset(false);
+            GUI.FocusControl(null); // Unfocus the TextField after saving
+            e.Use(); // Mark the event as used to prevent further processing
+        }
 
         //      New Preset
         //==============================
@@ -310,6 +391,7 @@ public partial class AutoFenceEditor
         if (GUILayout.Button(new GUIContent("New Preset", "Sets Everything to Default Values."), GUILayout.Width(87)))
         {
             CreateNewPreset();
+            saved = true;
         }
         //     Random Preset
         //==============================
@@ -346,7 +428,7 @@ public partial class AutoFenceEditor
     List<string> GetFilteredPresetsListOld(string filterString)
     {
         List<string> filteredList = new List<string>();
-        foreach (string s in allPresetMenuNames)
+        foreach (string s in presetMenuNames)
         {
             if (s.ToLower().Contains(filterString.ToLower()))
                 filteredList.Add(s);
@@ -354,7 +436,7 @@ public partial class AutoFenceEditor
         if (filteredList.Count == 0)
         {
             //Debug.Log("No presets found with filter: " + filterString);
-            // return allPresetMenuNames;
+            // return presetMenuNames;
         }
         return filteredList;
     }
@@ -388,7 +470,7 @@ public partial class AutoFenceEditor
         //-- Add the name of the new preset to the menu string list
         AddSinglePresetStringForPresetMenu(newPreset);
         //-- The  presetMenuIndexInDisplayList will now be the last one we added
-        af.presetMenuIndexInDisplayList = allPresetMenuNames.Count - 1;
+        af.presetMenuIndexInDisplayList = presetMenuNames.Count - 1;
         bool savedNew = presetsEd.SavePreset(false);
     }
 
@@ -437,7 +519,7 @@ public partial class AutoFenceEditor
         //-- Add the name of the new preset to the menu string list
         AddSinglePresetStringForPresetMenu(newPreset);
         //-- The  presetMenuIndexInDisplayList will now be the last one we added
-        af.presetMenuIndexInDisplayList = allPresetMenuNames.Count - 1;
+        af.presetMenuIndexInDisplayList = presetMenuNames.Count - 1;
         bool savedNew = presetsEd.SavePreset(false);
     }
 
@@ -449,7 +531,7 @@ public partial class AutoFenceEditor
 
 
         List<string> filteredList = new List<string>();
-        /*foreach (string s in allPresetMenuNames)
+        /*foreach (string s in presetMenuNames)
         {
             if (s.ToLower().Contains(filterString.ToLower()))
                 filteredList.Add(s);
@@ -459,8 +541,8 @@ public partial class AutoFenceEditor
 
         // Assuming prefabs is a List<Prefab> and you have a method StripPrefabTypeFromNameForType
         string targetPresetName = filterString; // Already stripped
-        List<string> presetNames = allPresetMenuNames;
-        List<string> presetMenuNamesWithoutCategory = allPresetMenuNames.Select(name => name.Substring(name.IndexOf('/') + 1)).ToList();
+        List<string> presetNames = presetMenuNames;
+        List<string> presetMenuNamesWithoutCategory = presetMenuNames.Select(name => name.Substring(name.IndexOf('/') + 1)).ToList();
 
 
         //List<string> levList = Levenshtein(filterString, presetNames, 20);
@@ -575,6 +657,48 @@ public partial class AutoFenceEditor
 
         return presetWithComponentNames;
     }
+    //------------------
+    /// <summary>
+    /// Find the preset name in mainPresetList and return the index
+    /// </summary>
+    /// <param name="presetMenuName"></param>
+    /// <returns>int index of the preset with presetName</returns>
+    /// <remarks    >presetName has the categories (as menus have them)
+    /// so we have to strip the category</remarks>
+    public int GetPresetIndexByNameFromMainPresets(string presetName)
+    {
+        int presetIndex = 0;
+
+        //-- TODO Figure out why this fails but a simple loop succeeds
+        //presetIndex = mainPresetList.FindIndex(p => p.name == presetName);
+
+        string presetNameNoCat = GetPresetNameWithoutCategory(presetName);
+
+        for (int i = 0; i < mainPresetList.Count; i++)
+        {
+            string mainListName = mainPresetList[i].name;
+            if (presetNameNoCat == mainListName)
+            {
+                presetIndex = i;
+                return presetIndex;
+            }
+        }
+        return presetIndex;
+    }
+    public int GetPresetMenuIndexByNameFromMainPresetMenu(string presetName)
+    {
+        int presetIndex = 0;
+        for (int i = 0; i < presetMenuNames.Count; i++)
+        {
+            string menuListName = presetMenuNames[i];
+            if (presetName == menuListName)
+            {
+                presetIndex = i;
+                return presetIndex;
+            }
+        }
+        return presetIndex;
+    }
     //------------------------------------------------------------------------
     // Helper method to sort the presets and components by component count (descending)
     static void SortPresetsByComponentCount(ref List<ScriptablePresetAFWB> presets, ref List<string[]> components)
@@ -594,9 +718,15 @@ public partial class AutoFenceEditor
     public static string GetPresetNameWithoutCategory(string input)
     {
         int slashIndex = input.IndexOf('/');
+        string strippedName = input;
         if (slashIndex != -1 && slashIndex + 1 < input.Length)
         {
-            return input.Substring(slashIndex + 1);
+            input =  input.Substring(slashIndex + 1);
+        }
+        //-- Do it twice as there may be dual nested Categories. Dont bother with recursion for just two.
+        if (slashIndex != -1 && slashIndex + 1 < input.Length)
+        {
+            input = input.Substring(slashIndex + 1);
         }
         return input;
     }
@@ -610,7 +740,7 @@ public class PresetNotesWindow : EditorWindow
     public static void ShowWindow(AutoFenceCreator af, Vector2 mousePosition)
     {
         PresetNotesWindow window = GetWindow<PresetNotesWindow>("Preset Notes");
-        window.position = new Rect(mousePosition.x + 100, mousePosition.y-50, 600, 400); // Set initial position at the mouse position
+        window.position = new Rect(mousePosition.x + 100, mousePosition.y - 50, 600, 400); // Set initial position at the mouse position
         window.minSize = new Vector2(300, 200); // Set minimum size
         window.af = af;
         window.notes = af.presetNotes;

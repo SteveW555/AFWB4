@@ -53,13 +53,30 @@ namespace AFWB
 
             List<GameObject> prefabsForLayer = null;
             prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.postLayerSet);
+            
+            
             prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.railALayerSet);
+            //prefabsForLayer.Sort((x, y) => string.Compare(x.name, y.name));
+            
             prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.extraLayerSet);
+            //prefabsForLayer.Sort((x, y) => string.Compare(x.name, y.name));
 
-            //      Add Extras to Post Prefabs
+
+            //    Add Extras to Post Prefabs
             //=====================================
             AddExtraPrefabsToPosts();
+
+            //    Add Posts to Extra Prefabs
+            //=====================================
             AddPostPrefabsToExtras();
+
+            //    Add Rails to Extra Prefabs
+            //=====================================
+            AddRailPrefabsToExtras();
+
+            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayerSet, warn: false);
+            posts.Sort((x, y) => string.Compare(x.name, y.name));
+
 
             // Load SubJoiners
             foreach (string filePath in sysFilePaths)
@@ -93,6 +110,22 @@ namespace AFWB
                 if(prefabName.Contains("_Extra") == false)
                 {
                     exs.Add(posts[i]);
+                }
+            }
+        }
+        //-------------------------------------
+        private void AddRailPrefabsToExtras()
+        {
+            List<GameObject> rails = af.GetPrefabsForLayer(LayerSet.railALayerSet, warn: false);
+            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayerSet, warn: false);
+
+            for (int i = 0; i < rails.Count; i++)
+            {
+                string prefabName = rails[i].name;
+                //-- It shouldn't be _Extra as we didn't add extras to rails, but leave for future use
+                if (prefabName.Contains("_Extra") == false)
+                {
+                    exs.Add(rails[i]);
                 }
             }
         }
@@ -146,8 +179,8 @@ namespace AFWB
                                 string parentFolder = System.IO.Path.GetDirectoryName(filePath);
                                 prefabDetails.Add(new PrefabDetails(parentFolder)); 
                             }
-                            //else
-                                //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                            else
+                                Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
                         }
 
                         //      Posts
@@ -160,8 +193,8 @@ namespace AFWB
                                 string parentFolder = System.IO.Path.GetDirectoryName(filePath);
                                 prefabDetails.Add(new PrefabDetails(parentFolder));
                             }
-                            //else
-                                //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                            else
+                                Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
                         }
                         //      Extras
                         //=========================
@@ -175,8 +208,8 @@ namespace AFWB
 
                                 prefabDetails.Add(new PrefabDetails(parentFolder)); 
                             }
-                            //else
-                               // Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                            else
+                               Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
                         }
                     }
                     else if (go == null)

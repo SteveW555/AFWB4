@@ -255,7 +255,7 @@ so = ed.serializedObject;
         GameObject currPrefabForLayer = af.GetMainPrefabForLayer(layer);
         if (currPrefabForLayer == null)
         {
-            af.SetCurrentPrefabIndexForLayer(layer, 0);
+            af.SetCurrentPrefabIndexForLayer(0, layer);
             af.SetAllSourceVariantsToMainForLayer(layer);
             Debug.LogWarning($"The current prefab for {af.GetLayerNameAsString(layer)} was null, " +
                 $"so it has been set to a default prefab, along with all Variations for this Layer    caller = {caller}\n");
@@ -319,7 +319,7 @@ so = ed.serializedObject;
         neededReload = CheckPrefabsForLayer(LayerSet.extraLayerSet, warn);
 
         if (neededReload == true && reload == true)
-            LoadPrefabs(false, true);
+            LoadPrefabs();
         return neededReload;
     }
     /// <summary>
@@ -386,7 +386,7 @@ so = ed.serializedObject;
                 needsReload = true;
 
             if (mainPresetList != null && mainPresetList.Count > 0)
-                af.scrPresetSaveName = mainPresetList[af.currPresetIndex].name;
+                af.presetSaveName = mainPresetList[af.currPresetIndex].name;
 
             if (reload && needsReload)
             {
@@ -535,7 +535,7 @@ so = ed.serializedObject;
         extraPositionOffsetProp = exProp.FindPropertyRelative("extraTransformPositionOffset");
         extraSizeProp = serializedObject.FindProperty("ex.extraTransformScale");
         extraRotationProp = serializedObject.FindProperty("ex.extraTransformRotation");
-        userObjectExtraProp = serializedObject.FindProperty("userPrefabExtra");
+        userPrefabExtraProp = serializedObject.FindProperty("userPrefabExtra");
         extraFreq = exProp.FindPropertyRelative("extraFreq");
 
         gs = serializedObject.FindProperty("gs");
@@ -552,8 +552,8 @@ so = ed.serializedObject;
         SerializedProperty userObjectRailArray = serializedObject.FindProperty("userPrefabRail");
         if (userObjectRailArray.arraySize >= 2)
         {
-            userObjectRailProp[0] = userObjectRailArray.GetArrayElementAtIndex(0);
-            userObjectRailProp[1] = userObjectRailArray.GetArrayElementAtIndex(1);
+            userPrefabRailProp[0] = userObjectRailArray.GetArrayElementAtIndex(0);
+            userPrefabRailProp[1] = userObjectRailArray.GetArrayElementAtIndex(1);
         }
         useMainRails = serializedObject.FindProperty("useRailLayer[0]");
         useSecondaryRails = serializedObject.FindProperty("useRailLayer[1]");
@@ -565,7 +565,9 @@ so = ed.serializedObject;
         mainPostsSizeBoostProp = serializedObject.FindProperty("mainPostsSizeBoost");
         endPostsSizeBoostProp = serializedObject.FindProperty("endPostsSizeBoost");
         postRotationProp = serializedObject.FindProperty("postRotation");
-        userObjectPostProp = serializedObject.FindProperty("userPrefabPost");
+        userPrefabPostProp = serializedObject.FindProperty("userPrefabPost");
+        
+        
         postImportScaleModeProp = serializedObject.FindProperty("postImportScaleMode");
         railAImportScaleModeProp = serializedObject.FindProperty("railAImportScaleMode");
         railBImportScaleModeProp = serializedObject.FindProperty("railBImportScaleMode");
@@ -645,7 +647,6 @@ so = ed.serializedObject;
         varRailBInvertBools = serializedObject.FindProperty("varRailBInvertBools");
 
         railSingleVariantsProp = serializedObject.FindProperty("railSingleVariants");
-        //railSingleVariants[1]Prop = serializedObject.FindProperty("railSingleVariants[1]");
         railVariantsProp = serializedObject.FindProperty("railSourceVariants");
 
         quantizeRotIndexPostProp = serializedObject.FindProperty("quantizeRotIndexPost");
@@ -758,17 +759,17 @@ so = ed.serializedObject;
     //---------------
     public void CreateScriptablePresetStringsForMenus(List<ScriptablePresetAFWB> presetList)
     {
-        allPresetMenuNames.Clear();
+        presetMenuNames.Clear();
         for (int i = 0; i < presetList.Count; i++)
         {
             string menuName = presetList[i].categoryName + "/" + presetList[i].name;
-            allPresetMenuNames.Add(menuName);
+            presetMenuNames.Add(menuName);
         }
     }
     public void AddSinglePresetStringForPresetMenu(ScriptablePresetAFWB preset)
     {
         string menuName = preset.categoryName + "/" + preset.name;
-        allPresetMenuNames.Add(menuName);
+        presetMenuNames.Add(menuName);
     }
 
     //---------------

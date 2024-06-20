@@ -26,8 +26,8 @@ public partial class AutoFenceEditor : Editor
     LayerSet kSubpostLayer = LayerSet.subpostLayerSet;
     LayerSet kAllLayer = LayerSet.allLayerSet;
     public AutoFenceCreator af; // the main AutoFence script
-    public SerializedProperty[] userObjectRailProp = { null, null };
-    public SerializedProperty userObjectPostProp, userObjectExtraProp, userObjectProp;
+    public SerializedProperty[] userPrefabRailProp = { null, null };
+    public SerializedProperty userPrefabPostProp, userPrefabExtraProp, usePrefabProp;
     public SerializedProperty railACustomColliderMeshProp, railBCustomColliderMeshProp, postCustomColliderMeshProp, showOptionalPostPrefabsProp;
     public SerializedProperty extraCustomColliderMeshProp, subpostCustomColliderMeshProp;
     public SerializedProperty postImportScaleModeProp, railAImportScaleModeProp, railBImportScaleModeProp, extraImportScaleModeProp, importScaleModeProp;
@@ -157,7 +157,7 @@ public partial class AutoFenceEditor : Editor
     public string[] quantizeRotStrings = { "15", "30", "45", "60", "90", "120", "180", "Fix 90", "Fix 180", "Consecutive 90" };
     public string presetSaveRename = "", userFenceName = "";
     public string[] randomScopeStrings = { "Main Only", "Variations Only", "Main&Variations" };
-    public List<string> allPresetMenuNames = new List<string>();
+    public List<string> presetMenuNames = new List<string>();
     //-------------------------------
 
     bool respanAfterGlobalScale = true;
@@ -204,7 +204,6 @@ public partial class AutoFenceEditor : Editor
     public Texture2D bgBoxTex, bgBoxSmallTex, bgBoxLargeTex, bgGreenBoxTex, bgDarkCyanBoxTex, shapesTex, saveTex;
     public ScriptablePresetAFWB currPreset = null;
     public SeqItem currSeqAStepVariant, currSeqBStepVariant, currSeqPostStepVariant;
-    public BakeRotationsWindow rotWindow = null;
     public PrefabLoader prefabLoader;
     public GUIContent[] seqToolbarGUIContent = new GUIContent[2];
     Timer unlockMouseButtonTimer = new Timer("Unlock Mouse");
@@ -231,7 +230,7 @@ public partial class AutoFenceEditor : Editor
     public RailEditor railEd;
     public ExtraEditor exEd;
     public SubpostEditor subEd;
-    public PrefabAssignEditor helperEd;
+    public PrefabAssignEditor prefabAssignEd;
     public ResourceUtilities resEd;
     public VariationsEditor varEd;
     public SequenceEditor seqEd;
@@ -381,7 +380,7 @@ public partial class AutoFenceEditor : Editor
     void SimulateFirstEnable()
     {
         ResetState();
-        PostVector.LinkParentList(af.postVectors);
+        PostVector.LinkPostVectorParentList(af.postVectors);
         SetupEditor();
         af.CheckPostDirectionVectors(logMissing: true);
         af.ForceRebuildFromClickPoints();
@@ -429,7 +428,7 @@ public partial class AutoFenceEditor : Editor
         //EditorApplication.update += OnCustomUpdate; // -- add a cusom method that will be called every frame
 
         //-- Enure the postVectors have a reference to their master parents List
-        PostVector.LinkParentList(af.postVectors);
+        PostVector.LinkPostVectorParentList(af.postVectors);
         InitializeGizmoDrawManager();
 
         //StackLog(this.GetType().Name);
@@ -542,11 +541,11 @@ public partial class AutoFenceEditor : Editor
             presetsEd.SetupPreset(launchPresetIndex, forceRebuild: false);
         }
         //Get the preset Menu Index for the current preset
-        for (int i = 0; i < allPresetMenuNames.Count; i++)
+        for (int i = 0; i < presetMenuNames.Count; i++)
         {
-            if (allPresetMenuNames[i] == null)
+            if (presetMenuNames[i] == null)
                 continue;
-            string name = allPresetMenuNames[i];
+            string name = presetMenuNames[i];
             if (name.Contains(af.currPresetName))
                 af.presetMenuIndexInDisplayList = i;
         }
@@ -584,11 +583,11 @@ public partial class AutoFenceEditor : Editor
     //-- Link all the aux Editor classes to this Editor
     protected void SetupLinkedEditorClasses()
     {
-        helperEd = new PrefabAssignEditor(af, this);
-        postEd = new PostEditor(af, this, helperEd);
-        railEd = new RailEditor(af, this, helperEd);
-        subEd = new SubpostEditor(af, this, helperEd, serializedObject);
-        exEd = new ExtraEditor(af, this, helperEd, af.ex, exProp);
+        prefabAssignEd = new PrefabAssignEditor(af, this);
+        postEd = new PostEditor(af, this, prefabAssignEd);
+        railEd = new RailEditor(af, this, prefabAssignEd);
+        subEd = new SubpostEditor(af, this, prefabAssignEd, serializedObject);
+        exEd = new ExtraEditor(af, this, prefabAssignEd, af.ex, exProp);
         resEd = new ResourceUtilities(af, this);
         varEd = new VariationsEditor(af, this);
         seqEd = new SequenceEditor(af, this);
@@ -608,14 +607,10 @@ public partial class AutoFenceEditor : Editor
     // EditorUtilitiesAF.CheckPrefabsAndOptionReload()
     // AutoFenceEditor.OnInspectorAssetsCheck()
     // AutoFenceEditor.ReloadPrefabsAndPresets()
-    public void LoadPrefabs(bool contentFreeUse, bool fixRailMeshes = true)
+    public void LoadPrefabs(bool contentFreeUse = false)
     { //Debug.Log("LoadPrefabs()\n");
-
-        af.postPrefabs.Clear();
-        af.railPrefabs.Clear();
-        //af.subPrefabs.Clear();
-        af.subJoinerPrefabs.Clear();
-        af.extraPrefabs.Clear();
+        
+        af.ClearAllPrefabs();
 
         if (contentFreeUse == false)
         {
@@ -652,12 +647,15 @@ public partial class AutoFenceEditor : Editor
         else
             Debug.LogWarning("Auto Fence Builder:  Prefabs folder not found. Please reload Auto Fence Builder in the Hierarchy");
     }
+
+    
+
     //---------------------------------------
     public void ReloadPrefabsAndPresets(bool rebuild = true)
     {
         if (af.allowContentFreeUse == true)
         {
-            LoadPrefabs(true, true);
+            LoadPrefabs(true);
             presetsEd.LoadAllScriptablePresets(true);
 
             af.currPresetIndex = 0;
@@ -669,7 +667,7 @@ public partial class AutoFenceEditor : Editor
         }
         else
         {
-            LoadPrefabs(false, true);
+            LoadPrefabs(false);
             presetsEd.LoadAllScriptablePresets(af.allowContentFreeUse);
         }
 
@@ -790,7 +788,7 @@ public partial class AutoFenceEditor : Editor
                 af.SetClickMarkersActiveStatus(showControlsProp.boolValue);
             }
 
-            string defaultFenceName = "[AF] " + af.scrPresetSaveName, fenceName = "";
+            string defaultFenceName = "[AF] " + af.presetSaveName, fenceName = "";
             if (openFinishControls == false)
             {
                 userFenceName = defaultFenceName;
@@ -1363,7 +1361,7 @@ public partial class AutoFenceEditor : Editor
         //                         Presets:      Choose or Save Scriptable Main Fence/Wall Preset
         //
         //============================================================================================================================
-        ShowPresetsUI();
+        ShowPresetsUI(this);
 
         GUILayout.Space(28);
 
@@ -3122,7 +3120,7 @@ public partial class AutoFenceEditor : Editor
                 if (GUILayout.Button("Retry", GUILayout.Width(200)))
                 {
                     fencePrefabsFolderFound = true; // assume it's true before retrying
-                    LoadPrefabs(af.allowContentFreeUse, true);
+                    LoadPrefabs(af.allowContentFreeUse);
                     Debug.Log("AFWB Loaded Prefabs \n");
                 }
             }

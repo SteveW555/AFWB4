@@ -187,7 +187,7 @@ public class ExtraEditor
         //==============================================================================
         //                          Transforms
         //==============================================================================
-        helper.SetExtraMainParameters();
+        SetExtraMainParameters();
 
 
         //=================================================================
@@ -1264,6 +1264,20 @@ public class ExtraEditor
             ex.numGridZ = numGridZProp.floatValue = 4;
             ex.gridWidth = gridWidthProp.floatValue = 2f;
             ex.useRandomScatter = randomScatterProp.boolValue = true;
+        }
+    }
+    public void SetExtraMainParameters()
+    {
+        GUILayout.Space(10);
+        EditorGUI.BeginChangeCheck();
+
+        EditorShowTransforms.ShowTransformEditor(LayerSet.extraLayerSet, ed);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            ed.extraSizeProp.vector3Value = ed.EnforceVectorMinimums(ed.extraSizeProp.vector3Value, new Vector3(0.01f, 0.01f, 0.01f));
+            ed.serializedObject.ApplyModifiedProperties();
+            af.ForceRebuildFromClickPoints();
         }
     }
 }

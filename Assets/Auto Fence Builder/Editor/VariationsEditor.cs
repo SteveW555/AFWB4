@@ -227,7 +227,7 @@ public class VariationsEditor
             //-- Get Menu Indices for all sourceVariants;
             List<int> sv = af.GetSourceVariantMenuIndicesForLayer(layer);
 
-            List<int> categoryList = ed.helperEd.GetListOfPrefabMenuIndicesWithCategory(prefabType, catName);
+            List<int> categoryList = ed.prefabAssignEd.GetListOfPrefabMenuIndicesWithCategory(prefabType, catName);
             for (int i = 1; i < maxNumVariations; i++)
             {
                 SerializedProperty thisMenuIndexProp = sourceVariant_MenuIndicesProp.GetArrayElementAtIndex(i);

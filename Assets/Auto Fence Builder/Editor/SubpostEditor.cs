@@ -167,7 +167,7 @@ public class SubpostEditor
         //===================================================
         //  Set Main - Subpost Position - Size - Rotation
         //===================================================
-        helperEd.SetSubpostMainParameters();
+        SetSubpostMainParameters();
 
         EditorGUI.BeginChangeCheck();
         //======  Force Ground,Bury ========
@@ -281,5 +281,20 @@ public class SubpostEditor
             //EditorGUILayout.Space();
             EditorGUI.EndDisabledGroup();*/
         GUILayout.Space(10);
+    }
+    //------------------------------------
+    public void SetSubpostMainParameters()
+    {
+        GUILayout.Space(10);
+
+        EditorGUI.BeginChangeCheck();
+        EditorShowTransforms.ShowTransformEditor(LayerSet.subpostLayerSet, ed);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            ed.subpostScaleProp.vector3Value = ed.EnforceVectorMinimums(ed.subpostScaleProp.vector3Value, new Vector3(0.01f, 0.01f, 0.01f));
+            ed.serializedObject.ApplyModifiedProperties();
+            af.ForceRebuildFromClickPoints();
+        }
     }
 }

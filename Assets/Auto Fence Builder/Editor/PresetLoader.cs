@@ -58,7 +58,7 @@ namespace AFWB
                     defaultMissingPreset.categoryName = "default";
 
                     ed.mainPresetList.Add(defaultMissingPreset);
-                    ed.allPresetMenuNames.Add(defaultMissingPreset.name);
+                    ed.presetMenuNames.Add(defaultMissingPreset.name);
                 }
             }
 
@@ -70,10 +70,10 @@ namespace AFWB
                 //-- Check for missing Category name
                 if (preset.categoryName == "")
                 {
-                    preset.categoryName = ScriptablePresetAFWB.FindCategoryForPreset(preset, ed.af.scrPresetSaveName, "", af);
+                    preset.categoryName = ScriptablePresetAFWB.FindCategoryForPreset(preset, ed.af.presetSaveName, "", af);
                     Debug.Log("categoryName missing for " + preset.name + ".  Assigned to: " + preset.categoryName);
                 }
-                if (af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, preset.postName) == -1)
+                if (af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, preset.postName, $"LoadAllScriptablePresets() Preset: {preset.name} postName") == -1)
                 {
                     Debug.LogWarning("Missing Post [" + preset.postName + "] is -1 in Preset: " + preset.categoryName + "/" + preset.name + "\n");
                 }
@@ -82,7 +82,7 @@ namespace AFWB
                 {
                     for (int j = preset.postVariants.Count; j < AutoFenceCreator.kMaxNumSourceVariants; j++)
                     {
-                        if (af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, preset.postName) != -1)
+                        if (af.FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, preset.postName, $"LoadAllScriptablePresets() PostVariants Preset: {preset.name} postName") != -1)
                             preset.postVariants.Add(new SourceVariant(preset.postName));
                         else
                             preset.postVariants.Add(new SourceVariant("ABasicConcrete_Post"));
@@ -94,26 +94,25 @@ namespace AFWB
             return ed.mainPresetList;
         }
 
-        //=================== Save All Presets ===================
+        //=================== Save Preset ===================
 
-        /// <summary> main Preset Save: Saves the current settings as a preset.</summary>
+        /// <summary> main Preset Save: Saves the current settings as a preset with the name af.presetSaveName.</summary>
         /// <param name="forcedSave">If set to <c>true</c>, the preset will be saved even if a file with the same name already exists.</param>
         /// <param name="reloadAll">If set to <c>true</c>, all scriptable presets will be reloaded after the save.</param>
         /// <returns><c>true</c> if the preset was saved successfully; otherwise, <c>false</c>.</returns>
         /// <remarks> If control and shift are held down, the preset will be saved without asking for confirmation.
-
-        /// /// <remarks> Called by DisplaySavePresetControls()  ResaveAllScriptablePresets()  GUILayout.Button("Fave")  CreateNewPreset</remarks>
-        public bool SavePreset(bool forcedSave = false, bool reloadAll = true)
+        /// <remarks> Called by DisplaySavePresetControls()  ResaveAllScriptablePresets()  GUILayout.Button("Fave")  CreateNewPreset</remarks>
+        public bool SavePreset(bool forcedSave = false)
         {
             if (Event.current.control && Event.current.shift)
                 forcedSave = true;
 
             //    Setup & Name Preset Ready to Save
             //============================================
-            ScriptablePresetAFWB preset = ScriptablePresetAFWB.CreatePresetFromCurrentSettings(ed.af.scrPresetSaveName, "", af);
+            ScriptablePresetAFWB preset = ScriptablePresetAFWB.CreatePresetFromCurrentSettings(ed.af.presetSaveName, "", af);
             PresetCheckFixEd.CheckAndRepairSourceVariantsListsAllLayerForPreset(preset, af, warn: true);
 
-            preset.categoryName = ScriptablePresetAFWB.FindCategoryForPreset(preset, ed.af.scrPresetSaveName, af.categoryNames[af.categoryIndex], af);
+            preset.categoryName = ScriptablePresetAFWB.FindCategoryForPreset(preset, ed.af.presetSaveName, af.categoryNames[af.categoryIndex], af);
             string filePath = ScriptablePresetAFWB.CreateSaveString(af, preset.name, preset.categoryName);
             if (filePath == "")
             {
@@ -127,19 +126,6 @@ namespace AFWB
             if (!fileExists || forcedSave)
             {
                 ScriptablePresetAFWB.SaveScriptablePreset(af, preset, filePath, true, forcedSave);
-
-                if (reloadAll)
-                {
-                    LoadAllScriptablePresets(af.allowContentFreeUse);
-                    string menuName = preset.categoryName + "/" + preset.name;
-                    int index = ed.allPresetMenuNames.IndexOf(menuName);
-                    if (index != -1)
-                    {
-                        af.currPresetIndex = index;
-                        SetupPreset(index);
-                        af.ForceRebuildFromClickPoints();
-                    }
-                }
             }
             else
             {
@@ -147,7 +133,7 @@ namespace AFWB
                 //========================
                 ed.presetSaveRename = "";
                 SavePresetWindow saveWindow = ScriptableObject.CreateInstance(typeof(SavePresetWindow)) as SavePresetWindow;
-                saveWindow.Init(ed, ed.af.scrPresetSaveName, preset);
+                saveWindow.Init(ed, ed.af.presetSaveName, preset);
                 saveWindow.minSize = new Vector2(475, 190); saveWindow.maxSize = new Vector2(475, 190);
                 saveWindow.ShowUtility();
             }
@@ -164,7 +150,7 @@ namespace AFWB
         public static ScriptablePresetAFWB SaveFinishedPreset(string finishedName, string finishedFolderPath, AutoFenceCreator afc)
         {
             ScriptablePresetAFWB preset = ScriptablePresetAFWB.CreatePresetFromCurrentSettings(finishedName, "", afc);
-            preset.categoryName = ScriptablePresetAFWB.FindCategoryForPreset(preset, afc.scrPresetSaveName, afc.categoryNames[afc.categoryIndex], afc);
+            preset.categoryName = ScriptablePresetAFWB.FindCategoryForPreset(preset, afc.presetSaveName, afc.categoryNames[afc.categoryIndex], afc);
             string filePath = finishedFolderPath + "/" + "Preset-" + preset.name + ".asset";
             if (filePath == "")
             {
@@ -232,7 +218,7 @@ namespace AFWB
                     changed = true;
                     af.currPresetIndex = ed.mainPresetList.Count - 1;
                 }
-                af.scrPresetSaveName = ed.mainPresetList[af.currPresetIndex].name;
+                af.presetSaveName = ed.mainPresetList[af.currPresetIndex].name;
                 return changed;
             }
 
@@ -303,7 +289,7 @@ namespace AFWB
             {
                 ScriptablePresetAFWB preset = ed.mainPresetList[i];
 
-                ed.af.scrPresetSaveName = preset.name;
+                ed.af.presetSaveName = preset.name;
 
                 af.currPresetIndex = i;
 
@@ -324,7 +310,7 @@ namespace AFWB
                 if (resave)
                 {
                     Debug.Log(preset.name + "\n");
-                    SavePreset(true, false);
+                    SavePreset(true);
                 }
             }
         }
@@ -431,14 +417,7 @@ namespace AFWB
 
             //-- Sets the main prefab for each layer and syncs the prefab menu iondex for that layer
             SyncPrefabMenus();
-
-            
-            //SetAllPopupsToShowCorrectPrefabsAfterPresetChange();
-            //ed.varEd.SetMainSourceVariantObjects();
-            //ed.varEd.FillEmptyVariantsWithMain();
-
-            ed.af.scrPresetSaveName = ed.currPreset.name;
-            //bool addedSeeds = af.GetSeedsFromList(ed.currPreset.name);
+            ed.af.presetSaveName = ed.currPreset.name;
             af.ex.UpdateExtrasFromExtraVariantsStruct(ed.currPreset.extraVarsStruct);
             af.singlesContainer.ResetAllRailSingles(af);
             af.ResetAllPools();
@@ -448,10 +427,11 @@ namespace AFWB
             ed.af.userPrefabExtra = null;
 
             ed.useBreakpoint = true;
-            //ed.varEd.SyncControlsAfterPresetChange();
 
             return ed.currPreset;
         }
+        
+       
         public ScriptablePresetAFWB SetupPreset(int presetIndex, bool forceRebuild = false)
         {
             if (presetIndex >= ed.mainPresetList.Count)
@@ -467,23 +447,53 @@ namespace AFWB
         }
 
         //---------------
+        /// <summary>
+        /// Get the preset from the main preset list at the given index.
+        /// </summary>
+        /// <param name="presetIndex"></param>
+        /// <returns>ScriptablePresetAFWB</returns>
         public ScriptablePresetAFWB GetPresetFromPresetsList(int presetIndex)
         {
             ScriptablePresetAFWB preset = ed.mainPresetList[presetIndex];
             return preset;
         }
+        //---------------
+        /// <summary>
+        /// Gets the preset by name from the main preset list.
+        /// </summary>
+        /// <param name="presetName">The name of the preset to find.</param>
+        /// <returns>The ScriptablePresetAFWB with the specified name, or null if not found.</returns>
+        public ScriptablePresetAFWB GetPresetByName(string presetName)
+        {
+            // Find preset in ed.mainPresetList with presetName
+            ScriptablePresetAFWB preset = ed.mainPresetList.Find(x => x.name == presetName);
+
+            // Warn if preset not found
+            if (preset == null)
+                Debug.LogWarning($"Preset with name '{presetName}' not found\n");
+
+            return preset;
+        }
+
 
         //---------------
+        /// <summary>
+        /// Called from SetupPreset() to set up the parameters after a preset has been selected.
+        /// </summary>
+        /// <remarks>
+        /// 1. Maps parameters that don't directly map to an integer index, such as strings or non-linear values.
+        /// 2. Populates SeqItems with the correct GameObjects (GOs) using the sourceVariantIndex.
+        /// 3. Handles different Auto Fence & Wall Builder (AFWB) version features saved in presets, including adjusting the number of sourceVariants.
+        /// </remarks>
         public void SetupParametersAfterPresetSelect()
         {
-
-            //Some parameters are such that they don't directly map to an integer index, e.g strings or non-linear
+            // Map parameters that don't directly map to an integer index, e.g., strings or non-linear values
             af.currentExtra_PrefabMenuIndex = af.ConvertExtraPrefabIndexToMenuIndex(af.currentExtra_PrefabIndex);
             af.categoryIndex = af.categoryNames.IndexOf(ed.currPreset.categoryName);
-            af.quantizeRotIndexRailA = ed.helperEd.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAngleRailA);
-            af.quantizeRotIndexRailB = ed.helperEd.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAngleRailB);
-            af.quantizeRotIndexPost = ed.helperEd.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAnglePost);
-            af.quantizeRotIndexSubpost = ed.helperEd.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAngleSubpost);
+            af.quantizeRotIndexRailA = af.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAngleRailA);
+            af.quantizeRotIndexRailB = af.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAngleRailB);
+            af.quantizeRotIndexPost = af.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAnglePost);
+            af.quantizeRotIndexSubpost = af.GetMenuIndexFromQuantizedRotAngle(af.quantizeRotAngleSubpost);
 
             //-- Populate the SeqItems with the correct GOs by using the sourceVariantIndex into the list of Variants
             //-- This is needed because the SeqItems are saved in the preset, but the GOs are not
@@ -494,8 +504,6 @@ namespace AFWB
             {
                 SeqItem seqVar = railASeq[i];
                 int goIndex = seqVar.sourceVariantIndex;
-                //railASeq[i].go = railAVariants[goIndex].go;
-                //Debug.Log("Step " + i + ":  [" + sourceVariantIndex + "]  " + af.StripPanelRailFromName(railASeq[i].go.name) + "\n");
             }
 
             //-- Deal with different AFWB version features saved in presetsEd
@@ -508,12 +516,11 @@ namespace AFWB
                 if (variantIndex > maxIndex)
                     maxIndex = variantIndex;
             }
-            //Debug.Log("maxIndex " + maxIndex + " numRailASeqSteps " + numRailASeqSteps + "\n");
+            //Debug.Log($"maxIndex {maxIndex} numRailASeqSteps {numRailASeqSteps}\n");
             //-- Set the num variations to the maxIndex, ensuring it's at least
             af.SetNumVariationsInUseForLayer(kRailALayer, (maxIndex > 2) ? maxIndex : 2);
-
-
         }
+
 
         //--------------------------------
         //this saves from an existing ScriptablePresetAFWB

@@ -300,7 +300,7 @@ public class PostEditor
                 prefabIndex = af.GetPrefabIndexForLayerByName(LayerSet.postLayerSet, "ABasicConcrete_Post");
             if (prefabIndex == -1)
                 prefabIndex = 0;
-            af.SetCurrentPrefabIndexForLayer(LayerSet.postLayerSet, prefabIndex);
+            af.SetCurrentPrefabIndexForLayer(prefabIndex, LayerSet.postLayerSet);
             af.SetMenuIndexFromPrefabIndexForLayer(prefabIndex, LayerSet.postLayerSet);
 
         }

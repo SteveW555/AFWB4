@@ -37,7 +37,7 @@ public class RailEditor
     //serializedObject here refers to the AutoFEnceEditor's SO (which is AutoFenceCreator)
     public void ShowRailEditor(SerializedObject serializedObject, LayerSet layer)
     {
-        spreadModeStr = new string[] { "Total", "Per Rail" };
+        spreadModeStr = new string[] { "Total", "Per Rail", "Gap" };
         //=====  Set up the variables depending on which layer it is  =====
 
         int railLayerIndex = kRailALayerInt;
@@ -334,7 +334,7 @@ public class RailEditor
             {
                 float gap = 0;
                 if (af.railSpreadMode[railLayerIndex] == 0)//total
-                    gap = af.railSpreadMode[railLayerIndex] / (af.numStackedRails[railLayerIndex] - 1);
+                    gap = af.railSpread[railLayerIndex] / (af.numStackedRails[railLayerIndex] - 1);
                 else
                     gap = af.railSpread[railLayerIndex];
             }

@@ -51,7 +51,7 @@ namespace AFWB
                 if (warn)
                 {
                     string message = sourceVariants == null ? "is null" : "was Empty";
-                    Debug.LogWarning($"SourceVariant list for {layer} {message}.  Fixing\n");
+                    Debug.Log($"SourceVariant list for {layer} {message}.  Fixing\n");
                 }
                 sourceVariants = SourceVariant.CreateInitialisedSourceVariantList(mainGo, AutoFenceCreator.kMaxNumSourceVariants);
                 numFixed = AutoFenceCreator.kMaxNumSourceVariants;

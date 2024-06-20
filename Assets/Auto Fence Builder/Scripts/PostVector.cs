@@ -99,7 +99,7 @@ public class PostVector
         postBuildInfo = new PostBuildInfo();
     }
     /// <summary>Links the parent list for all PostVector instances.</summary>
-    public static void LinkParentList(List<PostVector> list)
+    public static void LinkPostVectorParentList(List<PostVector> list)
     {
         parentList = list;
     }
@@ -530,6 +530,12 @@ public class PostVector
 
         DirAvg = ((prev.Forward + Forward) / 2).normalized; // average of previous and current direction vectors
         DirAvgRight = ((prev.DirRight + DirRight) / 2).normalized; // average of previous and current perpendicular direction vectors
+
+        if(IsClickPointNode)
+        {
+            //DirAvg = Forward;
+            //DirAvgRight = -DirAvgRight;
+        }
     }
     //-----------------------------
     /// <summary>Checks if the parentList and af for nulls and links bothe.</summary>

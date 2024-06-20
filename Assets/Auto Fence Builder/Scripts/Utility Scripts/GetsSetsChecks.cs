@@ -78,7 +78,7 @@ namespace AFWB
         public GameObject GetPrefabByName(string name)
         {
             PrefabTypeAFWB prefabTypeAFWB = GetPrefabTypeByName(name);
-            int prefabIndex = FindPrefabIndexByNameForLayer(prefabTypeAFWB, name);
+            int prefabIndex = FindPrefabIndexByNameForLayer(prefabTypeAFWB, name, "GetPrefabByName()");
             if (prefabIndex == -1)
                 return null;
 
@@ -94,7 +94,7 @@ namespace AFWB
         public int GetPrefabIndexForLayerByName(LayerSet layer, string name)
         {
             PrefabTypeAFWB prefabTypeAFWB = layer.ToPrefabType();
-            int prefabIndex = FindPrefabIndexByNameForLayer(prefabTypeAFWB, name);
+            int prefabIndex = FindPrefabIndexByNameForLayer(prefabTypeAFWB, name, "GetPrefabIndexForLayerByName()");
             return prefabIndex;
         }
 
@@ -143,7 +143,7 @@ namespace AFWB
         /// <param name="layer"></param>
         /// <param name="index"></param>
         /// <returns> The prefab for ease of debugging </returns>
-        public GameObject SetCurrentPrefabIndexForLayer(LayerSet layer, int index)
+        public GameObject SetCurrentPrefabIndexForLayer(int index, LayerSet layer)
         {
             //List<SourceVariant> sv = GetSourceVariantsForLayer(layer);
 
@@ -215,7 +215,7 @@ namespace AFWB
             if (prefabIndex == -1)
                 errorStr = $"prefabIndex for {layer.String()} is -1. {msg}\n";
             if ((errorStr != "" && resetBad))
-                SetCurrentPrefabIndexForLayer(layer, 0);
+                SetCurrentPrefabIndexForLayer(0, layer);
             if (errorStr != "")
             {
                 Debug.LogWarning(errorStr);
@@ -295,8 +295,7 @@ namespace AFWB
         {
             //if (warn) DebugUtilitiesTCT.LogStackTrace();
 
-            //string layerString = GetLayerNameAsString(layer);
-            string layerString = GetLayerNameAsString(layer);
+            
             List<GameObject> prefabsForLayer = null;
             if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
                 prefabsForLayer = railPrefabs;
@@ -310,13 +309,13 @@ namespace AFWB
             //-- Always warn for null
             if (prefabsForLayer == null)
             {
-                Debug.LogWarning($"GetPrefabsForLayer()  {layerString} Prefab List was null.  Caller: {caller}\n");
+                Debug.LogWarning($"GetPrefabsForLayer()  {layer.String()} Prefab List was null.  Caller: {caller}\n");
                 return null;
             }
             if (prefabsForLayer.Count > 0 && prefabsForLayer[0] == null)
-                Debug.LogWarning($"GetPrefabsForLayer() {layerString} prefab at index [0] was null.  Count = {prefabsForLayer.Count} \n");
+                Debug.LogWarning($"GetPrefabsForLayer() {layer.String()} prefab at index [0] was null.  Count = {prefabsForLayer.Count} \n");
             else if (prefabsForLayer.Count == 0 && warn)
-                Debug.LogWarning($"GetPrefabsForLayer()  {layerString} prefabs.Count = 0.  Caller: {caller}\n");
+                Debug.LogWarning($"GetPrefabsForLayer()  {layer.String()} prefabs.Count = 0.  Caller: {caller}\n");
 
             return prefabsForLayer;
         }
@@ -339,7 +338,7 @@ namespace AFWB
 
 
             // set the current prefab index for layer
-            SetCurrentPrefabIndexForLayer(layer, prefabIndex);
+            SetCurrentPrefabIndexForLayer(prefabIndex, layer );
             //sync the prefab menu index
             SetMenuIndexFromPrefabIndexForLayer(prefabIndex, layer);
 
@@ -583,7 +582,7 @@ namespace AFWB
         {
             string prefabName = railMenuNames[railmenuIndex]; // name including category
             prefabName = prefabName.Remove(0, prefabName.IndexOf("/") + 1); // remove category name
-            int prefabIndex = FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, prefabName);
+            int prefabIndex = FindPrefabIndexByNameForLayer(PrefabTypeAFWB.railPrefab, prefabName, "ConvertRailMenuIndexToPrefabIndex");
             return prefabIndex;
         }
 
@@ -628,7 +627,7 @@ namespace AFWB
             if (prefabName.Contains("/"))
                 prefabName = prefabName.Remove(0, prefabName.IndexOf("/") + 1); // remove subcategory name
 
-            int prefabIndex = FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, prefabName);
+            int prefabIndex = FindPrefabIndexByNameForLayer(PrefabTypeAFWB.postPrefab, prefabName, "ConvertPostMenuIndexToPrefabIndex");
 
             return prefabIndex;
         }
@@ -649,7 +648,7 @@ namespace AFWB
                                                                             //--If there'stackIdx a subcategory, remove that too
             if (prefabName.Contains("/"))
                 prefabName = prefabName.Remove(0, prefabName.IndexOf("/") + 1); // remove subcategory name
-            int prefabIndex = FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, prefabName);
+            int prefabIndex = FindPrefabIndexByNameForLayer(PrefabTypeAFWB.extraPrefab, prefabName, "ConvertExtraMenuIndexToPrefabIndex");
             return prefabIndex;
         }
 

@@ -20,10 +20,6 @@ namespace AFWB
             this.a = a;
             this.b = b;
         }
-        public float Multiply() // Method to multiply the numbers and return the resultStr
-        {
-            return a * b;
-        }
     }
 
     public partial class AutoFenceCreator
@@ -78,48 +74,7 @@ namespace AFWB
             CreatePoolForLayer(LayerSet.extraLayerSet, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled, caller);
         }
 
-        //----------------------------------
-        // caled from  CreateAllPools(), ResetPoolForLayer(), ValidatePoolForLayer( Fails ), RequestSub(), RebuildPoolWithNewUserPrefab()
-        public int CreatePoolForLayer(LayerSet layer, int requiredPoolSize = 0, bool append = false,
-                              bool enableDebugLogs = false, bool onlyCreateWhenLayerEnabled = false,
-                              [CallerMemberName] string caller = null)
-        {
-            // Set required pool size to default if not provided
-            if (requiredPoolSize == 0)
-                requiredPoolSize = GetDefaultPoolSizeForLayer(layer);
 
-            //-- Initialize or retrieve the current pool
-            List<Transform> pool = CheckAndInitPool(layer, append, enableDebugLogs, caller);
-            int origPoolSize = pool.Count, newPoolCount = 0; ;
-
-            //      Rails
-            //====================
-            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
-                pool = CreateRailsPool(layer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled);
-
-            //      Post & Subposts
-            //==========================
-            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
-            {
-                CreatePostsPool(layer, requiredPoolSize, enableDebugLogs, caller, pool, append: false);
-            }
-
-            //      Extras
-            //====================
-            //-- Now called direct from BuildExtras() as it's a special case which might need frequent Mesh updates
-            /*else if (layer == LayerSet.extraLayerSet)
-                pool = ex.CreateExtrasPool(requiredPoolSize, append, true);*/
-
-
-            //Debug.Log($"CreatePoolForLayer() - {GetLayerNameAsString(layer)} Pool size: {pool.Count} (was {origPoolSize}) Created {pool.Count - origPoolSize} items\n");
-            if (pool.Count != GetPoolForLayer(layer).Count)
-            {
-                Debug.LogError($"Mismatched Pool Reference!  {layer}   {pool.Count}     {GetPoolForLayer(layer).Count} \n");
-                // Ensure the original pool reference is updated
-                SetPoolForLayer(layer, pool);
-            }
-            return pool.Count;
-        }
 
         /////-----------------------
         private void CreatePostsPool(LayerSet layer, int requiredPoolSize, bool enableDebugLogs, string caller, List<Transform> pool, bool append = false)
@@ -145,7 +100,7 @@ namespace AFWB
                             postPrefab = GetNodePostsOverridePrefab(postIndex, postPrefab);
 
                             //if (postIndex < allPostPositions.Count)
-                                //Debug.Log($"Node PostPrefab: {postPrefab.name}\n");
+                            //Debug.Log($"Node PostPrefab: {postPrefab.name}\n");
                             postPrefab = GetEndPostsOverridePrefab(postIndex, postPrefab);
                         }
 
@@ -191,17 +146,55 @@ namespace AFWB
                 postPrefab = currPrefab;
             return postPrefab;
         }
+        //----------------------------------
+        // caled from  CreateAllPools(), ResetPoolForLayer(), ValidatePoolForLayer( Fails ), RequestSub(), RebuildPoolWithNewUserPrefab()
+        public int CreatePoolForLayer(LayerSet layer, int requiredPoolSize = 0, bool append = false,
+                              bool enableDebugLogs = false, bool onlyCreateWhenLayerEnabled = false,
+                              [CallerMemberName] string caller = null)
+        {
+            // Set required pool size to default if not provided
+            if (requiredPoolSize == 0)
+                requiredPoolSize = GetDefaultPoolSizeForLayer(layer);
+
+            //-- Initialize or retrieve the current pool
+            List<Transform> pool = CheckAndInitPool(layer, append, enableDebugLogs, caller);
+            int origPoolSize = pool.Count, newPoolCount = 0; ;
+
+            //      Rails
+            //====================
+            if (layer == LayerSet.railALayerSet || layer == LayerSet.railBLayerSet)
+                pool = CreateRailsPool(layer, requiredPoolSize, append, enableDebugLogs, onlyCreateWhenLayerEnabled);
+
+            //      Post & Subposts
+            //==========================
+            else if (layer == LayerSet.postLayerSet || layer == LayerSet.subpostLayerSet)
+            {
+                CreatePostsPool(layer, requiredPoolSize, enableDebugLogs, caller, pool, append: false);
+            }
+
+            //      Extras
+            //====================
+            //-- Now called direct from BuildExtras() as it's a special case which might need frequent Mesh updates
+            /*else if (layer == LayerSet.extraLayerSet)
+                pool = ex.CreateExtrasPool(requiredPoolSize, append, true);*/
+
+
+            //Debug.Log($"CreatePoolForLayer() - {GetLayerNameAsString(layer)} Pool size: {pool.Count} (was {origPoolSize}) Created {pool.Count - origPoolSize} items\n");
+            if (pool.Count != GetPoolForLayer(layer).Count)
+            {
+                Debug.LogError($"Mismatched Pool Reference!  {layer}   {pool.Count}     {GetPoolForLayer(layer).Count} \n");
+                // Ensure the original pool reference is updated
+                SetPoolForLayer(layer, pool);
+            }
+            return pool.Count;
+        }
         //--------------------------------
         public List<Transform> CreateRailsPool(LayerSet layer, int requiredPoolSize, bool append = false, bool enableDebugLogs = false, bool onlyCreateWhenLayerEnabled = false, [CallerMemberName] string caller = null)
         {
             List<Transform> railPool = GetPoolForLayer(layer);
-            //InitializeAndCheckEarlyReturn(layer, enableDebugLogs, onlyCreateWhenLayerEnabled);
-
             try
             {
-                //railPool = CheckAndInitPool(layer, append, enableDebugLogs, caller);
                 int currentPoolSize = railPool.Count;
-
                 //- Main function to create the pool
                 if (append == false || currentPoolSize < requiredPoolSize)
                 {
@@ -213,6 +206,80 @@ namespace AFWB
                 Debug.LogError($"CreateRailsPool() - Error: {ex.Message}\n");
             }
             return railPool;
+        }
+        private void AddRailsToPool(List<Transform> railPool, LayerSet layer, int currentPoolSize, int requiredPoolSize, bool enableDebugLogs)
+        {
+            List<SourceVariant> variants = GetSourceVariantsForLayer(layer);
+            List<SeqItem> seqItems = GetSequenceForLayer(layer);
+            bool useRailVar = useRailVariations[layer.Int()];
+            Sequencer sequencer = GetSequencerForLayer(layer);
+            bool useSequencer = sequencer.useSeq;
+            bool useSingles = useRailSingles[layer.Int()];
+            SinglesItem single = null;
+            List<SourceVariant> sourceVariants = GetSourceVariantsForLayer(layer);
+
+
+            GameObject go = null, mainGo = GetMainPrefabForLayer(layer);
+            SourceVariant variant = null;
+            for (int i = currentPoolSize; i < requiredPoolSize; i++)
+            {
+                if (useRailVar == true && (useSequencer == true || useSingles == true))
+                {
+                    //-- Get the Go from the source variant for this step
+                    if (useSequencer == true)
+                    {
+                        /*if (variant == null || variant.Go == null)
+                        {
+                            if (enableDebugLogs)
+                                Debug.Log($"CreateRailsPool() - Variant or GameObject is null at index {i}");
+                            continue;
+                        }*/
+                        variant = GetVariantAtSeqIndexForLayer(variants, seqItems, i);
+                        go = variant.Go;
+                    }
+                    else if (useSingles == true)
+                    {
+                        go = GetGoForSingleAtIndexForLayer(i, layer);
+                    }
+                    if (go == null)
+                        go = mainGo;
+                }
+                else
+                    go = mainGo;
+                GameObject rail = Instantiate(go);
+                rail.SetActive(false);
+                rail.hideFlags = HideFlags.HideInHierarchy;
+                if (useRailVariations[layer.Int()] == true)
+                    ApplyTransformations(rail, variant, seqItems, i);
+                railPool.Add(rail.transform);
+            }
+
+            if (enableDebugLogs)
+                Debug.Log($"CreateRailsPool() - Added {requiredPoolSize - currentPoolSize} new rails to the pool.");
+        }
+
+        private GameObject GetGoForSingleAtIndexForLayer(int index, LayerSet layer)
+        {
+            List<SourceVariant> sourceVariants = GetSourceVariantsForLayer(layer);
+            SinglesContainer singlesContainer = GetSinglesContainerForLayer(layer);
+            SinglesItem single = singlesContainer.GetSingleAtSectionIndex(index);
+            int sourceVariantIndex = single.sourceVariantIndex;
+            SourceVariant variant = sourceVariants[sourceVariantIndex];
+            GameObject go = variant.Go;
+            return go;
+        }
+
+        private SinglesContainer GetSinglesContainerForLayer(LayerSet layer)
+        {
+            SinglesContainer singlesContainer = null;
+            if (layer == LayerSet.railALayerSet)
+                singlesContainer = railSinglesContainer[0];
+            else if (layer == LayerSet.railBLayerSet)
+                singlesContainer = railSinglesContainer[1];
+            else if (layer == LayerSet.postLayerSet)
+                singlesContainer = postSinglesContainer;
+
+            return singlesContainer;
         }
 
         //-------------------------------
@@ -348,40 +415,9 @@ namespace AFWB
             return Mathf.CeilToInt(numVariants * numSeqSteps * excessFactor);
         }
 
-        private void AddRailsToPool(List<Transform> railPool, LayerSet layer, int currentPoolSize, int requiredPoolSize, bool enableDebugLogs)
-        {
-            List<SourceVariant> variants = GetSourceVariantsForLayer(layer);
-            List<SeqItem> seqItems = GetSequenceForLayer(layer);
 
-            GameObject go = GetMainPrefabForLayer(layer);
-            SourceVariant variant = null;
-            for (int i = currentPoolSize; i < requiredPoolSize; i++)
-            {
-                if (useRailVariations[layer.Int()] == true)
-                {
-                    //-- Get the Go from the source variant for this step
-                    variant = GetVariantForLayer(variants, seqItems, i);
-                    if (variant == null || variant.Go == null)
-                    {
-                        if (enableDebugLogs)
-                            Debug.Log($"CreateRailsPool() - Variant or GameObject is null at index {i}");
-                        continue;
-                    }
-                    go = variant.Go;
-                }
-                GameObject rail = Instantiate(go);
-                rail.SetActive(false);
-                rail.hideFlags = HideFlags.HideInHierarchy;
-                if (useRailVariations[layer.Int()] == true)
-                    ApplyTransformations(rail, variant, seqItems, i);
-                railPool.Add(rail.transform);
-            }
 
-            if (enableDebugLogs)
-                Debug.Log($"CreateRailsPool() - Added {requiredPoolSize - currentPoolSize} new rails to the pool.");
-        }
-
-        private SourceVariant GetVariantForLayer(List<SourceVariant> variants, List<SeqItem> seqItems, int index)
+        private SourceVariant GetVariantAtSeqIndexForLayer(List<SourceVariant> variants, List<SeqItem> seqItems, int index)
         {
             if (index < seqItems.Count)
             {

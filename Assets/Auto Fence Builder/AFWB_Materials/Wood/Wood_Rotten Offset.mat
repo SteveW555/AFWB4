@@ -10,7 +10,6 @@ Material:
   m_Name: Wood_Rotten Offset
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ValidKeywords:
-  - _DETAIL_MULX2
   - _METALLICGLOSSMAP
   - _NORMALMAP
   m_InvalidKeywords: []
@@ -28,11 +27,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
-        m_Texture: {fileID: 2800000, guid: 738bd916a43e6d344b7e2f0725045c51, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
-        m_Texture: {fileID: 2800000, guid: efe485e2d3431ab4ab0299cbd74b20b3, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
@@ -61,7 +60,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BumpScale: 1
+    - _BumpScale: 0.9
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0

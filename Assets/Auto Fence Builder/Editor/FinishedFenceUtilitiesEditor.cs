@@ -235,7 +235,7 @@ public class FinishedFenceUtilitiesEditor : Editor
                 if (af == null)
                     return;
                 //finishedPos = finishedUtils.af.currentFencesFolder.transform.position;
-                string defaultFenceName = "[AF] " + af.scrPresetSaveName;
+                string defaultFenceName = "[AF] " + af.presetSaveName;
                 CreateFinishedFromCurrent(af, defaultFenceName);
 
                 af.ClearAllFences();

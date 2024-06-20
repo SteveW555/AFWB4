@@ -10,7 +10,7 @@ public class LoadUtilitiesAFWB
     public static void ResetMeshOnUserPrefab(AutoFenceCreator af, LayerSet layer)
     {
         GameObject curr = af.GetMainPrefabForLayer(layer);
-        GameObject user = af.GetUserObjectForLayer(layer);
+        GameObject user = af.GetUserPrefabForLayer(layer);
 
         Debug.Log(curr);
         Debug.Log(user);

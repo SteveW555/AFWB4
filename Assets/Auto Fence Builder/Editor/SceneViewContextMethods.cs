@@ -70,7 +70,7 @@ namespace AFWB
                 Debug.LogWarning($"Added Prefab as Post: {prefab.name}\n");
             LayerSet layer = info.layer;
 
-            ed.resEd.HandleImportedCustomPrefab(prefab, LayerSet.postLayerSet);
+            ed.prefabAssignEd.HandleImportedCustomPrefab(prefab, LayerSet.postLayerSet);
             af.ForceRebuildFromClickPoints();
 
         }

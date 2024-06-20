@@ -184,8 +184,8 @@ MonoBehaviour:
   - enabled: 1
     inUse: 1
     probability: 0.5
-    goName: BrickSquare_Post
-    go: {fileID: 1709060837914780, guid: 85a3c8b03965e4ce6aaf71b0014cba02, type: 3}
+    goName: Bush1_Extra
+    go: {fileID: 8190515472468132982, guid: a264b2b8f0ebd7e43a24089fc49941c9, type: 3}
   - enabled: 1
     inUse: 1
     probability: 0.5

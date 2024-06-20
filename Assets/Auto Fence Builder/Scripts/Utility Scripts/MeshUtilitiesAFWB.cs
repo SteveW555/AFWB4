@@ -33,7 +33,7 @@ public struct QuadData
             v[i] += offset;
     }
 }
-namespace ProceduralToolkitTCT
+/*namespace ProceduralToolkitTCT
 {
     public class ProcGenAFWB : MonoBehaviour
     {
@@ -51,7 +51,7 @@ namespace ProceduralToolkitTCT
 
         }
     }
-}
+}*/
 namespace MeshUtils
 {
     public class MeshUtilitiesAFWB : MonoBehaviour

@@ -73,7 +73,7 @@ public class SavePresetWindow : EditorWindow
                 ScriptablePresetAFWB.SaveScriptablePreset(ed.af, preset, filePath, true, false);
                 ed.presetsEd.LoadAllScriptablePresets(ed.af.allowContentFreeUse);
                 string menuName = preset.categoryName + "/" + preset.name;
-                int index = ed.allPresetMenuNames.IndexOf(menuName);
+                int index = ed.presetMenuNames.IndexOf(menuName);
                 if (index != -1)
                 {
                     ed.af.currPresetIndex = index;
@@ -99,7 +99,7 @@ public class SavePresetWindow : EditorWindow
                 saved = ScriptablePresetAFWB.SaveScriptablePreset(ed.af, preset, filePath, true, true);
                 ed.presetsEd.LoadAllScriptablePresets(ed.af.allowContentFreeUse);
                 string menuName = preset.categoryName + "/" + preset.name;
-                int index = ed.allPresetMenuNames.IndexOf(menuName);
+                int index = ed.presetMenuNames.IndexOf(menuName);
                 if (index != -1)
                 {
                     ed.af.currPresetIndex = index;
