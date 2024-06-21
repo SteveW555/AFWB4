@@ -218,7 +218,10 @@ namespace AFWB
                         Debug.LogWarning($"Prefab in {layer.ToString()} folder not named{layer.ToString()}:  " + go.name + "    " + layerFilePath + "\n");
                 }
             }
-            return prefabsForLayer;
+			//Now load the system prefabs with the mandatory defaultprefab for each layer
+           	string systemDefaultPath = "SystemDefaultPrefabs";
+			string[] sustemDefaultsFilePaths = Directory.GetFiles(systemDefaultPath, "*.*", SearchOption.AllDirectories);
+		 return prefabsForLayer;
         }
         //-- This is a parallel List to the prefabs Lists. Dont want the hassle of embedding in the prefabs Lists inside another wrapper
         public void AddPrefabDetails(GameObject prefab, string parentDir, LayerSet layer)
