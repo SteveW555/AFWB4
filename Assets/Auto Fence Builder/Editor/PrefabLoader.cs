@@ -1,4 +1,4 @@
-﻿using MeshUtils;
+using MeshUtils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -159,12 +159,12 @@ namespace AFWB
             List<PrefabDetails> prefabDetails = PrefabDetails.GetPrefabDetailsForLayer(layer, af);
 
             prefabDetails.Clear();
-            string[] prefabFilePaths = GetPrefabFilePathsForLayer(layer, af);
-            foreach (string filePath in prefabFilePaths)
+            string[] prefabFilePathsForLayer = GetPrefabFilePathsForLayer(layer, af);
+            foreach (string layerFilePath in prefabFilePathsForLayer)
             {
-                if (filePath.EndsWith(".prefab") && filePath.Contains("[Pure]") == false)
+                if (layerFilePath.EndsWith(".prefab") && layerFilePath.Contains("[Pure]") == false)
                 {
-                    GameObject go = AssetDatabase.LoadMainAssetAtPath(filePath) as GameObject;
+                    GameObject go = AssetDatabase.LoadMainAssetAtPath(layerFilePath) as GameObject;
                     //if (go.name.Contains("Boul"))
                         //Debug.Log("Boul");
                     if (go != null)
@@ -176,11 +176,11 @@ namespace AFWB
                             if (MeshUtilitiesAFWB.GetFirstMeshInGameObject(go) != null)
                             {
                                 prefabsForLayer.Add(go);
-                                string parentFolder = System.IO.Path.GetDirectoryName(filePath);
+                                string parentFolder = System.IO.Path.GetDirectoryName(layerFilePath);
                                 prefabDetails.Add(new PrefabDetails(parentFolder)); 
                             }
                             //else
-                                //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                                //Debug.Log($"Missing Mesh while Loading Prefab  {layerFilePath}  Look in the path directory and delete or fix the prefab\n");
                         }
 
                         //      Posts
@@ -190,11 +190,11 @@ namespace AFWB
                             if (MeshUtilitiesAFWB.GetFirstMeshInGameObject(go) != null)
                             {
                                 prefabsForLayer.Add(go);
-                                string parentFolder = System.IO.Path.GetDirectoryName(filePath);
+                                string parentFolder = System.IO.Path.GetDirectoryName(layerFilePath);
                                 prefabDetails.Add(new PrefabDetails(parentFolder));
                             }
                             //else
-                                //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                                //Debug.Log($"Missing Mesh while Loading Prefab  {layerFilePath}  Look in the path directory and delete or fix the prefab\n");
                         }
                         //      Extras
                         //=========================
@@ -204,18 +204,18 @@ namespace AFWB
                             {
                                 prefabsForLayer.Add(go);
                                 //--GetFileName(). Stupid name, actually gets the thing at the end of the path, even if not a file.
-                                string parentFolder = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(filePath));
+                                string parentFolder = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(layerFilePath));
 
                                 prefabDetails.Add(new PrefabDetails(parentFolder)); 
                             }
                             //else
-                               //Debug.Log($"Missing Mesh while Loading Prefab  {filePath}  Look in the path directory and delete or fix the prefab\n");
+                               //Debug.Log($"Missing Mesh while Loading Prefab  {layerFilePath}  Look in the path directory and delete or fix the prefab\n");
                         }
                     }
                     else if (go == null)
-                        Debug.LogWarning($"{layer.ToString()} was null in  LoadAllPrefabs()  " + filePath + "\n");
+                        Debug.LogWarning($"{layer.ToString()} was null in  LoadAllPrefabs()  " + layerFilePath + "\n");
                     else if (LayerAndSuffixMatch(layer, go) == false)
-                        Debug.LogWarning($"Prefab in {layer.ToString()} folder not named{layer.ToString()}:  " + go.name + "    " + filePath + "\n");
+                        Debug.LogWarning($"Prefab in {layer.ToString()} folder not named{layer.ToString()}:  " + go.name + "    " + layerFilePath + "\n");
                 }
             }
             return prefabsForLayer;
