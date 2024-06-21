@@ -3,13 +3,9 @@
 ////#pragma warning disable 0414
 
 using AFWB;
-using MeshUtils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using TCT.PrintUtils;
 using UnityEditor;
 
 using UnityEngine;
@@ -252,6 +248,9 @@ public partial class AutoFenceEditor : Editor
     private string presetPrefabName;
     private float minPostToPostDistance;
     private string meshName;
+    private bool drawEditingGizmo = false;
+    private Vector3  editingGizmoPos = Vector3.zero;
+
     //private static GizmoDrawManager instance;
 
 
@@ -1328,6 +1327,34 @@ public partial class AutoFenceEditor : Editor
     }
 
 
+    private Vector3 DrawSmallerPositionHandle(Vector3 position, Quaternion? rotation = null)
+    {
+        // Use the provided rotation or default to Quaternion.identity
+        Quaternion effectiveRotation = rotation ?? Quaternion.identity;
+
+        // Define the scale factor and handle color
+        float scaleFactor = 0.5f;
+        Color handleColor = new Color(0.5f, 0.5f, 0.5f); // Dark gray
+
+        // Save the original handle matrix and color
+        Matrix4x4 originalMatrix = Handles.matrix;
+        Color originalColor = Handles.color;
+
+        // Set the new handle matrix and color
+        Handles.matrix = Matrix4x4.TRS(position, effectiveRotation, Vector3.one * scaleFactor);
+        Handles.color = handleColor;
+
+        // Draw the position handle
+        Vector3 newPosition = Handles.PositionHandle(Vector3.zero, Quaternion.identity);
+
+        // Restore the original handle matrix and color
+        Handles.matrix = originalMatrix;
+        Handles.color = originalColor;
+
+        // Return the adjusted position
+        return position + newPosition;
+    }
+
 
     //===========================================================================================================
     //
@@ -1349,6 +1376,11 @@ public partial class AutoFenceEditor : Editor
         if (af != null && af.gameObject != null)
             Selection.activeGameObject = af.gameObject; // Sanity check: keep Auto Fence Builder object selected so we can see the inspector. TODO: Unlock this if we need to select other objects
 
+
+
+        //return;     // It's not for us!
+
+
         //-- Completely block use, if user has chosen to unload assets to optimize build Size
         if (userUnloadedAssets == true)
         {
@@ -1360,16 +1392,25 @@ public partial class AutoFenceEditor : Editor
 
         Color originalUnityBgColor = GUI.backgroundColor;
         af.mouseHoveringOverIgnoreLayer = false;
+
+        //===================================================================================
+        //                  Show Buttons, Controls, Gizmos, and  Info
+        //===================================================================================
         Handles.BeginGUI(); //Begin a 2D GUI block
+        EditorGUI.BeginChangeCheck();
+
+        //=====================================
+        //     Show Gizmo Controls & Markers
+        //=====================================
+        int helpBoxHeight, helpBoxWidth, x, y, boxYPos, boxTextYPos;
+        ShowGizmoControls(out helpBoxHeight, out helpBoxWidth, out x, out y);
 
         //===============================
         //  Left Buttons Column
         //===============================
         GUILayout.Space(Screen.height - 850);
         if (af.showDebugInfo == true)
-        {
             originalUnityBgColor = LeftButtonsColumn();
-        }
 
         //===============================
         //  Top Screen Buttons
@@ -1378,12 +1419,6 @@ public partial class AutoFenceEditor : Editor
         GUI.backgroundColor = new Color(.5f, .5f, .5f);
         GUI.backgroundColor = originalUnityBgColor;
 
-        //=====================================
-        //     Show Gizmo Controls & Markers
-        //=====================================
-        EditorGUI.BeginChangeCheck();
-        int helpBoxHeight, helpBoxWidth, x, y, boxYPos, boxTextYPos;
-        ShowGizmoControls(out helpBoxHeight, out helpBoxWidth, out x, out y);
 
         //===========================================
         //     Show Debug Info And Bottom Buttons 
@@ -1423,8 +1458,7 @@ public partial class AutoFenceEditor : Editor
         Handles.EndGUI();
 
         af.CheckFoldersBuilt();
-        if (currEvent.alt)
-            return;     // It's not for us!
+
         Vector3 clickPoint = Vector3.zero;
         int shiftRightClickAddGap = 0; // use 0 instead of a boolean so we can store int flags in clickPointFlags
 
@@ -1456,18 +1490,45 @@ public partial class AutoFenceEditor : Editor
         //          Mouse Hover 
         //=======================================================
         go = MouseHover(helpBoxHeight, rayPosition, out hoveredLayer, out isClickPoint);
-        bool isFenceLayer = hoveredLayer.IsFence();
+        bool overFenceLayer = hoveredLayer.IsFence();
         bool variationsEnabledForLayer = af.GetUseVariationsForLayer(hoveredLayer);
 
-        if (isFenceLayer && go == null)
+        if (overFenceLayer && go == null)
             af.mouseHoveringOverIgnoreLayer = true;
+
+        if (overFenceLayer && currEvent.alt)
+        {
+            //Debug.Log("Alt key pressed\n");
+            //currEvent.Use();
+        }
+        if (currEvent.alt == true && currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
+        {
+            Debug.Log("Double-clicked on Fence to Enable Scene Editing");
+            drawEditingGizmo = true;
+
+            //ToggleNodeGizmos();
+
+            // consume the event so that it doesn't get passed on to other methods
+            currEvent.Use();
+        }
+
+        if(overFenceLayer && go != null)
+        {
+            editingGizmoPos = go.transform.position;
+            editingGizmoPos.y = af.GetNodeMarkerPosition(0).y;
+        }
+
+        if (drawEditingGizmo)
+            DrawSmallerPositionHandle(editingGizmoPos);
 
         //============================================
         //          Double-click shortcuts
         //============================================
-        ShowHideControlsViaOptionDoubleClick(currEvent, hoveredLayer);
+        ShowHideControlsViaDoubleClick(currEvent, hoveredLayer);
         UnlockMouse(currEvent, hoveredLayer);
         GoToPrefabInFolderFromSceneView(currEvent, hoveredLayer);
+
+        //EnableSceneEditing(currEvent, hoveredLayer);
 
         //============================================
         //          Add Post/ClickPoint
@@ -1503,7 +1564,7 @@ public partial class AutoFenceEditor : Editor
         //=====================================
         //          Insert Post
         //=====================================
-        InsertPost(currEvent);
+        InsertPost(currEvent, isMouseInSceneView);
 
         //=====================================
         //          Switch Toolbar Component View
@@ -1931,10 +1992,13 @@ public partial class AutoFenceEditor : Editor
         EditorGUI.EndDisabledGroup();
         return originalUnityBgColor;
     }
-
+    /// <summary>
+    /// Alt-double-click on Fence Prefab to Show in Assets Folder
+    /// </summary>
+    /// <param name="layer"></param>
     private void GoToPrefabInFolderFromSceneView(Event currEvent, LayerSet layer)
     {
-        if (currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0 && currEvent.control == true)
+        /*if (currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0 && currEvent.alt == true)
         {
             if (layer < LayerSet.markerLayer)
             {
@@ -1942,24 +2006,53 @@ public partial class AutoFenceEditor : Editor
                 //Selection.activeObject = selectedObj;
                 return;
             }
-        }
+        }*/
     }
-    void ShowHideControlsViaOptionDoubleClick(Event currEvent, LayerSet layer)
+    /// <summary>
+    /// Double-Click on Prefab or Markers to Show/Hide Controls
+    /// </summary>
+    /// <param name="layer"></param>
+    void ShowHideControlsViaDoubleClick(Event currEvent, LayerSet layer)
     {
         if (currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
         {
             if (layer <= LayerSet.markerLayer)
             {
-                showControlsProp.boolValue = !showControlsProp.boolValue;
-                af.showControls = !af.showControls;
-                af.SetClickMarkersActiveStatus(showControlsProp.boolValue);
+                ToggleNodeGizmos();
                 af.ForceRebuildFromClickPoints();
                 return;
             }
+            //Also disable the editing gizmo
+            drawEditingGizmo = false;
         }
     }
+    /// <summary>
+    /// Enabbles/Disable the ability to Offset / Scale / Rotate Fence parts
+    /// </summary>
+    /// <param name="layer"></param>
+    void EnableSceneEditing(Event currEvent, LayerSet layer)
+    {
+        if (currEvent.alt == true && currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
+        {
+            Debug.Log("Double-clicked on Fence to Enable Scene Editing");
+            // consume the event so that it doesn't get passed on to other methods
+            currEvent.Use();
+
+
+        }
+    }
+    /// <summary>
+    /// Enabbles/Disable the Node Markers & Gizmos
+    /// </summary>
+    private void ToggleNodeGizmos()
+    {
+        showControlsProp.boolValue = !showControlsProp.boolValue;
+        af.showControls = !af.showControls;
+        af.SetClickMarkersActiveStatus(showControlsProp.boolValue);
+    }
+
     //-------------------------------------------------
-    /// <summary>  Return Mouse Control to Unity by Double-clicking away from fence  </summary>
+    /// <summary>  Return Mouse Control to Unity by Double-clicking Away from fence  </summary>
     private void UnlockMouse(Event currEvent, LayerSet layer)
     {
         //-- Return early if over fence, and cancel if already shown
@@ -2002,6 +2095,9 @@ public partial class AutoFenceEditor : Editor
                 Ray rayPos = HandleUtility.GUIPointToWorldRay(currEvent.mousePosition);
                 Physics.Raycast(rayPos, out rayHit, 2000.0f);
                 Selection.activeObject = Selection.activeGameObject = rayHit.collider.gameObject;
+                //-- If the Node Gizmos are shown, disable them
+                if (af.showControls == true)
+                    ToggleNodeGizmos();
             }
             Handles.EndGUI();
 
@@ -2439,8 +2535,11 @@ public partial class AutoFenceEditor : Editor
         }
     }
 
-    private void InsertPost(Event currentEvent)
+    private void InsertPost(Event currentEvent, bool isMouseInSceneView)
     {
+        if (isMouseInSceneView == false)
+            return;
+
         //=====================================
         //      Insert Post
         //=====================================

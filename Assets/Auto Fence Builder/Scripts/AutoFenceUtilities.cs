@@ -1176,7 +1176,7 @@ namespace AFWB
             }
             return formattedString;
         }
-        
+
 
 
         //---------------------------
@@ -1967,7 +1967,8 @@ namespace AFWB
         }
         public static bool IsFence(this LayerSet layerSet)
         {
-            if (layerSet <= LayerSet.subpostLayer)
+            //if (layerSet <= LayerSet.subpostLayer)
+            if (layerSet <= LayerSet.markerLayer)
                 return true;
             return false;
         }

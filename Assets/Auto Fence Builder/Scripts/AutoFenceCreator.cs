@@ -2933,7 +2933,7 @@ namespace AFWB
                 DestroyImmediate(guideFirstPostMarker);
                 guideFirstPostMarker = null;
             }
-            SetUpClickMarkers();
+            SetUpNodeMarkers();
             RotateAndModifyPostsFinal(); //rotate each post to correctly follow the fence direction, best to do at the end when all directions have been calc'd
                                          //Debug.Log("postVizMarkers.Count = " + db.postVizMarkers.Count);
             t.Lap("RotateAndModifyPostsFinal");
@@ -4565,7 +4565,7 @@ namespace AFWB
         }
 
         //=================================================================
-        private void SetUpClickMarkers()
+        private void SetUpNodeMarkers()
         {
             DestroyNodeMarkers();
             if (showControls)
@@ -4575,63 +4575,71 @@ namespace AFWB
 
             Vector3 markerScale = new Vector3(0.45f, 0.45f, 0.45f);
 
-            //-- Variation might need to know the size of the Mesh
-            GameObject go = GetCurrentPrefabForLayer(LayerSet.postLayer);
-            float postMeshHeight = MeshUtilitiesAFWB.GetCombinedSizeOfAllMeshesInGameObject(go).y;
+            
+            
 
-            Vector3 variantScaling = Vector3.one, variantOffset = Vector3.zero;
+            //Vector3 variantScaling = Vector3.one, variantOffset = Vector3.zero;
 
-            int numSeqSteps = GetNumSeqStepsForLayer(LayerSet.postLayer);
+            
 
 
             //SeqItem currSeqItem = new SeqItem();
             int numClickPoints = clickPoints.Count;
 
-            for (int i = 0; i < numClickPoints; i++)
+            for (int clickPointIndex = 0; clickPointIndex < numClickPoints; clickPointIndex++)
             {
-                int postIndex = PostVector.GetPostIndexFromClickpointIndex(i);
+                
 
-                GameObject marker = nodeMarkersPool[i].gameObject;
+                GameObject marker = nodeMarkersPool[clickPointIndex].gameObject;
                 marker.SetActive(true);
                 marker.hideFlags = HideFlags.HideInHierarchy;
-                Vector3 clickPointPos = clickPoints[i];
-                Vector3 markerPos = clickPoints[i];
-
-                //float h = (globalScale.y * postScale.y * mainPostsSizeBoost.y * variantScaling.y) + postHeightOffset + variantOffset.y + globalLift;
-                //if (h < 1) h = 1;
-                //float markerHeightBoost = 1.1f;
-                //markerPos.y += (h * markerHeightBoost);
-                //float postTop = markerPos.y;
-
-                //float groundY = postPos.y, padding = 0.35f, min = 0.5f;
-                float groundY = clickPointPos.y, padding = 0.35f, min = 0.5f;
-                (float highestPointRailA, float yOffsetRailA) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railALayer);
-                (float highestPointRailB, float yOffsetRailB) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railBLayer);
-                (float highestPointPost, float yOffsetPost) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.postLayer);
-
-                float maxRailTop = Mathf.Max(highestPointRailA + yOffsetRailA, highestPointRailB + yOffsetRailB);
-                float maxGoTop = Mathf.Max(maxRailTop, highestPointPost + yOffsetPost);
-                float topPos = maxGoTop + padding;
-                if (topPos < min)
-                    topPos = min;
-
-                float extraHeightOfVariant = 0;
-                if (usePostVariations)
-                {
-                    int seqStep = postIndex % numSeqSteps;
-                    SeqItem currSeqItem = GetSeqItemAtStepForLayer(seqStep, LayerSet.postLayer);
-                    variantScaling = currSeqItem.size;
-                    variantOffset = currSeqItem.pos;
-                    extraHeightOfVariant = (globalScale.y * postScale.y * mainPostsSizeBoost.y * (variantScaling.y - 1) * postMeshHeight) + variantOffset.y;
-                }
-
-                markerPos.y = groundY + topPos;
-                markerPos.y += extraHeightOfVariant;
+                
+                Vector3 markerPos = GetNodeMarkerPosition(clickPointIndex);
                 marker.transform.position = markerPos;
                 marker.transform.localScale = markerScale;
-                marker.name = "FenceManagerMarker_" + i.ToString();
+                marker.name = "FenceManagerMarker_" + clickPointIndex.ToString();
             }
         }
+
+        public Vector3 GetNodeMarkerPosition(int clickPointIndex)
+        {
+            //-- Variation might need to know the size of the Mesh
+            GameObject go = GetCurrentPrefabForLayer(LayerSet.postLayer); //TODO Cache these two
+            float postMeshHeight = MeshUtilitiesAFWB.GetCombinedSizeOfAllMeshesInGameObject(go).y;
+
+            int postIndex = PostVector.GetPostIndexFromClickpointIndex(clickPointIndex);
+            Vector3 variantScaling = Vector3.one, variantOffset = Vector3.zero;
+            Vector3 clickPointPos = clickPoints[clickPointIndex];
+            int numSeqSteps = GetNumSeqStepsForLayer(LayerSet.postLayer);
+
+            float groundY = clickPointPos.y, padding = 0.35f, min = 0.5f;
+            (float highestPointRailA, float yOffsetRailA) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railALayer);
+            (float highestPointRailB, float yOffsetRailB) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.railBLayer);
+            (float highestPointPost, float yOffsetPost) = MeshUtilitiesAFWB.CalculateHighestPointOfLayer(this, LayerSet.postLayer);
+
+            float maxRailTop = Mathf.Max(highestPointRailA + yOffsetRailA, highestPointRailB + yOffsetRailB);
+            float maxGoTop = Mathf.Max(maxRailTop, highestPointPost + yOffsetPost);
+            float topPos = maxGoTop + padding;
+            if (topPos < min)
+                topPos = min;
+
+            float extraHeightOfVariant = 0;
+            if (usePostVariations)
+            {
+                int seqStep = postIndex % numSeqSteps;
+                SeqItem currSeqItem = GetSeqItemAtStepForLayer(seqStep, LayerSet.postLayer);
+                variantScaling = currSeqItem.size;
+                variantOffset = currSeqItem.pos;
+                extraHeightOfVariant = (globalScale.y * postScale.y * mainPostsSizeBoost.y * (variantScaling.y - 1) * postMeshHeight) + variantOffset.y;
+            }
+
+            Vector3 markerPos = clickPointPos;
+            markerPos.y = groundY + topPos;
+            markerPos.y += extraHeightOfVariant;
+
+            return markerPos;
+        }
+
         //-------------------------------------------------
         //-- called from SetupPost
         private void SetupClickMarker(PostVector postVector)
