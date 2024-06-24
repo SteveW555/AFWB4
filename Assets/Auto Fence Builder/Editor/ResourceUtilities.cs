@@ -165,13 +165,13 @@ public class ResourceUtilities
 
         PrefabLoader prefabLoader = new PrefabLoader();
 
-        bool prefabLayerFolderFound = prefabLoader.LoadAllPrefabs(this, af.extraPrefabs, af.postPrefabs, af.subPrefabs,
+        bool prefabLayerFolderFound = prefabLoader.LoadAllPrefabLayers(this, af.extraPrefabs, af.postPrefabs, af.subPrefabs,
                 af.railPrefabs, af.subJoinerPrefabs, ref af.nodeMarkerObj);
 
         af.needsReloading = false;
         af.prefabsLoaded = true;
         userUnloadedAssets = false;
-        if (fencePrefabsFolderFound)
+        if (prefabLoadOK)
         {
             af.BackupPrefabMeshes(af.railPrefabs, af.origRailPrefabMeshes);
             af.BackupPrefabMeshes(af.postPrefabs, af.origPostPrefabMeshes);

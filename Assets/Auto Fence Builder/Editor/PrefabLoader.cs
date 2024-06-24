@@ -20,8 +20,8 @@ namespace AFWB
         }
 
         //-------------------------------------
-        public bool LoadAllPrefabs(AutoFenceEditor ed, List<GameObject> extraPrefabs, List<GameObject> postPrefabs,
-        List<GameObject> railPrefabs, List<GameObject> subJoinerPrefabs, ref GameObject nodeMarkerObj)
+        // Only called by ed.LoadPrefabs. Keep it that way!
+        public bool LoadAllPrefabLayers(AutoFenceEditor ed)
         {
             string prefabsFolderPath = GetPrefabsFolderPath(ed.af);
             if (prefabsFolderPath == "")
@@ -30,42 +30,38 @@ namespace AFWB
             if (userPrefabsFolderPath == "")
                 return false;
 
-            string[] prefabsPaths = AssetDatabase.FindAssets("AFWB_Prefabs");
-            string[] userPrefabsPaths = AssetDatabase.FindAssets("UserAssets_AFWB");
-            string sysPrefabsFolderPath = prefabsFolderPath + "/Protected_Do_Not_Remove/System Prefabs_AFWB/";
-
-            //-- Gets Post AFWB Prefabs and User Prefabs and combines them
-            //string[] postFilePaths = GetCombinedFilePaths(prefabsFolderPath + "/_Posts_AFWB/", userPrefabsFolderPath + "/UserPrefabs_Posts/");
-            //if (postFilePaths == null) return false;
-
-            //-- Rails
+            
+            //      Load System Objects 
+            //===================================
+            string systemDefaultPath = af.currAutoFenceBuilderDir + "/System_Do_Not_Remove";
+            string[] systemDefaultsFilePaths = Directory.GetFiles(systemDefaultPath, "*.*", SearchOption.AllDirectories);
+            LoadSystemObjects(systemDefaultPath);
+            CreateFallbackObjects();
+            
+            //    Load Post Prefabs
+            //=====================================
+            LoadAllPrefabsForLayer(af, LayerSet.postLayer);
+            
+            //    Load Rail Prefabs
+            //=====================================
             string[] railFilePaths = GetCombinedFilePaths(prefabsFolderPath + "/_Rails_AFWB/", userPrefabsFolderPath + "/UserPrefabs_Rails/");
             if (railFilePaths == null) return false;
-            //-- Extras
+            LoadAllPrefabsForLayer(af, LayerSet.railALayer);
+            
+            //    Load Extra Prefabs
+            //=====================================
             string[] extrasFilePaths = GetCombinedFilePaths(prefabsFolderPath + "/_Extras_AFWB/", userPrefabsFolderPath + "/UserPrefabs_Extras/");
             if (extrasFilePaths == null) return false;
-            //-- AF Internal
-            string[] sysFilePaths = GetCombinedFilePaths(prefabsFolderPath + "/Protected_Do_Not_Remove/", "");
-            if (sysFilePaths == null) return false;
+            LoadAllPrefabsForLayer(af, LayerSet.extraLayer);
 
-            LoadMarkerObjects(sysPrefabsFolderPath);
-            CreateFallbackObjects();
 
-            List<GameObject> prefabsForLayer = null;
-            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.postLayer);
             
-            
-            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.railALayer);
-            //prefabsForLayer.Sort((x, y) => string.Compare(x.name, y.name));
-            
-            prefabsForLayer = LoadAllPrefabsForLayer(af, LayerSet.extraLayer);
-            //prefabsForLayer.Sort((x, y) => string.Compare(x.name, y.name));
-
+            //-- Share and copy some of the blayers with each other
 
             //    Add Extras to Post Prefabs
             //=====================================
             AddExtraPrefabsToPosts();
-
+            
             //    Add Posts to Extra Prefabs
             //=====================================
             AddPostPrefabsToExtras();
@@ -74,85 +70,47 @@ namespace AFWB
             //=====================================
             AddRailPrefabsToExtras();
 
-            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
-            posts.Sort((x, y) => string.Compare(x.name, y.name));
-
+            af.postPrefabs.Sort((x, y) => string.Compare(x.name, y.name));
 
             // Load SubJoiners
-            foreach (string filePath in sysFilePaths)
+            foreach(string filePath in systemDefaultsFilePaths)
             {
                 if (filePath.EndsWith(".prefab"))
                 {
                     string fileName = Path.GetFileName(filePath);
                     GameObject go = AssetDatabase.LoadMainAssetAtPath(filePath) as GameObject;
                     if (go != null && fileName.Contains("_SubJoiner"))
-                        subJoinerPrefabs.Add(go);
+                        af.subJoinerPrefabs.Add(go);
                 }
             }
             return true;
-        }
-        //-------------------------------------
-        private void AddExtraPrefabsToPosts()
-        {
-            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
-            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
-            posts.AddRange(exs);
-        }
-        //-------------------------------------
-        private void AddPostPrefabsToExtras()
-        {
-            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
-            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
-
-            for (int i = 0; i < posts.Count; i++)
-            {
-                string prefabName = posts[i].name;
-                if(prefabName.Contains("_Extra") == false)
-                {
-                    exs.Add(posts[i]);
-                }
-            }
-        }
-        //-------------------------------------
-        private void AddRailPrefabsToExtras()
-        {
-            List<GameObject> rails = af.GetPrefabsForLayer(LayerSet.railALayer, warn: false);
-            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
-
-            for (int i = 0; i < rails.Count; i++)
-            {
-                string prefabName = rails[i].name;
-                //-- It shouldn't be _Extra as we didn't add extras to rails, but leave for future use
-                if (prefabName.Contains("_Extra") == false)
-                {
-                    exs.Add(rails[i]);
-                }
-            }
         }
 
         //-----------------------------------------------
         public static List<GameObject> LoadAllPrefabsForLayer(AutoFenceCreator af, LayerSet layer)
         {
-            string[] prefabsPaths = AssetDatabase.FindAssets("AFWB_Prefabs");
-            string[] userPrefabsPaths = AssetDatabase.FindAssets("UserAssets_AFWB");
+            //string[] prefabsPaths = AssetDatabase.FindAssets("AFWB_Prefabs");
+           // string[] userPrefabsPaths = AssetDatabase.FindAssets("UserAssets_AFWB");
 
-            string prefabsFolderPath = GetPrefabsFolderPath(af);
+           /* string prefabsFolderPath = GetPrefabsFolderPath(af);
             if (prefabsFolderPath == "")
                 return null;
             string userPrefabsFolderPath = GetUserPrefabsFolderPath(af);
             if (userPrefabsFolderPath == "")
-                return null;
+                return null;*/
 
-            string[] filePaths = null;
+            
+
+            /*string[] filePaths = null;
             try
             {
                 filePaths = Directory.GetFiles(prefabsFolderPath);
             }
             catch (System.Exception e)
             {
-                Debug.LogWarning("Missing FencePrefabs Folder. The FencePrefabs folder must be at Assets/Auto Fence Builder/FencePrefabs   " + e.ToString());
+                Debug.LogWarning("Missing FencePrefabs Folder. AFWB_Prefabs folder must be at Auto Fence Builder/AFWB_Prefabs   " + e.ToString());
                 return null;
-            }
+            }*/
 
             List<GameObject> prefabsForLayer = af.GetPrefabsForLayer(layer, warn: false);
             prefabsForLayer.Clear();
@@ -213,16 +171,22 @@ namespace AFWB
                         }
                     }
                     else if (go == null)
-                        Debug.LogWarning($"{layer.ToString()} was null in  LoadAllPrefabs()  " + layerFilePath + "\n");
+                        Debug.LogWarning($"{layer.ToString()} was null in  LoadAllPrefabLayers()  " + layerFilePath + "\n");
                     else if (LayerAndSuffixMatch(layer, go) == false)
                         Debug.LogWarning($"Prefab in {layer.ToString()} folder not named{layer.ToString()}:  " + go.name + "    " + layerFilePath + "\n");
                 }
             }
-			//Now load the system prefabs with the mandatory defaultprefab for each layer
-           	string systemDefaultPath = "SystemDefaultPrefabs";
-			string[] sustemDefaultsFilePaths = Directory.GetFiles(systemDefaultPath, "*.*", SearchOption.AllDirectories);
+			
 		 return prefabsForLayer;
         }
+        //--------------
+        void LoadAllPrefabsFromDirectory()
+        {
+
+
+
+        }
+        //---------
         //-- This is a parallel List to the prefabs Lists. Dont want the hassle of embedding in the prefabs Lists inside another wrapper
         public void AddPrefabDetails(GameObject prefab, string parentDir, LayerSet layer)
         {
@@ -236,6 +200,44 @@ namespace AFWB
                 af.extraPrefabDetails.Add(prefabDetails);
         }
         
+        //-------------------------------------
+        private void AddExtraPrefabsToPosts()
+        {
+            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
+            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
+            posts.AddRange(exs);
+        }
+        //-------------------------------------
+        private void AddPostPrefabsToExtras()
+        {
+            List<GameObject> posts = af.GetPrefabsForLayer(LayerSet.postLayer, warn: false);
+            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
+
+            for (int i = 0; i < posts.Count; i++)
+            {
+                string prefabName = posts[i].name;
+                if (prefabName.Contains("_Extra") == false)
+                {
+                    exs.Add(posts[i]);
+                }
+            }
+        }
+        //-------------------------------------
+        private void AddRailPrefabsToExtras()
+        {
+            List<GameObject> rails = af.GetPrefabsForLayer(LayerSet.railALayer, warn: false);
+            List<GameObject> exs = af.GetPrefabsForLayer(LayerSet.extraLayer, warn: false);
+
+            for (int i = 0; i < rails.Count; i++)
+            {
+                string prefabName = rails[i].name;
+                //-- It shouldn't be _Extra as we didn't add extras to rails, but leave for future use
+                if (prefabName.Contains("_Extra") == false)
+                {
+                    exs.Add(rails[i]);
+                }
+            }
+        }
         //------------------------------------
         public static bool GoHasRailSuffix(GameObject go)
         {
@@ -496,7 +498,7 @@ namespace AFWB
         {
             if (go == null)
             {
-                Debug.LogWarning($"{af.GetLayerNameAsString(layer)} was null in  LoadAllPrefabs() {filePath} \n");
+                Debug.LogWarning($"{af.GetLayerNameAsString(layer)} was null in  LoadAllPrefabLayers() {filePath} \n");
             }
             else if (go.name.EndsWith("_Rail") == false)
             {
@@ -542,9 +544,9 @@ namespace AFWB
         }
 
         //-------------------------------------
-        /*public bool LoadAllPrefabs(AutoFenceEditor ed, List<GameObject> extraPrefabs, List<GameObject> postPrefabs, List<GameObject> subPrefabs,
+        /*public bool LoadAllPrefabLayers(AutoFenceEditor ed, List<GameObject> extraPrefabs, List<GameObject> postPrefabs, List<GameObject> subPrefabs,
             List<GameObject> railPrefabs, List<GameObject> subJoinerPrefabs, ref GameObject nodeMarkerObj)
-        {//Debug.Log("LoadAllPrefabs\n");
+        {//Debug.Log("LoadAllPrefabLayers\n");
             string[] prefabsPaths = AssetDatabase.FindAssets("AFWB_Prefabs");
             string[] userPrefabsPaths = AssetDatabase.FindAssets("UserAssets_AFWB");
 
@@ -678,7 +680,7 @@ namespace AFWB
                     }
                     else if (go == null)
                     {
-                        Debug.LogWarning("Post was null in  LoadAllPrefabs()  " + filePath + "\n");
+                        Debug.LogWarning("Post was null in  LoadAllPrefabLayers()  " + filePath + "\n");
                     }
                     else if (go.name.EndsWith("_Rail") == false)
                     {
@@ -705,7 +707,7 @@ namespace AFWB
                     }
                     else if (go == null)
                     {
-                        Debug.LogWarning("Rail was null in  LoadAllPrefabs()  " + filePath + "\n");
+                        Debug.LogWarning("Rail was null in  LoadAllPrefabLayers()  " + filePath + "\n");
                     }
                     else if (go.name.EndsWith("_Rail") == false && go.name.EndsWith("_Rail") == false)
                     {
@@ -989,8 +991,12 @@ namespace AFWB
         }
 
         private Material blueMaterial;
-
-        private void LoadMarkerObjects(string sysPrefabsFolderPath)
+        /// <summary>
+        /// Load the mandatory prefabs for AFWB use
+        /// </summary>
+        /// <param name="sysPrefabsFolderPath"></param>
+        /// <remarks>Marker Post, Node Marker, Drag_Game_Obj, SubJoiner. Default: Post, Wall ExtraCube</remarks>
+        private void LoadSystemObjects(string sysPrefabsFolderPath)
         {
             //-- Marker Post
             af.markerPost = AssetDatabase.LoadMainAssetAtPath(sysPrefabsFolderPath + "/" + "Marker_Post.prefab") as GameObject;

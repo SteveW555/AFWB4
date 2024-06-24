@@ -276,7 +276,7 @@ public class PostEditor
 
     private void ResetAllPostParameters(bool controlKey)
     {
-        af.ResetPostTransforms(true);
+        af.ResetPostTransforms(false);
         af.endPostsSizeBoost = Vector3.one;
         af.mainPostsSizeBoost = Vector3.one;
         af.allowEndPostsPrefabOverride = false;
@@ -304,6 +304,9 @@ public class PostEditor
             af.SetMenuIndexFromPrefabIndexForLayer(prefabIndex, LayerSet.postLayer);
 
         }
+
+        af.ResetPoolForLayer(LayerSet.postLayer);
+        af.ForceRebuildFromClickPoints();
 
     }
 

@@ -11,12 +11,12 @@ using Debug = UnityEngine.Debug; // Alias UnityEngine.Debug to Debug
 
 public partial class PrefabAssignEditor
 {
-    private GameObject HandleUserImport(LayerSet layer, ref bool mainPrefabChanged, int layerIndex, out bool importAttempted, out MeshCollider userMeshCol)
+    private GameObject DragUserPrefab(LayerSet layer, ref bool mainPrefabChanged, int layerIndex)
     {
-        importAttempted = false;
-        if (ed.usePrefabProp == null)
+        //importAttempted = false;
+        if (ed.userPrefabProp == null)
         {
-            userMeshCol = null;
+            //userMeshCol = null;
             return null;
         }
 
@@ -26,10 +26,10 @@ public partial class PrefabAssignEditor
         EditorGUI.DrawRect(GUILayoutUtility.GetRect(1, 1, 1, 1), ed.uiLineGreyCol2);
 
         GUI.backgroundColor = new Color(0.8f, 0.88f, 1f);
-        GameObject userAddedPrefab = af.userPrefabPost;
-        userMeshCol = null;
-        if (layer != kPostLayer)
-            userAddedPrefab = af.userPrefabRail[kRailAIndex];
+        //GameObject userAddedPrefab = af.userPrefabPost;
+        //userMeshCol = null;
+        //if (layer != kPostLayer)
+        //userAddedPrefab = af.userPrefabRail[kRailAIndex];
 
         GUILayout.Space(2);
 
@@ -50,57 +50,32 @@ public partial class PrefabAssignEditor
         //===============================
         //          Drag Box
         //===============================
+        SerializedProperty propToDisplayInDragBox = ed.userPrefabProp;
+        if (IsUserPrefabInUse(layer) == false)
+            ed.userPrefabProp = ed.ResetUserPrefabPlaceholder();
 
-        //-- usePrefabProp links to the userPrefabPost, or userPrefabRail[2], or userPrefabExtra
-        //EditorGUILayout.PropertyField(ed.usePrefabProp, new GUIContent(""), GUILayout.Width(189));
         if (af)
-            EditorGUILayout.PropertyField(ed.usePrefabProp, new GUIContent(""), GUILayout.Width(189));
+            EditorGUILayout.PropertyField(ed.userPrefabProp, new GUIContent(""), GUILayout.Width(189));
 
         GameObject savedUserPrefab = null;
 
         if (EditorGUI.EndChangeCheck())
         {
             ed.serializedObject.ApplyModifiedProperties();
-            if (layer == kPostLayer)
-            {
-                savedUserPrefab = HandleImportedCustomPrefab((GameObject)ed.usePrefabProp.objectReferenceValue, kPostLayer);
-            }
-            else if (layer == kRailALayer || layer == kRailBLayer)
-            {
-                savedUserPrefab = HandleImportedCustomPrefab(userAddedPrefab, layer);
-                af.keepRailGrounded[(int)layer] = false;
-                af.slopeMode[(int)layer] = SlopeMode.shear;
-                af.GroundRails(layer);
-                // Centralize
-                if (MeshUtilitiesAFWB.GetMeshSize(af.userPrefabRail[layerIndex]).y < 0.25f)
-                    af.railAPositionOffset.y = 0.25f;
-            }
-            else if (layer == kExtraLayer)
-            {
-                //=============== User-Added Custom Extra ================
-                //userAddedPrefab = (GameObject)ed.userPrefabExtraProp.objectReferenceValue;
-                savedUserPrefab = HandleImportedCustomPrefab(userAddedPrefab, kExtraLayer);
-            }
-            mainPrefabChanged = true;
-            importAttempted = true;
-            if (savedUserPrefab != null)
-            {
-                //-- remove any transform scaling and set it to the Layer controls transdfor box instead
-                //af.SetPositionTransformForLayer(savedUserPrefab.transform.localPosition, sourceLayerList);
-                //af.SetRotationTransformForLayer(savedUserPrefab.transform.rotation.eulerAngles, sourceLayerList);
-                af.SetScaleTransformForLayer(savedUserPrefab.transform.localScale, layer);
-                savedUserPrefab.transform.localScale = Vector3.one;
-                //savedUserPrefab.transform.localPosition = Vector3.zero;
-                //savedUserPrefab.transform.localRotation = Quaternion.identity;
-                AutoRotateImportedMesh(savedUserPrefab, layer, af, true);
-            }
+            //-- userAddedPrefab has been updated from ApplyModifiedProperties()
+            GameObject userDraggedPrefab = (GameObject)ed.userPrefabProp.objectReferenceValue;
+            Debug.Log($"Drag Box: userDraggedPrefab: {userDraggedPrefab}\n");
+
+            //-- Encapsulate this to separate it from the UI code, so we can call it from other places
+            savedUserPrefab = AssignUserPrefab(layer, out mainPrefabChanged, userDraggedPrefab);
+            ed.ResetUserPrefabPlaceholder();
+
             return savedUserPrefab;
         }
 
         GUILayout.Space(10);
-        ShowImportScaleAndRotationButtons(layer);
+        ShowImportScaleAndRotationButtons(savedUserPrefab, layer);
 
-        
         GUILayout.Space(2);
         GUILayout.EndHorizontal();
 
@@ -109,24 +84,60 @@ public partial class PrefabAssignEditor
 
         return savedUserPrefab;
     }
+
+    public GameObject AssignUserPrefab(LayerSet layer, out bool mainPrefabChanged, GameObject userAddedPrefab)
+    {
+        GameObject savedUserPrefab = null;
+        if (layer == kPostLayer)
+        {
+            savedUserPrefab = SaveUserPrefab(userAddedPrefab, kPostLayer);
+        }
+        else if (layer == kRailALayer || layer == kRailBLayer)
+        {
+            savedUserPrefab = SaveUserPrefab(userAddedPrefab, layer);
+            af.keepRailGrounded[(int)layer] = false;
+            af.slopeMode[(int)layer] = SlopeMode.shear;
+            af.GroundRails(layer);
+            // Centralize
+            if (MeshUtilitiesAFWB.GetMeshSize(af.userPrefabRail[layer.Int()]).y < 0.25f)
+                af.railAPositionOffset.y = 0.25f;
+        }
+        else if (layer == kExtraLayer)
+        {
+            //=============== User-Added Custom Extra ================
+            //userAddedPrefab = (GameObject)ed.userPrefabExtraProp.objectReferenceValue;
+            savedUserPrefab = SaveUserPrefab(userAddedPrefab, kExtraLayer);
+        }
+        mainPrefabChanged = true;
+        //importAttempted = true;
+        if (savedUserPrefab != null)
+        {
+            //-- remove any transform scaling and set it to the Layer controls transdfor box instead
+            af.SetScaleTransformForLayer(savedUserPrefab.transform.localScale, layer);
+            savedUserPrefab.transform.localScale = Vector3.one;
+            AutoRotateImportedMesh(savedUserPrefab, layer, af, true);
+        }
+        return savedUserPrefab;
+    }
+    //-----------------
     /// <summary>
     /// Checks if a valid active user prefab is the same as the current prefab
     /// </summary>
     /// <returns>bool  true if active</returns>
     private bool UserPrefabIsValidAndActive(LayerSet layer)
     {
-       if ( af.GetMainPrefabForLayer(layer) == af.GetUserPrefabForLayer(layer))
+        if (af.GetMainPrefabForLayer(layer) == af.GetUserPrefabForLayer(layer))
         {
             //Debug.Log("User Prefab == current prefab\n");
             return true;
         }
         return false;
     }
-    private void ShowImportScaleAndRotationButtons(LayerSet layer)
+    private void ShowImportScaleAndRotationButtons(GameObject userPrefab, LayerSet layer)
     {
-        bool aciveUserPrefab = UserPrefabIsValidAndActive(layer);
+        bool activeUserPrefab = UserPrefabIsValidAndActive(layer);
 
-        EditorGUI.BeginDisabledGroup(aciveUserPrefab == false);
+        EditorGUI.BeginDisabledGroup(activeUserPrefab == false);
 
 
         EditorGUI.BeginChangeCheck();
@@ -147,8 +158,6 @@ public partial class PrefabAssignEditor
             scaleNames, GUILayout.Width(56));
 
 
-
-
         //    Rotate Label
         //=======================
         EditorGUILayout.LabelField(new GUIContent("Rotate:", $"Rotates the mesh to best suit the intended use\n\n" +
@@ -156,19 +165,27 @@ public partial class PrefabAssignEditor
             $"This is also necessary when models from Blender/Cinema4D/Max etc. have different orientation conventions.\n" +
             $"Some Asset Store models may need to be adjusted."), GUILayout.Width(41));
 
+        GameObject userPrefabForLayer = af.GetUserPrefabForLayer(layer);
+
         //    Rotate Buttons
         //=======================
         if (GUILayout.Button(new GUIContent($"X", "Rotate on X-axis in 90 increments"), GUILayout.Width(26)))
-            MeshUtilitiesAFWB.RotateMesh(ed.af.userPrefabPost, new Vector3(90, 0, 0), recalcBounds: true, recalcNormals: true);
+            MeshUtilitiesAFWB.RotateMesh(userPrefabForLayer, new Vector3(90, 0, 0), recalcBounds: true, recalcNormals: true);
         if (GUILayout.Button(new GUIContent($"Y", "Rotate on Y-axis in 90 increments"), GUILayout.Width(26)))
-            MeshUtilitiesAFWB.RotateMesh(ed.af.userPrefabPost, new Vector3(0, 90, 0), recalcBounds: true, recalcNormals: true);
+            MeshUtilitiesAFWB.RotateMesh(userPrefabForLayer, new Vector3(0, 90, 0), recalcBounds: true, recalcNormals: true);
         if (GUILayout.Button(new GUIContent($"Z", "Rotate on Z-axis in 90 increments"), GUILayout.Width(26)))
-            MeshUtilitiesAFWB.RotateMesh(ed.af.userPrefabPost, new Vector3(0, 0, 90), recalcBounds: true, recalcNormals: true);
+            MeshUtilitiesAFWB.RotateMesh(userPrefabForLayer, new Vector3(0, 0, 90), recalcBounds: true, recalcNormals: true);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            //-- Posts and some Extras will automatically update as their meshes have been altered
+            //-- Rails will need to be updated manually, as the one we see are copies of the original. For consistencey, do them all
+            af.ResetPoolForLayer(layer);
+            af.ForceRebuildFromClickPoints();
+        }
 
         EditorGUI.EndDisabledGroup();
     }
-
-    
 
     //-----------------------------
     /// <summary>
@@ -300,89 +317,33 @@ public partial class PrefabAssignEditor
         return effectiveSize;
     }
     //---------------------------------------
-    public GameObject HandleImportedCustomPrefab(GameObject userOrigPrefab, LayerSet layer)
+    public GameObject SaveUserPrefab(GameObject userOrigPrefab, LayerSet layer)
+    {
+        if (IsValidPrefab(userOrigPrefab) == false)
+            return null;
+        //FBXExportAFWB.SaveUserObjectAsFBX(userOrigPrefab, PrefabTypeAFWB.postPrefab, af);
+        GameObject savedPrefab = PrefabMeshExporterAF.ExportMeshAndPrefab(userOrigPrefab, layer.ToPrefabType(), af);
+        AssetDatabase.Refresh();
+        return savedPrefab;
+    }
+
+    private static bool IsValidPrefab(GameObject userOrigPrefab)
     {
         if (userOrigPrefab == null)
-            return null;
+        {
+            Debug.LogWarning("userOrigPrefab is null\n");
+            return false;
+        }
 
-        //get the renderer
         Renderer rend = userOrigPrefab.GetComponent<Renderer>();
         if (rend == null)
         {
             Debug.LogWarning($"{userOrigPrefab.name} is not a valid prefab \n");
-            return null;
+            return false;
         }
-
-        string path = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/User_Meshes/" + "dfgdfg";
-        //ModelExporter.ExportObject(path, userOrigPrefab);
-        AssetDatabase.Refresh();
-        //ModelExporter.ExportObject(path, userOrigPrefab);
-        //FBXExportAFWB.SaveUserObjectAsFBX(userOrigPrefab, PrefabTypeAFWB.postPrefab, af);
-
-        GameObject savedPrefab = PrefabMeshExporterAF.ExportMesh(userOrigPrefab, layer.ToPrefabType(), af);
-
-        if (savedPrefab != null)
-        {
-            AssetDatabase.Refresh();
-        }
-
-        return savedPrefab;
-
-        GameObject savedCleanedUserCopy = null;
-        int layerIndex = (int)layer;
-        GameObject cleanedUserCopy = MeshUtilitiesAFWB.CreateClonedGameObjectWithDuplicateMeshes(userOrigPrefab); // adjusted clone
-        cleanedUserCopy.name = "[Prep]" + userOrigPrefab.name;
-
-        PrefabTypeAFWB prefabType = af.GetPrefabTypeFromLayer(layer);
-
-        // Save copy of adjusted go
-        savedCleanedUserCopy = SaveUserGameObjectInUserAssetsFolder(cleanedUserCopy, prefabType, af);
-
-        ed.ReloadPrefabsAndPresets(rebuild: false);
-        if (savedCleanedUserCopy != null)
-        {
-            af.RebuildPoolWithNewUserPrefab(savedCleanedUserCopy, layer);
-            AssignPrefabAsCustomObject(savedCleanedUserCopy, layer);
-
-            UnityEngine.Object.DestroyImmediate(cleanedUserCopy, true);
-        }
-        else
-            Debug.LogWarning("savedUserRailPrefab was null");
-
-        if (af.autoRotateImports)
-            UserCustomPrefab.InitialSetup(savedCleanedUserCopy, af, layer);
-
-        // Also save a copy of the pure userOrigRail with unique duplicated mesh in case it's needed at any point after rotating the mesh
-        (GameObject pureClone, string pureClonePath) = SaveGameObjectDuplicate(userOrigPrefab, prefabType, af, "[Pure]");
-
-        if (layer == LayerSet.postLayer)
-        {
-            af.userPrefabPost = savedCleanedUserCopy;
-            af.userBackupPathPost = pureClonePath;
-        }
-        if (layer == LayerSet.railALayer || layer == LayerSet.railALayer)
-        {
-            af.userPrefabRail[layerIndex] = savedCleanedUserCopy;
-            af.userBackupPathRail[layerIndex] = pureClonePath;
-        }
-        /*if (sourceLayerList == LayerSet.railALayer)
-        {
-            af.userPrefabRail[kRailALayerInt] = savedCleanedUserCopy;
-            af.userBackupPathRailA = pureClonePath;
-        }
-        if (sourceLayerList == LayerSet.railBLayer)
-        {
-            af.userPrefabRail[kRailBLayerInt] = savedCleanedUserCopy;
-            af.userBackupPathRailB = pureClonePath;
-        }*/
-        if (layer == LayerSet.extraLayer)
-        {
-            af.userPrefabExtra = savedCleanedUserCopy;
-            af.userBackupPathExtra = pureClonePath;
-        }
-
-        return savedCleanedUserCopy;
+        return true;
     }
+
     //---------------------------
     /// <summary>Loads and returns a prefab from the specified asset path.</summary>
     public GameObject ReloadUserPrefab(string assetPath)

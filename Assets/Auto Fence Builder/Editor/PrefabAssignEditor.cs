@@ -170,7 +170,7 @@ public partial class PrefabAssignEditor
         {
             currMenuIndex = af.currentPost_PrefabMenuIndex;
             numMenuNames = af.postMenuNames.Count;
-            ed.usePrefabProp = ed.userPrefabPostProp;
+            ed.userPrefabProp = ed.userPrefabPostProp;
             ed.importScaleModeProp = ed.postImportScaleModeProp;
         }
         else if (layer == kRailALayer || layer == kRailBLayer)
@@ -178,7 +178,7 @@ public partial class PrefabAssignEditor
             currMenuIndex = af.currentRail_PrefabMenuIndex[layerIndex];
             numMenuNames = af.railMenuNames.Count;
             int prefabIndex = af.currentRail_PrefabIndex[layerIndex];
-            ed.usePrefabProp = ed.userPrefabRailProp[layerIndex];
+            ed.userPrefabProp = ed.userPrefabRailProp[layerIndex];
             ed.importScaleModeProp = ed.railAImportScaleModeProp;
             if (layer == kRailBLayer)
                 ed.importScaleModeProp = ed.railBImportScaleModeProp;
@@ -192,16 +192,8 @@ public partial class PrefabAssignEditor
         {
             currMenuIndex = af.currentExtra_PrefabMenuIndex;
             numMenuNames = af.extraMenuNames.Count;
-            ed.usePrefabProp = ed.userPrefabExtraProp;
+            ed.userPrefabProp = ed.userPrefabExtraProp;
             ed.importScaleModeProp = ed.extraImportScaleModeProp;
-        }
-        //    Current prefab is no longer the user prefab, use the placeholder and disable the import controls
-        //========================================================================================================
-        if (af.GetMainPrefabForLayer(layer) != af.GetUserPrefabForLayer(layer))
-        {
-            //Debug.Log("User Prefab != current prefab\n");
-            af.userPrefabPost = af.userPrefabPlaceholder;
-
         }
 
         //========================================================================
@@ -319,54 +311,29 @@ public partial class PrefabAssignEditor
             af.SetMainPrefabMenuIndexForLayer(layer, menuIndexForName);
         }
         MeshCollider userMeshCol = null;
-        bool importAttempted = false;
+        //bool importAttempted = false;
 
         //===============================================================
-        //                      User Custom Prefab
+        //                 Drag Box - User Prefab
         //===============================================================
 
-        //-- savedUserPrefab is the one saved in the prefabs folder and which will be loaded into the prefab lists from LoadPrefabs() below 
-        GameObject savedUserPrefab = HandleUserImport(layer, ref mainPrefabChanged, layerIndex, out importAttempted, out userMeshCol);
-        ShowImportMessage(layer, savedUserPrefab);
-        bool addedUserPrefab = false;
-        int indexOfNewPrefab = -1;
+        //-- savedUserPrefab is the one saved in the prefabs folder and which will be loaded into the prefab lists from LoadPrefabs()
+        //-- It will be null, except for the frame in which the user has dragged a prefab into the Drag Box
+        GameObject savedUserPrefab = DragUserPrefab(layer, ref mainPrefabChanged, layerIndex);
         
+        //ShowImportMessage(layer, savedUserPrefab);
+        bool userPrefabAdded = false;
+        int indexOfNewPrefab = -1;
+
         //     Do necessary setup for a succesfully added User Prefab
         //===============================================================
         if (savedUserPrefab != null)
         {
-            ed.LoadPrefabs();
-            addedUserPrefab = true;
-            
-            //-- Get the index of the newly added prefab in the prefab list
-            int prefabIndex = af.FindPrefabIndexByNameForLayer(layer.ToPrefabType(), savedUserPrefab.name, "Looking for just-saved User Prefab inPrefabAssignEdotor ChooseMainPrefab()", 
-                warnMissing: true, replaceMissingWithDefault: false);
-            Debug.Log("prefabIndex: " + prefabIndex + "\n");
-            af.RebuildPoolWithNewUserPrefab(savedUserPrefab, layer);
-
-            //-- Get the index of the new prefab in the reloaded List
-            indexOfNewPrefab = af.FindPrefabForLayer(savedUserPrefab, layer);
-            
-            //-- Set this as the current index 
-            af.SetCurrentPrefabIndexForLayer(indexOfNewPrefab, layer);
-
-            //-- Update the menu index from this
-            af.SetMenuIndexFromPrefabIndexForLayer(indexOfNewPrefab, layer);
-
-            //-- Update the properties
-            if (layer == kPostLayer)
-            {
-                af.userPrefabPost = savedUserPrefab;
-                ed.userPrefabPostProp = ed.serializedObject.FindProperty("userPrefabPost");
-            }
-        }
-        if (af.GetMainPrefabForLayer(layer) != af.GetUserPrefabForLayer(layer))
-        {
-            //Debug.Log("User Prefab != current prefab\n");
-            af.userPrefabPost = af.userPrefabPlaceholder;
-
+            indexOfNewPrefab = IntegrateUserPrefab(ed, layer, savedUserPrefab);
+            userPrefabAdded = true;
         }
 
+        
 
         if (layer == kPostLayer)
             EditorGUI.DrawRect(GUILayoutUtility.GetRect(1, 1, 1, 1), ed.uiLineGreyCol2);
@@ -380,39 +347,35 @@ public partial class PrefabAssignEditor
         //--------------------------
         if (mainPrefabChanged)
         {
-            
-            if (addedUserPrefab == true)
-            {
-                //-- As the prefabs were reloaded after saving, the new one should now be in the prefab Lists
-                //indexOfNewPrefab = af.FindPrefabForLayer(savedUserPrefab, sourceLayerList);
 
-                //-- Usually we choose a prefabfrom the menu, then have to sync the prebIndex with it.
-                //-- But as we added a known custom prefab directly, we have to do the reverse and sync the menu index with the prefab index
-                //af.SetCurrentPrefabIndexForLayer(indexOfNewPrefab, sourceLayerList);
-                //af.SetMenuIndexFromPrefabIndexForLayer(indexOfNewPrefab, sourceLayerList);
-                //ed.postprop
-            }
-            if (layer == kPostLayer)
+            if (userPrefabAdded == true)
             {
-                int prefabIndex = af.currentPost_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentPost_PrefabMenuIndex, PrefabTypeAFWB.postPrefab);
-                af.SetPostPrefab(prefabIndex, false);
-                af.SetSourceVariantGoAtIndexForLayer(0, prefabIndex, layer);
+                //-- All the links have been done in IntegrateUserPrefab()
             }
-            else if (layer == kRailALayer || layer == kRailBLayer)
+            else
             {
-                int prefabIndex = af.currentRail_PrefabIndex[layerIndex] = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentRail_PrefabMenuIndex[layerIndex], PrefabTypeAFWB.railPrefab);
-                af.SetRailPrefab(prefabIndex, layer, false);
-                af.SetSourceVariantGoAtIndexForLayer(0, prefabIndex, layer);
-            }
-            else if (layer == kSubpostLayer)
-            {
-                af.currentSubpost_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentSubpost_PrefabMenuIndex, PrefabTypeAFWB.postPrefab);
-                af.SetSubpostPrefab(af.currentSubpost_PrefabIndex, false);
-            }
-            else if (layer == kExtraLayer)
-            {
-                af.currentExtra_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentExtra_PrefabMenuIndex, PrefabTypeAFWB.extraPrefab);
-                af.SetExtraPrefab(af.currentExtra_PrefabIndex, false);
+                if (layer == kPostLayer)
+                {
+                    int prefabIndex = af.currentPost_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentPost_PrefabMenuIndex, PrefabTypeAFWB.postPrefab);
+                    af.SetPostPrefab(prefabIndex, false);
+                    af.SetSourceVariantGoAtIndexForLayer(0, prefabIndex, layer);
+                }
+                else if (layer == kRailALayer || layer == kRailBLayer)
+                {
+                    int prefabIndex = af.currentRail_PrefabIndex[layerIndex] = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentRail_PrefabMenuIndex[layerIndex], PrefabTypeAFWB.railPrefab);
+                    af.SetRailPrefab(prefabIndex, layer, false);
+                    af.SetSourceVariantGoAtIndexForLayer(0, prefabIndex, layer);
+                }
+                else if (layer == kSubpostLayer)
+                {
+                    af.currentSubpost_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentSubpost_PrefabMenuIndex, PrefabTypeAFWB.postPrefab);
+                    af.SetSubpostPrefab(af.currentSubpost_PrefabIndex, false);
+                }
+                else if (layer == kExtraLayer)
+                {
+                    af.currentExtra_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentExtra_PrefabMenuIndex, PrefabTypeAFWB.extraPrefab);
+                    af.SetExtraPrefab(af.currentExtra_PrefabIndex, false);
+                }
             }
 
             af.ResetPoolForLayer(layer);
@@ -423,11 +386,65 @@ public partial class PrefabAssignEditor
         else
             GUILayout.Space(3);
 
-        
 
         return userMeshCol;
     }
 
+    private bool IsUserPrefabInUse(LayerSet layer)
+    {
+        GameObject userprefab = af.GetUserPrefabForLayer(layer);
+        GameObject currPrefab = af.GetMainPrefabForLayer(layer);
+        
+        if (userprefab == currPrefab)
+            return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// Assigns Prefab & Menu indexes
+    /// <para>Set to current</para>
+    /// <para>Rebuild Pool</para>
+    /// <para>Update the SerializedProperties for the Drag Boxes</para>
+    /// </summary>
+    /// <param name="savedUserPrefab">The new prefab assigned in the Drag Box, or via Context Menu in Scene View</param>
+    /// <returns>The index of the newly integrated prefab in the prefabList for that Layer</returns>
+    public static int IntegrateUserPrefab(AutoFenceEditor ed, LayerSet layer, GameObject savedUserPrefab)
+    {
+        ed.LoadPrefabs();
+
+        //-- Get the index of the newly added prefab in the prefab list
+        int indexOfNewUserPrefab = ed.af.FindPrefabIndexByNameForLayer(layer.ToPrefabType(), savedUserPrefab.name, "Looking for just-saved User Prefab inPrefabAssignEdotor ChooseMainPrefab()",
+            warnMissing: true, replaceMissingWithDefault: false);
+        Debug.Log("indexOfNewUserPrefab: " + indexOfNewUserPrefab + "\n");
+
+
+        //-- Set the current prefab index and the corresponding menu index
+        ed.af.SetCurrentPrefabIndexForLayer(indexOfNewUserPrefab, layer);
+        ed.af.SetMenuIndexFromPrefabIndexForLayer(indexOfNewUserPrefab, layer);
+        //-- Keep a record of the different User Prefabs in case we need to return to them
+        ed.af.StoreUserPrefabForLayer(savedUserPrefab, layer);
+
+        ed.af.RebuildPoolWithNewUserPrefab(indexOfNewUserPrefab, layer);
+
+        //-- Update the properties
+        UpdateUserPrefabProperties(ed, layer);
+
+        return indexOfNewUserPrefab;
+    }
+    //--------------------------
+    private static void UpdateUserPrefabProperties(AutoFenceEditor ed, LayerSet layer)
+    {
+        if (layer == LayerSet.postLayer)
+            ed.userPrefabPostProp = ed.serializedObject.FindProperty("userPrefabPost");
+        if (layer == LayerSet.railALayer)
+            ed.userPrefabRailProp[0] = ed.serializedObject.FindProperty("userPrefabRail").GetArrayElementAtIndex(0);
+        if (layer == LayerSet.railBLayer)
+            ed.userPrefabRailProp[1] = ed.serializedObject.FindProperty("userPrefabRail").GetArrayElementAtIndex(1);
+        if (layer == LayerSet.railALayer)
+            ed.userPrefabExtraProp = ed.serializedObject.FindProperty("userPrefabExtra");
+    }
+    //--------------------------
     private void ShowImportMessage(LayerSet layer, GameObject newUserObject)
     {
         if (newUserObject != null)

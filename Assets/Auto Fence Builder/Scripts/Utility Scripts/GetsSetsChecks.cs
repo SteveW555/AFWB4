@@ -481,7 +481,7 @@ namespace AFWB
             else if (index < 0 || index >= prefabs.Count)
             {
                 Debug.LogWarning($"GetPrefabAtIndexForLayer()  {layerString} index {index} out of range. " +
-                                       $"True prefab count is {prefabs.Count}\n");
+                                       $"True prefab count is {prefabs.Count}  Try choosing another {layer.String()} prefab\n");
                 return null;
             }
             GameObject prefab = prefabs[index].gameObject;

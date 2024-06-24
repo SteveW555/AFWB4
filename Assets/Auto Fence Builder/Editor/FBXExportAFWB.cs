@@ -18,7 +18,7 @@ public class FBXExportAFWB
         ed = autoFenceEditor;
     }
 
-    /*public static void ExportMesh(Mesh mesh, string exportPath)
+    /*public static void ExportMeshAndPrefab(Mesh mesh, string exportPath)
     {
 #if UNITY_EDITOR
         if (FBXExporterChecker.IsFBXExporterAvailable())

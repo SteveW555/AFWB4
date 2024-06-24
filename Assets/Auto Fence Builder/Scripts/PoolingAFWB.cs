@@ -49,7 +49,7 @@ namespace AFWB
         public void ResetPoolForLayer(LayerSet layer)
         {
             DestroyPoolForLayer(layer);
-            CreatePoolForLayer(layer);
+            int numCreated = CreatePoolForLayer(layer);
 
             if (layer == LayerSet.postLayer)
             {

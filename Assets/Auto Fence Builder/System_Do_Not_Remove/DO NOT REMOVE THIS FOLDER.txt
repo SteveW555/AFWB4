@@ -1,0 +1,7 @@
+The contents of this folder are required by AFWB to be able to run the application. 
+The Contents of the following folders can simply be removed to create a minimal version of AFWB:
+
+_Extras_AFWB, _Posts_AFWB, _Rails_AFWB
+AFWB_Meshes, AFWB_Textures, AFWB_Presets.
+
+(A default Unity Cube with Default Material will be used instead, if they are accessed)

@@ -197,6 +197,7 @@ public class RandomizationEditor
             ed.serializedObject.ApplyModifiedProperties();
             ed.serializedObject.Update();//TODO Find out why this is needed for MinMaxSlider to work, related to need for ref
             af.postAndGlobalSeeds.GenerateRandomHeightValues();
+            reseedHeight = true;
             rebuildAll = true;
         }
         GUILayout.Space(3);

@@ -24,10 +24,17 @@ public class EditorContextInfo
     public int seqStepNum;
     public bool useRandomization, useVariations, useSingles;
     internal int variantIndex;
+    public bool control = false, shift = false; // was the control or shift key pressed when the context menu was invoked
 
 
     private EditorContextInfo()
     {
+    }
+    public EditorContextInfo(GameObject go, LayerSet layer)
+    {
+        prefab = go;
+        transform = go.transform;
+        this.layer = layer;
     }
 
     /// <summary>Initializes a new instance of the <see cref="EditorContextInfo"/> class.</summary>
@@ -39,8 +46,6 @@ public class EditorContextInfo
         variantIndex = 0;
         resetSection = false;
     }
-
-
 }
 //-----------------------------------------------------
 namespace AFWB
@@ -57,22 +62,58 @@ namespace AFWB
             ed = autoFenceEditor;
         }
 
-        public void UseAsPost(object obj)
+        public void UseAsLayer(object obj)
         {
             EditorContextInfo info = (EditorContextInfo)obj;
             GameObject prefab = info.prefab;
+            LayerSet layer = info.layer;
             if (prefab == null)
             {
-                Debug.LogWarning("Prefab is null in UseAsPost()\n");
+                Debug.LogWarning($"Prefab is null in UseAsLayer()\n");
                 return;
             }
             else
-                Debug.LogWarning($"Added Prefab as Post: {prefab.name}\n");
-            LayerSet layer = info.layer;
+                Debug.LogWarning($"Added Prefab: {prefab.name}  as  {layer.String()}: \n");
 
-            ed.prefabAssignEd.HandleImportedCustomPrefab(prefab, LayerSet.postLayer);
+
+            //-- By default (control not pressed), use the localScale of the incoming prefab
+            //if(info.control == false)
+            //af.SetScaleTransformForLayer(prefab.transform.localScale, layer);
+
+
+            bool mainPrefabChanged = false, importAttempted = true;
+            int layerIndex = 0;
+            GameObject savedPrefab = ed.prefabAssignEd.AssignUserPrefab(layer, out mainPrefabChanged, prefab);
+            int indexOfNewPrefab = PrefabAssignEditor.IntegrateUserPrefab(ed, layer, savedPrefab);
+
+
+
+
+            /*if (layer == LayerSet.postLayer)
+            {
+                int prefabIndex = af.currentPost_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentPost_PrefabMenuIndex, PrefabTypeAFWB.postPrefab);
+                af.SetPostPrefab(prefabIndex, false);
+                af.SetSourceVariantGoAtIndexForLayer(0, prefabIndex, layer);
+            }
+            else if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
+            {
+                int prefabIndex = af.currentRail_PrefabIndex[layerIndex] = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentRail_PrefabMenuIndex[layerIndex], PrefabTypeAFWB.railPrefab);
+                af.SetRailPrefab(prefabIndex, layer, false);
+                af.SetSourceVariantGoAtIndexForLayer(0, prefabIndex, layer);
+            }
+            else if (layer == LayerSet.subpostLayer)
+            {
+                af.currentSubpost_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentSubpost_PrefabMenuIndex, PrefabTypeAFWB.postPrefab);
+                af.SetSubpostPrefab(af.currentSubpost_PrefabIndex, false);
+            }
+            else if (layer == LayerSet.extraLayer)
+            {
+                af.currentExtra_PrefabIndex = af.ConvertMenuIndexToPrefabIndexForLayer(af.currentExtra_PrefabMenuIndex, PrefabTypeAFWB.extraPrefab);
+                af.SetExtraPrefab(af.currentExtra_PrefabIndex, false);
+            }*/
+
+            af.ResetPoolForLayer(layer);
             af.ForceRebuildFromClickPoints();
-
         }
 
         public void ConvertToClickPoint(object obj)

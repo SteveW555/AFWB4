@@ -23,7 +23,7 @@ public partial class AutoFenceEditor : Editor
     LayerSet kAllLayer = LayerSet.allLayer;
     public AutoFenceCreator af; // the main AutoFence script
     public SerializedProperty[] userPrefabRailProp = { null, null };
-    public SerializedProperty userPrefabPostProp, userPrefabExtraProp, usePrefabProp;
+    public SerializedProperty userPrefabPostProp, userPrefabExtraProp, userPrefabProp, userPrefabPlaceholderProp;
     public SerializedProperty railACustomColliderMeshProp, railBCustomColliderMeshProp, postCustomColliderMeshProp, showOptionalPostPrefabsProp;
     public SerializedProperty extraCustomColliderMeshProp, subpostCustomColliderMeshProp;
     public SerializedProperty postImportScaleModeProp, railAImportScaleModeProp, railBImportScaleModeProp, extraImportScaleModeProp, importScaleModeProp;
@@ -72,7 +72,7 @@ public partial class AutoFenceEditor : Editor
     public SerializedProperty subpostDuplicateModeProp;
 
     private bool oldCloseLoop = false;
-    protected bool fencePrefabsFolderFound = true, userUnloadedAssets = false;
+    protected bool prefabLoadOK = true, userUnloadedAssets = false;
     public string presetName = "Fence Preset_001";
     public string scriptablePresetName = "scriptablePresetName";
     public bool undone = false;
@@ -249,12 +249,13 @@ public partial class AutoFenceEditor : Editor
     private float minPostToPostDistance;
     private string meshName;
     private bool drawEditingGizmo = false;
-    private Vector3  editingGizmoPos = Vector3.zero;
+    private Vector3 editingGizmoPos = Vector3.zero;
+    private bool isLeftButtonOn = true, isRightButtonOn = false;
+    private bool showSwitches = false;
+    private Vector2 switchPosition;
+    private bool isUseGameObjectMenuVisible = false;
 
     //private static GizmoDrawManager instance;
-
-
-
 
     //====================================================
     //Useful to be able to re-check or call while debugging
@@ -266,7 +267,6 @@ public partial class AutoFenceEditor : Editor
         af.afwbActive = true;
 
     }
-
 
     //--------------------------
     void Awake()
@@ -316,17 +316,23 @@ public partial class AutoFenceEditor : Editor
         // This shouldn't be necessary if the List<SourceVariant> is serializable, but for some reason
         // after a re-compile, it can forget. It seems others who have used an array of a List of custom classes containing
         // GameObjects have seen this. Anyway for .001ms it takes, here we are
+
+        //EditorApplication.update += CheckContextMenuVisibility;
+        //EditorApplication.update += DrawSwitches;
+        
     }
     private void OnDisable()
     {
-        EditorApplication.update -= OnCustomUpdate;
+        //EditorApplication.update -= OnCustomUpdate;
         af.afwbActive = false;
+        //EditorApplication.update -= CheckContextMenuVisibility;
+        //EditorApplication.update -= DrawSwitches;
     }
     //-------------------------------------------
     //Called by OnEnable()
     void SetupEditor()
     {
-        if (userUnloadedAssets == true || fencePrefabsFolderFound == false) // AFWB will not function until the user reloads it.
+        if (userUnloadedAssets == true || prefabLoadOK == false) // AFWB will not function until the user reloads it.
         {
             Debug.Log("Auto Fence Builder:  Unloading Assets. Please reload Auto Fence Builder in the Hierarchy");
             return;
@@ -336,11 +342,8 @@ public partial class AutoFenceEditor : Editor
 
         //Debug.Log(af.currPresetIndex);
 
-        // make sure the Current Fences folder and component folders exist
-        af.CheckFoldersBuilt();
-
-        //-- Check, and keep a record of their location paths, which can be changed if the user has moved the Master AFWB folder
-        CheckFolderLocations(false);
+        //-- Ensure Folders exist, and their locations are stored and correct
+        ManageFolders();
 
         //-- Important to deal with folders before this as it needs them to load Textures
 
@@ -351,11 +354,9 @@ public partial class AutoFenceEditor : Editor
         SetupLinkedEditorClasses();
 
         //-- At this point we don't care about  Preset/Variations choices, just that Prefabs and SourceVariants are all valid and non-null
-        bool prefabsChanged = CheckPrefabsAndOptionReload(reload: true, warn: false);
-        //List<GameObject> prefabs = af.postPrefabs;
+        bool prefabsChanged = CheckPrefabsAndOptionallyReload(reload: true, warn: false);
 
         bool presetsChanged = CheckPresetsAndOptionReload(reload: true, warn: false);
-        //Debug.Log($"Curr Preset Index = {af.currPresetIndex}\n");
 
         bool layerPrefabsChanged = CheckAllLayerPrefabsExist();
         bool sourceVariantsChanged = CheckSourceVariantsExist();
@@ -376,7 +377,7 @@ public partial class AutoFenceEditor : Editor
         tooltipImage = EditorGUIUtility.Load("Assets/Auto Fence Builder/Editor/Images/KeepRowLevelOn.jpg") as Texture2D;
 
 
-        if (af.initialReset == false && fencePrefabsFolderFound == true)
+        if (af.initialReset == false && prefabLoadOK == true)
             af.ResetAutoFence(resetFenceParameters: false);
 
         af.ValidateAndUpdatePools();
@@ -392,10 +393,25 @@ public partial class AutoFenceEditor : Editor
         af.ValidateAllSeeds();
         CheckForNewPrefabs();
 
-        af.userPrefabPlaceholder = PrefabLoader.LoadPrefabNamed("Drag GameObj From Hrchy", af.currPrefabsDir);
+        af.userPrefabPlaceholder = PrefabLoader.LoadPrefabNamed("Drag GameObj From Hrchy", af.systemFilesDir);
+        ResetUserPrefabPlaceholder();
+
     }
 
+    public SerializedProperty ResetUserPrefabPlaceholder()
+    {
+        userPrefabPlaceholderProp = serializedObject.FindProperty("userPrefabPlaceholder");
+        return userPrefabPlaceholderProp;
+    }
 
+    //-------------------------------------------
+    void ManageFolders()
+    {
+        // make sure the Current Fences folder and component folders exist
+        af.CheckFoldersBuilt();
+        //-- Check, and keep a record of their location paths, which can be changed if the user has moved the Master AFWB folder
+        CheckFolderLocations(false);
+    }
     //---------------------------------------
     //-- Link all the aux Editor classes to this Editor
     protected void SetupLinkedEditorClasses()
@@ -421,36 +437,23 @@ public partial class AutoFenceEditor : Editor
     }
     //---------------------------------------
     // Called From:
-    // EditorUtilitiesAF.CheckPrefabsAndOptionReload()
+    // EditorUtilitiesAF.CheckPrefabsAndOptionallyReload()
     // AutoFenceEditor.OnInspectorAssetsCheck()
     // AutoFenceEditor.ReloadPrefabsAndPresets()
-    public void LoadPrefabs(bool contentFreeUse = false)
+    public void LoadPrefabs()
     { //Debug.Log("LoadPrefabs()\n");
 
         af.ClearAllPrefabs();
 
-        if (contentFreeUse == false)
-        {
+        if (prefabLoader == null)
             prefabLoader = new PrefabLoader(af);
-            if (fencePrefabsFolderFound != false)// we haven't already failed, or user pressed 'Retry'
-            {
-                fencePrefabsFolderFound = prefabLoader.LoadAllPrefabs(this, af.extraPrefabs, af.postPrefabs,
-                    af.railPrefabs, af.subJoinerPrefabs, ref af.nodeMarkerObj);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("LoadPrefabs as ContentFreeUse! \n");
-            prefabLoader = new PrefabLoader(af);
-            if (fencePrefabsFolderFound != false)// we haven't already failed, or user pressed 'Retry'
-            {
-                fencePrefabsFolderFound = prefabLoader.LoadAllPrefabsMinimal(this, af.extraPrefabs, af.postPrefabs,
-                    af.railPrefabs, af.subJoinerPrefabs, ref af.nodeMarkerObj);
-            }
-        }
+
+        prefabLoadOK = prefabLoader.LoadAllPrefabLayers(this);
+
+
         af.needsReloading = false;
         userUnloadedAssets = false;
-        if (fencePrefabsFolderFound)
+        if (prefabLoadOK)
         {
             af.BackupPrefabMeshes(af.railPrefabs, af.origRailPrefabMeshes);
             af.BackupPrefabMeshes(af.postPrefabs, af.origPostPrefabMeshes);
@@ -595,7 +598,8 @@ public partial class AutoFenceEditor : Editor
         //Debug.Log("CleanAndRebuild():  \n");
         DestroyImmediate(af.currentFencesFolder);
         af.SetupFolders();
-        ReloadPrefabsAndPresets(rebuild: false);
+        ReloadPrefabs(rebuild: false);
+        ReloadPresets(rebuild: false);
         af.ResetAllPools();
         SetupEditor();
         af.ForceRebuildFromClickPoints();
@@ -1294,19 +1298,20 @@ public partial class AutoFenceEditor : Editor
     // after a script compilation,a nd the GUI styles may not be available when OnEnable is invoked.
 
     //------------------------------------------
+    //      Check Periodically From OnInspectorGUI
     public bool OnInspectorAssetsCheck()
     {
-        if (userUnloadedAssets == true || fencePrefabsFolderFound == false)
+        if (userUnloadedAssets == true || prefabLoadOK == false)
         {
             GUILayout.Space(10); GUILayout.Space(10); GUILayout.Space(10);
-            if (fencePrefabsFolderFound == false)
+            if (prefabLoadOK == false)
             {
                 EditorGUILayout.LabelField("Missing FencePrefabs Folder. It must be at Assets/Auto Fence Builder/FencePrefabs/");
                 EditorGUILayout.LabelField("Please relocate this folder or re-import Auto Fence & Wall Builder");
                 if (GUILayout.Button("Retry", GUILayout.Width(200)))
                 {
-                    fencePrefabsFolderFound = true; // assume it's true before retrying
-                    LoadPrefabs(af.allowContentFreeUse);
+                    prefabLoadOK = true; // assume it's true before retrying
+                    LoadPrefabs();
                     Debug.Log("AFWB Loaded Prefabs \n");
                 }
             }
@@ -1316,7 +1321,8 @@ public partial class AutoFenceEditor : Editor
                 EditorGUILayout.LabelField("To continue using AFWB, press Reload below.", warningStyle);
                 if (GUILayout.Button("Reload Auto Fence & Wall Builder", GUILayout.Width(200)))
                 {
-                    ReloadPrefabsAndPresets();
+                    ReloadPrefabs();
+                    ReloadPresets();
                     userUnloadedAssets = false;
                 }
             }
@@ -1354,7 +1360,31 @@ public partial class AutoFenceEditor : Editor
         // Return the adjusted position
         return position + newPosition;
     }
+    /*private void DrawSwitches()
+    {
+        Debug.Log("DrawSwitches\n");
+        if(showSwitches == false)
+            return;
 
+        Handles.BeginGUI();
+        float buttonWidth = 80;
+        Rect leftButtonRect = new Rect(switchPosition.x, switchPosition.y, buttonWidth, 30);
+        Rect rightButtonRect = new Rect(switchPosition.x + buttonWidth, switchPosition.y, buttonWidth, 30);
+
+        if (GUI.Button(leftButtonRect, isLeftButtonOn ? "Left On" : "Left"))
+        {
+            isLeftButtonOn = true;
+            isRightButtonOn = false;
+        }
+
+        if (GUI.Button(rightButtonRect, isRightButtonOn ? "Right On" : "Right"))
+        {
+            isRightButtonOn = true;
+            isLeftButtonOn = false;
+        }
+
+        Handles.EndGUI();
+    }*/
 
     //===========================================================================================================
     //
@@ -1378,6 +1408,7 @@ public partial class AutoFenceEditor : Editor
 
 
 
+
         //return;     // It's not for us!
 
 
@@ -1392,6 +1423,17 @@ public partial class AutoFenceEditor : Editor
 
         Color originalUnityBgColor = GUI.backgroundColor;
         af.mouseHoveringOverIgnoreLayer = false;
+
+        /* if (currEvent.control == true && currEvent.alt == false && currEvent.type == EventType.MouseDown && currEvent.button == 1)
+         {
+             showSwitches = true;
+             switchPosition = currEvent.mousePosition;
+             //go = UseGameObjectAsAutoFence(currEvent, rayPosition, go);
+         }
+         if (showSwitches)
+         {
+             DrawSwitches(switchPosition);
+         }*/
 
         //===================================================================================
         //                  Show Buttons, Controls, Gizmos, and  Info
@@ -1418,6 +1460,7 @@ public partial class AutoFenceEditor : Editor
         TopScreenButtons();
         GUI.backgroundColor = new Color(.5f, .5f, .5f);
         GUI.backgroundColor = originalUnityBgColor;
+
 
 
         //===========================================
@@ -1455,7 +1498,11 @@ public partial class AutoFenceEditor : Editor
         //==========================================
         ShowLogComments();
 
+
+
+
         Handles.EndGUI();
+
 
         af.CheckFoldersBuilt();
 
@@ -1486,6 +1533,11 @@ public partial class AutoFenceEditor : Editor
         HandleDragAndControls(currEvent);
         AssignStepIndexForVariations(currEvent, sectionIndexForLayers, hoveredLayer, go);
 
+
+
+
+
+
         //=======================================================
         //          Mouse Hover 
         //=======================================================
@@ -1501,18 +1553,16 @@ public partial class AutoFenceEditor : Editor
             //Debug.Log("Alt key pressed\n");
             //currEvent.Use();
         }
-        if (currEvent.alt == true && currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
+        if (currEvent.alt == true && currEvent.control == false && currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
         {
             Debug.Log("Double-clicked on Fence to Enable Scene Editing");
             drawEditingGizmo = true;
-
             //ToggleNodeGizmos();
-
             // consume the event so that it doesn't get passed on to other methods
             currEvent.Use();
         }
 
-        if(overFenceLayer && go != null)
+        if (overFenceLayer && go != null)
         {
             editingGizmoPos = go.transform.position;
             editingGizmoPos.y = af.GetNodeMarkerPosition(0).y;
@@ -1571,10 +1621,33 @@ public partial class AutoFenceEditor : Editor
         //=====================================
         SwitchToolbarComponentViewOnClick(currEvent, hoveredLayer);
 
-        //=======================================================================
-        //          Handle Right-Click : Show Game Object Menu Selection
-        //=======================================================================
+        //===================================================================
+        //                      Handle Right-Click :
+        //===================================================================
+
+        //      Menus Etc.
+        //===================
         hit = HandleRightClick(currEvent, rayPosition, ref go, isClickPoint, sectionIndexForLayers, hoveredLayer);
+
+        //    Control Right-Click  :  Get GameObject to Use as Post
+        //===================================================================
+
+        /*if (showSwitches == true)
+        {
+            DrawSwitches();
+        }*/
+
+        if (currEvent.control == true && currEvent.alt == false && currEvent.type == EventType.MouseDown && currEvent.button == 1)
+        {
+            showSwitches = true;
+            isUseGameObjectMenuVisible = true;
+            switchPosition = currEvent.mousePosition;
+            go = UseGameObjectAsAutoFence(this, currEvent, rayPosition, go);
+        }
+
+        //=======================================================================
+
+
 
         /*Timer ti = new Timer("OnSceneGUI - Raycast");
         GameObject hitObject = RaycastForGameObject(rayPosition);
@@ -1593,6 +1666,16 @@ public partial class AutoFenceEditor : Editor
         //GUI.Label(new Rect(0, 400, 300, 40), $"Extra Build Time: {sceneViewTime.ToString("F2")} ms");
         Handles.EndGUI();
     }
+    /*private void CheckContextMenuVisibility()
+    {
+        // Reset the context menu visibility flag if the context menu loses focus
+        if (isUseGameObjectMenuVisible && (EditorWindow.focusedWindow == null || EditorWindow.focusedWindow.GetType() != typeof(GenericMenu)))
+        {
+            isUseGameObjectMenuVisible = false;
+            Debug.Log($"isUseGameObjectMenuVisible = {isUseGameObjectMenuVisible}\n");
+            showSwitches = false;
+        }
+    }*/
     //-------------------
     private static GameObject RaycastForGameObject(Ray worldRay)
     {
@@ -1790,11 +1873,6 @@ public partial class AutoFenceEditor : Editor
             CleanAndRebuild();
         }
         GUILayout.Space(8);
-        if (GUILayoutExtensions.ButtonAutoWidth("Refresh Assets"))
-        {
-            ReloadPrefabsAndPresets();
-        }
-        GUILayout.Space(12);
 
         //if ( GUILayoutExtensions.ButtonAutoWidth("Print Post Dir Vectors",  GUILayout.Width(  GUI.skin.button.CalcSize(new GUIContent("Print Post Dir Vectors")).x ) ) )
         if (GUILayoutExtensions.ButtonAutoWidth("Print Post Dir Vectors"))
@@ -2677,6 +2755,13 @@ public partial class AutoFenceEditor : Editor
     }
 
     //-------------------------------------------
+    /// <summary>
+    /// Gets the correct seq Step Num that this section will use
+    /// </summary>
+    /// <param name="currentEvent"></param>
+    /// <param name="sectionIndexForLayers"></param>
+    /// <param name="layer"></param>
+    /// <param name="go"></param>
     private void AssignStepIndexForVariations(Event currentEvent, int[] sectionIndexForLayers, LayerSet layer, GameObject go)
     {
         //if (af.usePostVariations == false)

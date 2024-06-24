@@ -88,7 +88,8 @@ public partial class AutoFenceEditor
                 if (GUILayout.Button(new GUIContent("Refresh", "Reloads all presetsEd & prefabs, including your custom ones. " +
                     "Necessary if you've manually added presetsEd or prefabs into the AFWB directories"), sty, GUILayout.Width(53)))
                 {
-                    ReloadPrefabsAndPresets();
+                    ReloadPrefabs();
+                    ReloadPresets();
                 }
                 GUILayout.Space(20);
             }

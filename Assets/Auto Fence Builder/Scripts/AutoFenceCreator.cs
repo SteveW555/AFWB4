@@ -387,6 +387,13 @@ namespace AFWB
             isProtected = false;
             parentFolderName = parentDirName;
         }
+        //-------
+        /// <summary>
+        /// Creates a 
+        /// </summary>
+        /// <param name="layer"></param>
+        /// <param name="af"></param>
+        /// <returns></returns>
         public static List<PrefabDetails> GetPrefabDetailsForLayer(LayerSet layer, AutoFenceCreator af)
         {
             List<PrefabDetails> prefabDetails = null;
@@ -602,7 +609,7 @@ namespace AFWB
         public string meshesDefaultDir = "Assets/Auto Fence Builder/AFWB_Meshes";
         public string presetsDefaultFilePath = "Assets/Auto Fence Builder/AFWB_Presets";
         public string autoFenceBuilderDefaultDir = "Assets/Auto Fence Builder";
-        public string currPrefabsDir, currExtraPrefabsDir, currPostPrefabsDir, currRailPrefabsDir, currMeshesDir, currPresetsDir;
+        public string currPrefabsDir, currExtraPrefabsDir, currPostPrefabsDir, currRailPrefabsDir, currMeshesDir, currPresetsDir, systemFilesDir;
         public string currAutoFenceBuilderDir, currTexturesDir, currMaterialsDir;
         public string presetSaveName = "New Fence Preset_001";
 
@@ -1074,7 +1081,7 @@ namespace AFWB
         public float subsGroundBurial = 0.0f;
         //List<Material> originalSubMaterials = new List<Material>();
         [Range(0.0f, 1.0f)]
-        public Vector3 nativeSubScale = Vector3.one;
+        public Vector3 nativeSubpostScale = Vector3.one;
 
         public bool useSubWave = false;
         [Range(0.01f, 10.0f)]
@@ -1702,7 +1709,6 @@ namespace AFWB
             }
             else
             {
-
                 if (postsFolder == null)
                 {
                     postsFolder = new GameObject("Posts");
@@ -1732,18 +1738,11 @@ namespace AFWB
         }
 
         //---------------------
-        public void RebuildPoolWithNewUserPrefab(GameObject newUserPrefab, LayerSet layer)
+        public void RebuildPoolWithNewUserPrefab(int indexOfNewUserPrefab, LayerSet layer)
         {
-            int indexOfNewUserPost = FindPrefabIndexByName(layer, newUserPrefab.name);
-
-            SetCurrentPrefabIndexForLayer(indexOfNewUserPost, layer);
-
             SetFirstSourceVariantToMainForLayer(layer);
             DestroyPoolForLayer(layer);
             CreatePoolForLayer(layer);
-            //CreatePostsPool(allPostPositions.Count);
-
-            ForceRebuildFromClickPoints();
         }
         //--------------------
         // If there are multiple contiguous gaps found, merge them in to 1 stackGap by deleting the previous point
@@ -2028,13 +2027,20 @@ namespace AFWB
         // AFWB build-in prefabs are always scaled (1,1,1), but users' might differ
         void ResetNativePrefabScales()
         {
-            nativeRailAScale = GetCurrentPrefabForLayer(LayerSet.railALayer).transform.localScale;
-            nativeRailBScale = GetCurrentPrefabForLayer(LayerSet.railBLayer).transform.localScale;
-            nativeSubScale = GetCurrentPrefabForLayer(LayerSet.postLayer).transform.localScale;
-            nativeExtraScale = GetCurrentPrefabForLayer(LayerSet.extraLayer).transform.localScale;
-            nativePostScale = GetCurrentPrefabForLayer(LayerSet.postLayer).transform.localScale;
+            nativeRailAScale = GetScaleOnCurrentPrefabForLayer(LayerSet.railALayer);
+            nativeRailBScale = GetScaleOnCurrentPrefabForLayer(LayerSet.railBLayer);
+            nativePostScale = GetScaleOnCurrentPrefabForLayer(LayerSet.postLayer);
+            nativeSubpostScale = GetScaleOnCurrentPrefabForLayer(LayerSet.subpostLayer);
+            nativeExtraScale = GetScaleOnCurrentPrefabForLayer(LayerSet.extraLayer);
 
+        }
+        public Vector3 GetScaleOnCurrentPrefabForLayer(LayerSet layer)
+        {
+            GameObject prefab = GetCurrentPrefabForLayer(layer);
+            if (prefab == null)
+                return Vector3.one;
 
+            return prefab.transform.localScale;
         }
         //------------------------
         public Mesh GetMainMeshFromGO(GameObject go)
@@ -2899,11 +2905,11 @@ namespace AFWB
                     {
                         if (useRailLayer[kRailALayerInt] == true && (layer == LayerSet.railALayer || layer == LayerSet.allLayer))
                             railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railALayer, GetPreparedMeshVariantsForLayer(LayerSet.railALayer));  //---- CreateMergedPrefabs Main Rails ----
-                                                                                                                                                                                 //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railALayer, GetPreparedMeshVariantsForLayer(LayerSet.railALayer));  //---- CreateMergedPrefabs Main Rails ----
+                                                                                                                                                                           //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railALayer, GetPreparedMeshVariantsForLayer(LayerSet.railALayer));  //---- CreateMergedPrefabs Main Rails ----
 
                         if (useRailLayer[kRailBLayerInt] == true && (layer == LayerSet.railBLayer || layer == LayerSet.allLayer))
                             railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railBLayer, GetPreparedMeshVariantsForLayer(LayerSet.railBLayer)); //---- CreateMergedPrefabs Seconday Rails ----
-                                                                                                                                                                                //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railBLayer, GetPreparedMeshVariantsForLayer(LayerSet.railBLayer)); //---- CreateMergedPrefabs Seconday Rails ----
+                                                                                                                                                                          //railGo = BuildRailsForSection(prevPostPos, A, B, C, sectionIndex, LayerSet.railBLayer, GetPreparedMeshVariantsForLayer(LayerSet.railBLayer)); //---- CreateMergedPrefabs Seconday Rails ----
 
                         if (useSubpostsLayer == true && (layer == LayerSet.subpostLayer || layer == LayerSet.allLayer))
                             BuildSubposts(A, B, sectionIndex);
@@ -3012,7 +3018,7 @@ namespace AFWB
             bool allowMirrorZ = allowMirroring_Z_Rail[layerIndex];
 
 
-            int railPrefabIndex = currentRail_PrefabIndex[layerIndex];
+            //int railPrefabIndex = currentRail_PrefabIndex[layerIndex];
             bool railKeepGrounded = keepRailGrounded[layerIndex];
             int numStackedRailsInThisSet = (int)numStackedRails[layerIndex];
             int numSections = allPostPositions.Count - 1;
@@ -3083,7 +3089,15 @@ namespace AFWB
             bool useRailSeq = sequencer.GetUseSeq();
             numSeqSteps = sequencer.numSteps;
             currSeq = sequencer.seqList;
+            GameObject currRailPrefab = GetCurrentPrefabForLayer(layer);
+            if (currRailPrefab == null)
+            {
+                Debug.Log($"Can't Build Rails: currRailPrefab [{GetCurrentPrefabIndexForLayer(layer)}/{GetNumPrefabsForLayer(layer)}] " +
+                    $"is null in BuildRailsForSection()\n Try selecting a different {layer.String()} prefab");
+                return null;
+            }
 
+            //-----------
 
             if (numStackedRailsInThisSet > 1)
             {
@@ -3107,7 +3121,6 @@ namespace AFWB
                 P = posA;
                 Q = posB;
 
-
                 Vector3 currDirectionEuler = VectorUtilitiesTCT.GetRotationAnglesFromDirection(posB, posA);
                 Vector3 currDirectionVector = (posB - posA).normalized;
                 Vector3 prevDirection = Vector3.zero;
@@ -3122,7 +3135,6 @@ namespace AFWB
                 /*float shiftTest = stackGap;
                 float shiftGap = shiftTest * stackIdx;
                 Z_Shift = shiftGap;*/
-
 
                 if (offsetMode == RailOffsetMode.joined)
                 {
@@ -3239,26 +3251,6 @@ namespace AFWB
                 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 bool omit = false;
                 if (SkipChanceOfMissing(sectionIndex, layer, seeds, chanceOfMissing, stackIdx))
                     continue;
@@ -3279,7 +3271,7 @@ namespace AFWB
                 int currVariantIndex = -1, meshIndex = 0, currSeqStepNum = -1;  //currSingleVariantIndex = -1;
                 bool isSingle = false, singlesInUse = singlesContainer.GetUseSinglesForLayer(layer, this) && singlesContainer.numInUse > 0;
                 SourceVariant sourceVariantForSingle = null;
-                SourceVariant currSourceVariant = new SourceVariant(railPrefabs[railPrefabIndex]);//initialise with current singleVarGO in cast something goes wrong with the sourceVariant
+                SourceVariant currSourceVariant = new SourceVariant(currRailPrefab);//initialise with current singleVarGO in cast something goes wrong with the sourceVariant
                 SinglesItem currSingleItem = new SinglesItem();
                 SeqItem currSeqStepItem = new SeqItem();
 
@@ -3466,7 +3458,7 @@ namespace AFWB
                     //Debug.Log("simple forward " + thisGO.transform.svRotation.eulerAngles + "\n");
 
                     //-- Position basically in the world
-                    thisRail.transform.position = posA + new Vector3(0, (stackGap * stackIdx * 0) + alternateHeightDelta, 0);
+                    thisRail.transform.position = posA + new Vector3(0, (stackGap * stackIdx) + alternateHeightDelta, 0);
 
 
                     //====================================
@@ -3601,7 +3593,7 @@ namespace AFWB
                 if (railSlopeMode != SlopeMode.shear)//don't adjustedNativeScale raillSize.y if sheared, as the vertices are explicitly set instead
                     adjustedNativeScale.y *= cumulativeHeightScaling;
                 //-- If it'sectionIndex a panel type but NOT sheared, adjustedNativeScale it with the fence
-                else if ((railPrefabs[railPrefabIndex].name.EndsWith("_Panel_Rail") || railPrefabs[railPrefabIndex].name.EndsWith("_Panel")) && railSlopeMode != SlopeMode.shear)
+                else if ((currRailPrefab.name.EndsWith("_Panel_Rail") || currRailPrefab.name.EndsWith("_Panel")) && railSlopeMode != SlopeMode.shear)
                     adjustedNativeScale.y *= cumulativeHeightScaling;
                 //-- It'sectionIndex a regular sheared
                 else if (railSlopeMode == SlopeMode.shear)
@@ -4575,12 +4567,12 @@ namespace AFWB
 
             Vector3 markerScale = new Vector3(0.45f, 0.45f, 0.45f);
 
-            
-            
+
+
 
             //Vector3 variantScaling = Vector3.one, variantOffset = Vector3.zero;
 
-            
+
 
 
             //SeqItem currSeqItem = new SeqItem();
@@ -4588,12 +4580,12 @@ namespace AFWB
 
             for (int clickPointIndex = 0; clickPointIndex < numClickPoints; clickPointIndex++)
             {
-                
+
 
                 GameObject marker = nodeMarkersPool[clickPointIndex].gameObject;
                 marker.SetActive(true);
                 marker.hideFlags = HideFlags.HideInHierarchy;
-                
+
                 Vector3 markerPos = GetNodeMarkerPosition(clickPointIndex);
                 marker.transform.position = markerPos;
                 marker.transform.localScale = markerScale;
@@ -5734,7 +5726,7 @@ namespace AFWB
                 if (i < prefabDetailsList.Count)
                     prefabDetails = prefabDetailsList[i];
                 //else
-                    //Debug.LogWarning($"PrefabDetailsList is shorter than the number of prefabs in the list for layer {layer.String()}");
+                //Debug.LogWarning($"PrefabDetailsList is shorter than the number of prefabs in the list for layer {layer.String()}");
 
                 parentFolderName = prefabDetails.parentFolderName;
                 category = AssignPresetOrPrefabCategoryByName(menuName, parentFolderName);

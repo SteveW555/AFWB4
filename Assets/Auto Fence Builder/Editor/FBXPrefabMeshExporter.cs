@@ -18,7 +18,7 @@ public static class PrefabMeshExporterAF
     /// </summary>
     /// <param name="mesh">The mesh to export.</param>
     /// <param name="exportPath">The path where the mesh should be exported.</param>
-    public static GameObject ExportMesh(GameObject mesh, PrefabTypeAFWB objType, AutoFenceCreator af)
+    public static GameObject ExportMeshAndPrefab(GameObject mesh, PrefabTypeAFWB objType, AutoFenceCreator af)
     {
 #if UNITY_EDITOR
         if (FBXExporterChecker.IsFBXExporterAvailable())
@@ -49,7 +49,6 @@ public static class PrefabMeshExporterAF
                 //exportObjectMethod.Invoke(null, new object[] { exportPath, tempObject });
                 //================================================================================================
 
-
                 if (userObj == null)
                     return null;
                 if (af.currAutoFenceBuilderDir == null)
@@ -64,7 +63,7 @@ public static class PrefabMeshExporterAF
                     objName += "[U]";
                 objName += userObj.name;
 
-                string meshExtnStr = ".fbx";
+                //string meshExtnStr = ".fbx";
                 string fbxExpPath = "";
                 GameObject meshGO = null, exportedModel = null, prefab = null;
 
@@ -82,14 +81,14 @@ public static class PrefabMeshExporterAF
                     //============================
                     //      Save Mesh Path
                     //============================
-                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Rails/" + objName + meshExtnStr;
+                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Rails/" + objName + ".fbx";
                 }
                 if (objType == PrefabTypeAFWB.postPrefab)
                 {
                     if (objName.EndsWith("_Post") == false)
                         objName += "_Post";
                     prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Posts/" + objName + ".prefab";
-                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Posts/" + objName + meshExtnStr;
+                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Posts/" + objName + ".fbx";
                     isVariant = false;
                 }
                 if (objType == PrefabTypeAFWB.extraPrefab)
@@ -97,7 +96,7 @@ public static class PrefabMeshExporterAF
                     if (objName.EndsWith("_Extra") == false)
                         objName += "_Extra";
                     prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Extras/" + objName + ".prefab";
-                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Extras/" + objName + meshExtnStr;
+                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Extras/" + objName + ".fbx";
                     isVariant = false;
                 }
 

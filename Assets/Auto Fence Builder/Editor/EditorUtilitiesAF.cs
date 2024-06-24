@@ -47,7 +47,7 @@ so = ed.serializedObject;
         return neededFixing;
     }
 
-    
+
 
     //================================================================================
     // Convenience Methods To Get Nested or List Serialized Properties
@@ -134,9 +134,9 @@ so = ed.serializedObject;
 
         if (layer == LayerSet.railALayer)
             return railASeqListProp;
-        
-        
-        
+
+
+
         SerializedProperty numSeqStepsArrayProp = serializedObject.FindProperty("seqNumSteps");// the index to a SourceVariant this seq step references
         if (numSeqStepsArrayProp != null)
         {
@@ -283,7 +283,7 @@ so = ed.serializedObject;
     protected bool InitialCheckPrefabs(bool reload = true)
     {
         bool somethingChanged = false;
-        CheckPrefabsAndOptionReload(reload: true, warn: false);
+        CheckPrefabsAndOptionallyReload(reload: true, warn: false);
 
         AutoFenceConfigurationManager configFile = AutoFenceConfigurationManager.ReadPermissionFile(af);
         if (configFile != null && af.usingMinimalVersion == false)
@@ -311,7 +311,7 @@ so = ed.serializedObject;
     /// <returns>If Reloading was necessary</returns>
     /// <remarks>Only one of each Rail or Post set is checked as they use the same prefabs
     /// Warning is not necessary during start up and reenabling, so set to false</remarks>
-    protected bool CheckPrefabsAndOptionReload(bool reload = true, bool warn = true)
+    protected bool CheckPrefabsAndOptionallyReload(bool reload = true, bool warn = true)
     {
         bool neededReload = false;
         neededReload = CheckPrefabsForLayer(LayerSet.railALayer, warn);
@@ -319,7 +319,7 @@ so = ed.serializedObject;
         neededReload = CheckPrefabsForLayer(LayerSet.extraLayer, warn);
 
         if (neededReload == true && reload == true)
-            LoadPrefabs();
+            this.LoadPrefabs();
         return neededReload;
     }
     /// <summary>
@@ -366,7 +366,7 @@ so = ed.serializedObject;
             af.allowContentFreeUse = configFile.allowContentFreeTool;
         }
         bool needsReload = false;
-        
+
         //      Normal Use
         //=======================
         if (af.allowContentFreeUse == false)
@@ -487,7 +487,8 @@ so = ed.serializedObject;
             }
             int oldCount = cachedExistingPrefabPaths.Count; //debug comment out
             //Debug.Log($"{newPrefabPaths.Count} New prefabs found:\n" + string.Join(",   ", newPrefabPaths) + $"  {oldCcount} -> {cachedExistingPrefabPaths.Count}");
-            ReloadPrefabsAndPresets();
+            ReloadPrefabs();
+            ReloadPresets();
             //Debug.Log($"Num Reloaded Prefabs = {af.GetAllPrefabs().Count} \n");
             //Debug.Log("Bob\n");
         }
@@ -566,13 +567,13 @@ so = ed.serializedObject;
         endPostsSizeBoostProp = serializedObject.FindProperty("endPostsSizeBoost");
         postRotationProp = serializedObject.FindProperty("postRotation");
         userPrefabPostProp = serializedObject.FindProperty("userPrefabPost");
-        
-        
+
+
         postImportScaleModeProp = serializedObject.FindProperty("postImportScaleMode");
         railAImportScaleModeProp = serializedObject.FindProperty("railAImportScaleMode");
         railBImportScaleModeProp = serializedObject.FindProperty("railBImportScaleMode");
         extraImportScaleModeProp = serializedObject.FindProperty("extraImportScaleMode");
-        
+
 
         roundingDistance = serializedObject.FindProperty("roundingDistance");
 
@@ -1038,7 +1039,7 @@ so = ed.serializedObject;
         grayHelpStyle.fontStyle = FontStyle.Italic;
         grayHelpStyle.normal.textColor = new Color(0.15f, 0.2f, 0.3f);
         grayHelpStyle.fontSize = 11;
-        
+
         smallOrangeItalicLabelStyle = new GUIStyle(EditorStyles.label);
         smallOrangeItalicLabelStyle.fontStyle = FontStyle.Italic;
         smallOrangeItalicLabelStyle.normal.textColor = new Color(1f, 0.8f, 0.4f);
@@ -1073,7 +1074,7 @@ so = ed.serializedObject;
         greyStyle.fontSize = 11;
 
         lilacUnityStyle = new GUIStyle(EditorStyles.label);
-        lilacUnityStyle.normal.textColor = new Color(0.88f, 0.78f, 0.96f); 
+        lilacUnityStyle.normal.textColor = new Color(0.88f, 0.78f, 0.96f);
 
         lightGreyStyle2 = new GUIStyle(EditorStyles.label);
         lightGreyStyle2.fontStyle = FontStyle.Italic;
@@ -1151,7 +1152,7 @@ so = ed.serializedObject;
         }
 
         bgTrans2 = new Color(.9f, .9f, .9f, .4f);
-         topScreenButtonsCol = new Color(.1f, .1f, .5f, 0.5f);
+        topScreenButtonsCol = new Color(.1f, .1f, .5f, 0.5f);
     }
     /// <summary>
     /// GUILayout Button with a conditional background color. Resets the background color after drawing the button.
@@ -1233,7 +1234,7 @@ so = ed.serializedObject;
             changedStr += "currAutoFenceBuilderDir  ";
         }
 
-        // Materials
+        //-- Materials
         string[] materialsLocation = AssetDatabase.FindAssets("AFWB_Materials");
         if (materialsLocation.Length == 0 || materialsLocation[0] == "")
         {
@@ -1243,7 +1244,7 @@ so = ed.serializedObject;
         else
             af.currMaterialsDir = AssetDatabase.GUIDToAssetPath(materialsLocation[0]);
 
-        // Textures
+        //-- Textures
         string[] texturesLocation = AssetDatabase.FindAssets("AFWB_Textures");
         if (texturesLocation.Length == 0 || texturesLocation[0] == "")
         {
@@ -1253,7 +1254,7 @@ so = ed.serializedObject;
         else
             af.currTexturesDir = AssetDatabase.GUIDToAssetPath(texturesLocation[0]);
 
-        // Prefabs
+        //-- Prefabs
         string[] prefabsLocation = AssetDatabase.FindAssets("AFWB_Prefabs");
         if (prefabsLocation.Length == 0 || prefabsLocation[0] == "")
         {
@@ -1263,7 +1264,17 @@ so = ed.serializedObject;
         else
             af.currPrefabsDir = AssetDatabase.GUIDToAssetPath(prefabsLocation[0]);
 
-        // Presets
+        //-- System Files
+        string[] systemFilesLocation = AssetDatabase.FindAssets("System_Do_Not_Remove");
+        if (prefabsLocation.Length == 0 || prefabsLocation[0] == "")
+        {
+            Debug.LogWarning("Couldn't find systemFilesLocation in CheckFolderLocations()  \n");
+            changedStr += "systemFilesLocation  ";
+        }
+        else
+            af.systemFilesDir = AssetDatabase.GUIDToAssetPath(systemFilesLocation[0]);
+
+        //-- Presets
         string[] presetsLocation = AssetDatabase.FindAssets("AFWB_Presets");
         if (presetsLocation.Length == 0 || presetsLocation[0] == "")
         {
@@ -1285,6 +1296,7 @@ so = ed.serializedObject;
         //t.End();
         return changed;
     }
+
     //---------------------------------------
     public string RebuildFoldersIfNeeded(string changedStr)
     {
@@ -1568,31 +1580,23 @@ so = ed.serializedObject;
         return presetIndex;
     }
     //---------------------------------------
-    public void ReloadPrefabsAndPresets(bool rebuild = true)
+    public void ReloadPrefabs(bool rebuild = true)
     {
-        if (af.allowContentFreeUse == true)
-        {
-            LoadPrefabs(true);
-            presetsEd.LoadAllScriptablePresets(true);
-
-            af.currPresetIndex = 0;
-            af.currentPost_PrefabIndex = 0;
-            af.currentRail_PrefabIndex[0] = 0;
-            af.currentRail_PrefabIndex[1] = 0;
-            af.currentSubpost_PrefabIndex = 0;
-            af.currentExtra_PrefabIndex = 0;
-        }
-        else
-        {
-            LoadPrefabs(false);
-            presetsEd.LoadAllScriptablePresets(af.allowContentFreeUse);
-        }
-
+        LoadPrefabs();
         if (rebuild)
         {
             af.ResetAllPools();
             af.ForceRebuildFromClickPoints();
-
+        }
+    }
+    //---------------------------------------
+    public void ReloadPresets(bool rebuild = true)
+    {
+        presetsEd.LoadAllScriptablePresets(af.allowContentFreeUse);
+        if (rebuild)
+        {
+            af.ResetAllPools();
+            af.ForceRebuildFromClickPoints();
         }
     }
     //----------

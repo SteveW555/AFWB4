@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public partial class AutoFenceEditor
 {
@@ -21,7 +22,7 @@ public partial class AutoFenceEditor
             VariationMode variationMode = VariationMode.none;
             int layerNum = layer.Int();
             int sectionIndex = layerNum <= 5 ? sectionIndexForLayers[layerNum] : 0;
-            
+
             EditorContextInfo contextInfo = new EditorContextInfo(this);
             contextInfo.sectionIndex = sectionIndex;
             contextInfo.transform = go.transform;
@@ -334,46 +335,67 @@ public partial class AutoFenceEditor
             }
         }
 
-        //===================================================================
-        //      Right-Click, Control  :  Get GameObject to Use as Post
-        //===================================================================
+
+        return hit;
+    }
+    private GameObject UseGameObjectAsAutoFence(AutoFenceEditor ed, Event currentEvent, Ray rayPosition, GameObject go)
+    {
         if (currentEvent.button == 1 && currentEvent.type == EventType.MouseDown && currentEvent.control && currentEvent.shift == false)
         {
             //-- If go is null, it's possible that the mouse is over a valid object that doesn't have a collider.
             //-- If so, do one full Scene scan to find the object nearest under the mouse
-            if (go == null || go.name.Contains("Terrain"))
+            if (go == null || go.name.Contains("errain"))
             {
-                Timer ti = new Timer("HandleRightClick - RaycastForGameObject()");
                 go = RaycastForGameObject(rayPosition);
-                ti.End(print: true);
                 if (go != null)
                 {
                     Debug.Log($"Hit Object: {go.name}\n");
                 }
             }
 
-
-
-            EditorContextInfo contextInfo = new EditorContextInfo(this);
+            GenericMenu menu = new GenericMenu();
             if (go != null && go.name.Contains("errain") == false && go.GetComponent<Terrain>() == null)
             {
-                af.logComment = $"  {go.name} ";
+                //af.logComment = $"  {go.name} ";
+                UseGameObjectAsLayer(menu, go, LayerSet.postLayer);
+                UseGameObjectAsLayer(menu, go, LayerSet.railALayer);
+                UseGameObjectAsLayer(menu, go, LayerSet.railBLayer);
+                UseGameObjectAsLayer(menu, go, LayerSet.extraLayer);
 
-                GenericMenu menu = new GenericMenu();
-                contextInfo.transform = go.transform;
-                contextInfo.prefab = go;
+                //EditorContextInfo contextInfo = new EditorContextInfo();
 
-                menu.AddItem(new GUIContent("Use as AutoFence Post"), false, sceneViewContextMethods.UseAsPost, contextInfo);
-                menu.AddSeparator("");
+                menu.AddItem(
+                new GUIContent(
+                "(Hold Ctrl to retain layer's 'Scale' setting. Else defaults to new object's Scale",
+                "By default, the transform-scaling on the new object will be used. " +
+                "If you wish to retain the scaling you have set in the layer's Scale control, hold the control key while adding."),
+                 false, null);
+                //menu.AddSeparator("");
 
-                menu.ShowAsContext();
 
-                currentEvent.Use();
             }
+            menu.ShowAsContext();
+            // Set the context menu visibility flag
+            isUseGameObjectMenuVisible = true;
 
+            // Store the current mouse position
+            //switchPosition = currentEvent.mousePosition;
+            //showSwitches = true;
 
         }
-        return hit;
+        currentEvent.Use();
+        return go;
+
+    }
+    private void UseGameObjectAsLayer(GenericMenu menu, GameObject go, LayerSet layer)
+    {
+        EditorContextInfo contextInfo = new EditorContextInfo(go, layer);
+        contextInfo.control = Event.current.control;
+        contextInfo.shift = Event.current.shift;
+
+        menu.AddItem(new GUIContent($"Use as AutoFence  {layer.String()} "), false, sceneViewContextMethods.UseAsLayer, contextInfo);
+        menu.AddSeparator("");
+
     }
     //-------------------------------------------
     private void CreateButton(Vector2 position)

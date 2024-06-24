@@ -481,7 +481,8 @@ public partial class AutoFenceEditor
 
                 if (GUILayout.Button("Refresh Prefabs & Presets", GUILayout.Width(170)))
                 {
-                    ReloadPrefabsAndPresets();
+                    ReloadPrefabs();
+                    ReloadPresets();
                     mainPresetListStaticCopy = new List<ScriptablePresetAFWB>(mainPresetList);
                     //mainPresetListStaticCopy.AddRange(amainPresetList);
                 }
@@ -1209,7 +1210,8 @@ public partial class AutoFenceEditor
                         string newSourceName = StringUtilsTCT.ReplaceCaseInsensitive(sourceName, renameSourceSubtring, renameNewSubstring);
                         Housekeeping.RenamePrefabAsset(sourceName, newSourceName);
                         Housekeeping.UpdatePresetComponentAssetName(layer, sourceName, newSourceName, true);
-                        ReloadPrefabsAndPresets();
+                        ReloadPrefabs();
+                        ReloadPresets();
                     }
                     AssetDatabase.Refresh();
                 }

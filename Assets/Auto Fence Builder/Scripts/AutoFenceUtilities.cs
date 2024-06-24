@@ -211,7 +211,6 @@ namespace AFWB
 
         }
 
-
         //--------------------------------------------
         public static AutoFenceCreator GetAutoFenceCreator()
         {
@@ -1699,7 +1698,11 @@ namespace AFWB
                 userPrefab = userPrefabExtra;
             return userPrefab;
         }
-        public void SetUserPrefabForLayer(GameObject userPrefab, LayerSet layer)
+
+        /// <summary>
+        /// Store the direct reference to the user's prefab for the given layer
+        /// </summary>
+        public void StoreUserPrefabForLayer(GameObject userPrefab, LayerSet layer)
         {
             if (layer == LayerSet.railALayer)
                 userPrefabRail[0] = userPrefab;
