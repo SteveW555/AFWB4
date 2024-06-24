@@ -84,55 +84,7 @@ public partial class PrefabAssignEditor
 
         return savedUserPrefab;
     }
-
-    public GameObject AssignUserPrefab(LayerSet layer, out bool mainPrefabChanged, GameObject userAddedPrefab)
-    {
-        GameObject savedUserPrefab = null;
-        if (layer == kPostLayer)
-        {
-            savedUserPrefab = SaveUserPrefab(userAddedPrefab, kPostLayer);
-        }
-        else if (layer == kRailALayer || layer == kRailBLayer)
-        {
-            savedUserPrefab = SaveUserPrefab(userAddedPrefab, layer);
-            af.keepRailGrounded[(int)layer] = false;
-            af.slopeMode[(int)layer] = SlopeMode.shear;
-            af.GroundRails(layer);
-            // Centralize
-            if (MeshUtilitiesAFWB.GetMeshSize(af.userPrefabRail[layer.Int()]).y < 0.25f)
-                af.railAPositionOffset.y = 0.25f;
-        }
-        else if (layer == kExtraLayer)
-        {
-            //=============== User-Added Custom Extra ================
-            //userAddedPrefab = (GameObject)ed.userPrefabExtraProp.objectReferenceValue;
-            savedUserPrefab = SaveUserPrefab(userAddedPrefab, kExtraLayer);
-        }
-        mainPrefabChanged = true;
-        //importAttempted = true;
-        if (savedUserPrefab != null)
-        {
-            //-- remove any transform scaling and set it to the Layer controls transdfor box instead
-            af.SetScaleTransformForLayer(savedUserPrefab.transform.localScale, layer);
-            savedUserPrefab.transform.localScale = Vector3.one;
-            AutoRotateImportedMesh(savedUserPrefab, layer, af, true);
-        }
-        return savedUserPrefab;
-    }
-    //-----------------
-    /// <summary>
-    /// Checks if a valid active user prefab is the same as the current prefab
-    /// </summary>
-    /// <returns>bool  true if active</returns>
-    private bool UserPrefabIsValidAndActive(LayerSet layer)
-    {
-        if (af.GetMainPrefabForLayer(layer) == af.GetUserPrefabForLayer(layer))
-        {
-            //Debug.Log("User Prefab == current prefab\n");
-            return true;
-        }
-        return false;
-    }
+    //--------------------
     private void ShowImportScaleAndRotationButtons(GameObject userPrefab, LayerSet layer)
     {
         bool activeUserPrefab = UserPrefabIsValidAndActive(layer);
@@ -178,6 +130,9 @@ public partial class PrefabAssignEditor
 
         if (EditorGUI.EndChangeCheck())
         {
+            GameObject resavedUserPrefab = ResaveUserPrefab(userPrefabForLayer, layer);
+
+
             //-- Posts and some Extras will automatically update as their meshes have been altered
             //-- Rails will need to be updated manually, as the one we see are copies of the original. For consistencey, do them all
             af.ResetPoolForLayer(layer);
@@ -186,6 +141,56 @@ public partial class PrefabAssignEditor
 
         EditorGUI.EndDisabledGroup();
     }
+    /// <summary>
+    /// Saves the prefab and mesh, sets the scale, aand AutoRotates the imported mesh
+    /// </summary>
+    /// <param name="layer"></param>
+    /// <param name="mainPrefabChanged"></param>
+    /// <param name="userAddedPrefab"></param>
+    /// <returns></returns>
+    public GameObject AssignUserPrefab(LayerSet layer, out bool mainPrefabChanged, GameObject userAddedPrefab)
+    {
+        //SetScaleAndAutoRotateImportedMesh(userAddedPrefab, layer);
+
+        GameObject savedUserPrefab = null;
+        if (layer == kPostLayer)
+        {
+            savedUserPrefab = SaveUserPrefab(userAddedPrefab, kPostLayer);
+        }
+        else if (layer == kRailALayer || layer == kRailBLayer)
+        {
+            savedUserPrefab = SaveUserPrefab(userAddedPrefab, layer);
+            af.keepRailGrounded[(int)layer] = false;
+            af.slopeMode[(int)layer] = SlopeMode.shear;
+            af.GroundRails(layer);
+            // Centralize
+            if (MeshUtilitiesAFWB.GetMeshSize(af.userPrefabRail[layer.Int()]).y < 0.25f)
+                af.railAPositionOffset.y = 0.25f;
+        }
+        else if (layer == kExtraLayer)
+        {
+            savedUserPrefab = SaveUserPrefab(userAddedPrefab, kExtraLayer);
+        }
+        
+        SetScaleAndAutoRotateImportedMesh(savedUserPrefab, layer);
+        ResaveUserPrefab(savedUserPrefab, layer);
+        
+        mainPrefabChanged = true;
+        
+        return savedUserPrefab;
+    }
+    //--------------------
+    private void SetScaleAndAutoRotateImportedMesh(GameObject userAddedPrefab, LayerSet layer)
+    {
+        if (userAddedPrefab != null)
+        {
+            //-- remove any transform scaling and set it to the Layer controls transdfor box instead
+            af.SetScaleTransformForLayer(userAddedPrefab.transform.localScale, layer);
+            userAddedPrefab.transform.localScale = Vector3.one;
+            AutoRotateImportedMesh(userAddedPrefab, layer, af, true);
+        }
+    }
+    
 
     //-----------------------------
     /// <summary>
@@ -321,12 +326,32 @@ public partial class PrefabAssignEditor
     {
         if (IsValidPrefab(userOrigPrefab) == false)
             return null;
-        //FBXExportAFWB.SaveUserObjectAsFBX(userOrigPrefab, PrefabTypeAFWB.postPrefab, af);
         GameObject savedPrefab = PrefabMeshExporterAF.ExportMeshAndPrefab(userOrigPrefab, layer.ToPrefabType(), af);
         AssetDatabase.Refresh();
         return savedPrefab;
     }
-
+    //---------------------------------------
+    public GameObject ResaveUserPrefab(GameObject userOrigPrefab, LayerSet layer)
+    {
+        if (IsValidPrefab(userOrigPrefab) == false)
+            return null;
+        GameObject savedPrefab = PrefabMeshExporterAF.ExportMeshAndPrefab(userOrigPrefab, layer.ToPrefabType(), af, resave:true);
+        AssetDatabase.Refresh();
+        return savedPrefab;
+    }
+    //-----------------
+    /// <summary>
+    /// Checks if a valid active user prefab is the same as the current prefab
+    /// </summary>
+    /// <returns>bool  true if active</returns>
+    private bool UserPrefabIsValidAndActive(LayerSet layer)
+    {
+        if (af.GetMainPrefabForLayer(layer) == af.GetUserPrefabForLayer(layer))
+        {
+            return true;
+        }
+        return false;
+    }
     private static bool IsValidPrefab(GameObject userOrigPrefab)
     {
         if (userOrigPrefab == null)

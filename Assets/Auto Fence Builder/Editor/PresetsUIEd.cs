@@ -725,6 +725,7 @@ public partial class AutoFenceEditor
             input =  input.Substring(slashIndex + 1);
         }
         //-- Do it twice as there may be dual nested Categories. Dont bother with recursion for just two.
+        slashIndex = input.IndexOf('/');
         if (slashIndex != -1 && slashIndex + 1 < input.Length)
         {
             input = input.Substring(slashIndex + 1);

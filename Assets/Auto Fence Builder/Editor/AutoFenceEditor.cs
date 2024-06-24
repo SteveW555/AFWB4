@@ -1339,7 +1339,7 @@ public partial class AutoFenceEditor : Editor
         Quaternion effectiveRotation = rotation ?? Quaternion.identity;
 
         // Define the scale factor and handle color
-        float scaleFactor = 0.5f;
+        float scaleFactor = 0.7f;
         Color handleColor = new Color(0.5f, 0.5f, 0.5f); // Dark gray
 
         // Save the original handle matrix and color
@@ -1405,12 +1405,6 @@ public partial class AutoFenceEditor : Editor
         Event currEvent = Event.current;
         if (af != null && af.gameObject != null)
             Selection.activeGameObject = af.gameObject; // Sanity check: keep Auto Fence Builder object selected so we can see the inspector. TODO: Unlock this if we need to select other objects
-
-
-
-
-        //return;     // It's not for us!
-
 
         //-- Completely block use, if user has chosen to unload assets to optimize build Size
         if (userUnloadedAssets == true)
@@ -1498,11 +1492,7 @@ public partial class AutoFenceEditor : Editor
         //==========================================
         ShowLogComments();
 
-
-
-
         Handles.EndGUI();
-
 
         af.CheckFoldersBuilt();
 
@@ -1532,10 +1522,6 @@ public partial class AutoFenceEditor : Editor
         //-- Moved 9/6/24 to ensure gizmos drawn behind text for better visibility
         HandleDragAndControls(currEvent);
         AssignStepIndexForVariations(currEvent, sectionIndexForLayers, hoveredLayer, go);
-
-
-
-
 
 
         //=======================================================
@@ -1578,7 +1564,7 @@ public partial class AutoFenceEditor : Editor
         UnlockMouse(currEvent, hoveredLayer);
         GoToPrefabInFolderFromSceneView(currEvent, hoveredLayer);
 
-        //EnableSceneEditing(currEvent, hoveredLayer);
+        EnableSceneEditing(currEvent, hoveredLayer);
 
         //============================================
         //          Add Post/ClickPoint
@@ -2105,7 +2091,7 @@ public partial class AutoFenceEditor : Editor
         }
     }
     /// <summary>
-    /// Enabbles/Disable the ability to Offset / Scale / Rotate Fence parts
+    /// Enabbles/Disable the ability to Offset / Scale / Rotate Fence parts  from Alt-double-click
     /// </summary>
     /// <param name="layer"></param>
     void EnableSceneEditing(Event currEvent, LayerSet layer)

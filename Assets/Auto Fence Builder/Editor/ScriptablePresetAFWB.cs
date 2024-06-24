@@ -1256,6 +1256,13 @@ public class ScriptablePresetAFWB : ScriptableObject
         Array.Resize(ref directoryPaths, directoryPaths.Length + userDirectoryPaths.Length);
         Array.Copy(userDirectoryPaths, 0, directoryPaths, directoryPaths.Length - userDirectoryPaths.Length, userDirectoryPaths.Length);
 
+        //-- If we know these have been deleted we can ignore many of the prersets
+        /*bool mainPrefabsFolderExists = AssetDatabase.IsValidFolder(af.currAutoFenceBuilderDir + "/AFWB_Prefabs");
+        bool railsPrefabsFolderExists = AssetDatabase.IsValidFolder(af.currAutoFenceBuilderDir + "/AFWB_Prefabs/_Rails_AFWB");
+        bool postsPrefabsFolderExists = AssetDatabase.IsValidFolder(af.currAutoFenceBuilderDir + "/AFWB_Prefabs/_Posts_AFWB");
+        bool extrasPrefabsFolderExists = AssetDatabase.IsValidFolder(af.currAutoFenceBuilderDir + "/AFWB_Prefabs/_Extras_AFWB");*/
+       
+        
         foreach (string dirPath in directoryPaths)
         {
             //Debug.Log(dirPath);
@@ -1268,26 +1275,28 @@ public class ScriptablePresetAFWB : ScriptableObject
                     if (preset == null)
                         continue;
                     ReCategoriseBasedOnDirectory(dirPath, preset);
-                    FixPresetDebug(preset);
+                    //FixPresetDebug(preset);
+
+                    //ReplaceMissingPrefabsWithDefaults(preset);
 
                     //-- check for bad Size vectors from obsolete presetsEd
-                    for (int i = 0; i < AutoFenceCreator.kMaxNumSeqSteps; i++)
+                    /*for (int i = 0; i < AutoFenceCreator.kMaxNumSeqSteps; i++)
                     {
                         if (preset.userSequenceRailA[i].size == Vector3.zero)
                             preset.userSequenceRailA[i].size = Vector3.one;
                         if (preset.userSequenceRailB[i].size == Vector3.zero)
                             preset.userSequenceRailB[i].size = Vector3.one;
-                    }
+                    }*/
                     if (filePath.Contains("PresetsForFinishedFences"))
                     {
                         preset.categoryName = "Used in Finished Fences";
                     }
-                    PresetCheckFixEd.CheckAndRepairSourceVariantsListsAllLayerForPreset(preset, af);
+                    //PresetCheckFixEd.CheckAndRepairSourceVariantsListsAllLayerForPreset(preset, af);
                     presetList.Add(preset);
                     // add a copy in a seperate [User] category
                     if (dirPath.Contains("User_Presets"))
                     {
-                        PresetCheckFixEd.CheckAndRepairSourceVariantsListsAllLayerForPreset(preset, af);
+                        //PresetCheckFixEd.CheckAndRepairSourceVariantsListsAllLayerForPreset(preset, af);
                         SourceVariant.stopComplainingAboutNullGos = true;
                         ScriptablePresetAFWB userCopy = Instantiate(preset);
                         SourceVariant.stopComplainingAboutNullGos = false;
@@ -1299,7 +1308,19 @@ public class ScriptablePresetAFWB : ScriptableObject
         }
         return presetList;
     }
-
+    public void ReplaceMissingPrefabsWithDefaultsCheckAndRepairPreset(ScriptablePresetAFWB preset)
+    {
+        if (postName == "")
+            postName = "Post";
+        if (railAName == "")
+            railAName = "RailA";
+        if (railBName == "")
+            railBName = "RailB";
+        if (subpostName == "")
+            subpostName = "Subpost";
+        if (extraName == "")
+            extraName = "Extra";
+    }
     //-------------------
     private static void ReCategoriseBasedOnDirectory(string dirPath, ScriptablePresetAFWB preset)
     {

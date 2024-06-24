@@ -3403,7 +3403,9 @@ public static class Housekeeping
 
             foreach (int index in matchingPresets)
             {
-                Debug.Log($"Preset index: {index}\n");
+                string name = ed.mainPresetList[index].name;
+                string category = ed.mainPresetList[index].categoryName;
+                Debug.Log($"Preset index: {index}  {category}/{name}\n");
             }
         }
 

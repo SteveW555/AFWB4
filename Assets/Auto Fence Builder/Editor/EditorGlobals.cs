@@ -1314,9 +1314,13 @@ public partial class AutoFenceEditor
                 //-- Find Prefabs Using material
                 //===============================
                 GUILayout.Space(rowGap);
-                if (GUILayout.Button(new GUIContent($"Print Prefabs Using Material Name {prefabTypeWord}", ""), GUILayout.Width(250)))
+                if (GUILayout.Button(new GUIContent($"Print Prefabs Using Current Mat {prefabTypeWord}", ""), GUILayout.Width(250)))
                 {
-                    List<GameObject> prefabsWithMatName = Housekeeping.FindPrefabsUsingMaterialName("Brickwall_OldEnglish");
+                    GameObject gameObject = af.GetCurrentPrefabForLayer(currViewedLayer);
+                    Material mat = gameObject.GetComponent<Renderer>().sharedMaterial;
+                    string matName = mat.name;
+                    
+                    List<GameObject> prefabsWithMatName = Housekeeping.FindPrefabsUsingMaterialName(matName);
                     foreach (GameObject prefab in prefabsWithMatName)
                     {
                         Debug.Log(prefab.name + "\n");

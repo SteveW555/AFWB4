@@ -691,7 +691,7 @@ public class ResourceUtilities
         GameObject copy = GameObject.Instantiate(prefab); // a backup so we can undo any rotations etc
         if (name != "")
             copy.name = name;
-        string userRailPrefabsFolderPath = PrefabLoader.GetUserRailsFolderPath(af);
+        string userRailPrefabsFolderPath = PrefabLoader.GetUserPrefabFolderPathForLayer(ed.af, LayerSet.railALayer);
         //string filePath = userRailPrefabsFolderPath + "/" + copy.name + ".prefab";
         GameObject go = PrefabAssignEditor.SaveUserGameObjectInUserAssetsFolder(copy, PrefabTypeAFWB.railPrefab, ed.af);
         GameObject.DestroyImmediate(copy);

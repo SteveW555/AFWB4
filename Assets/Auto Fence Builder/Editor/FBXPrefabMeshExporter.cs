@@ -18,12 +18,16 @@ public static class PrefabMeshExporterAF
     /// </summary>
     /// <param name="mesh">The mesh to export.</param>
     /// <param name="exportPath">The path where the mesh should be exported.</param>
-    public static GameObject ExportMeshAndPrefab(GameObject mesh, PrefabTypeAFWB objType, AutoFenceCreator af)
+    public static GameObject ExportMeshAndPrefab(GameObject mesh, PrefabTypeAFWB objType, AutoFenceCreator af, bool resave = false)
     {
 #if UNITY_EDITOR
         if (FBXExporterChecker.IsFBXExporterAvailable())
         {
-            GameObject newPrefab = ExportWithFBXExporter(mesh, objType, af);
+            GameObject newPrefab = null;
+            if (resave == false)
+                 newPrefab = ExportWithFBXExporter(mesh, objType, af);
+            else if (resave == true)
+                newPrefab = ReexportWithFBXExporter(mesh, objType, af);
             return newPrefab;
         }
         else
@@ -36,7 +40,7 @@ public static class PrefabMeshExporterAF
         return null;
     }
 
-    private static GameObject ExportWithFBXExporter(GameObject userObj, PrefabTypeAFWB objType, AutoFenceCreator af, GameObject master = null,
+    private static GameObject ExportWithFBXExporter(GameObject userPrefab, PrefabTypeAFWB prefabType, AutoFenceCreator af, GameObject master = null,
                                                 bool isVariant = false, bool addUserPrefix = true)
     {
 
@@ -49,54 +53,60 @@ public static class PrefabMeshExporterAF
                 //exportObjectMethod.Invoke(null, new object[] { exportPath, tempObject });
                 //================================================================================================
 
-                if (userObj == null)
+                if (userPrefab == null)
                     return null;
                 if (af.currAutoFenceBuilderDir == null)
                 {
                     Debug.LogWarning("af.currAutoFenceBuilderDir is null in SaveUserObject()");
                     return null;
                 }
-                GameObject result = userObj; // just in case replace fails
                 string meshPath = "", prefabPath = "";
-                string objName = "";
-                if (userObj.name.StartsWith("[U") == false && addUserPrefix == true)
-                    objName += "[U]";
-                objName += userObj.name;
+
+                //-- We need to strip and re-add the name in case e.g. we're saving a _Rail as a _Post 
+                string baseName = af.StripPrefabTypeFromName(userPrefab.name);
+                if (prefabType == PrefabTypeAFWB.postPrefab)
+                    baseName += "_Post";
+                if (prefabType == PrefabTypeAFWB.railPrefab)
+                    baseName += "_Panel";
+                if (prefabType == PrefabTypeAFWB.extraPrefab)
+                    baseName += "_Extra";
+
+                if (baseName.StartsWith("[U]"))
+                    baseName = baseName.Replace("[U]", "");
+                else if (baseName.StartsWith("[User]"))
+                    baseName = baseName.Replace("[User]", "");
+
+                string prefabName = "[U]" + baseName;
+
+                string meshName = "U_" + baseName; //-- because meshes cant have chars like [ ] 
 
                 //string meshExtnStr = ".fbx";
                 string fbxExpPath = "";
                 GameObject meshGO = null, exportedModel = null, prefab = null;
 
-                if (objType == PrefabTypeAFWB.railPrefab)
+                if (prefabType == PrefabTypeAFWB.railPrefab)
                 {
-                    if (objName.EndsWith("_Panel") == false && objName.EndsWith("_Rail") == false)
-                    {
-                        objName += "_Panel";
-                    }
                     //===========================
                     //      Save Prefab Path
                     //============================
-                    prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Rails/" + objName + ".prefab";
+                    prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Rails/" + prefabName + ".prefab";
 
                     //============================
                     //      Save Mesh Path
                     //============================
-                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Rails/" + objName + ".fbx";
-                }
-                if (objType == PrefabTypeAFWB.postPrefab)
-                {
-                    if (objName.EndsWith("_Post") == false)
-                        objName += "_Post";
-                    prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Posts/" + objName + ".prefab";
-                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Posts/" + objName + ".fbx";
+                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Rails/" + meshName + ".fbx";
                     isVariant = false;
                 }
-                if (objType == PrefabTypeAFWB.extraPrefab)
+                if (prefabType == PrefabTypeAFWB.postPrefab)
                 {
-                    if (objName.EndsWith("_Extra") == false)
-                        objName += "_Extra";
-                    prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Extras/" + objName + ".prefab";
-                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Extras/" + objName + ".fbx";
+                    prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Posts/" + prefabName + ".prefab";
+                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Posts/" + meshName + ".fbx";
+                    isVariant = false;
+                }
+                if (prefabType == PrefabTypeAFWB.extraPrefab)
+                {
+                    prefabPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserPrefabs_Extras/" + prefabName + ".prefab";
+                    fbxExpPath = af.currAutoFenceBuilderDir + "/UserAssets_AFWB/UserMeshes_Extras/" + meshName + ".fbx";
                     isVariant = false;
                 }
 
@@ -107,20 +117,20 @@ public static class PrefabMeshExporterAF
                 //-- Default useBinaryFBX = true
                 if (af.useBinaryFBX == true)
                 {
-                    ExportBinaryFBX(fbxExpPath, userObj);
+                    ExportBinaryFBX(fbxExpPath, userPrefab, meshName);
                 }
                 else
                 {
-                    ExportNonBinaryFBX(userObj, objType, af, exportObjectMethod, fbxExpPath);
+                    ExportNonBinaryFBX(userPrefab, prefabType, af, exportObjectMethod, fbxExpPath);
                 }
 
-                //--- Load the exported fbx so we can attaxh it to our prefab
+                //--- Load the exported fbx so we can attatch it to our prefab
                 GameObject exportedGO = AssetDatabase.LoadMainAssetAtPath(fbxExpPath) as GameObject;
                 GameObject instantiatedExpGO = null;
                 if (isVariant == false)
                     instantiatedExpGO = GameObject.Instantiate(exportedGO) as GameObject; // can't SaveAsPrefabAsset() persistent disk asset directlyif (inst == null)
-                                                                         //else
-                                                                         //instantiatedExpGO = GameObject.Instantiate(exportedGO) as GameObject; // yup, I know
+                                                                                          //else
+                                                                                          //instantiatedExpGO = GameObject.Instantiate(exportedGO) as GameObject; // yup, I know
 
                 if (instantiatedExpGO == null)
                 {
@@ -129,7 +139,7 @@ public static class PrefabMeshExporterAF
                 }
 
                 //-- No idea why this should be necessary
-                List<GameObject> allSource = MeshUtilitiesAFWB.GetAllMeshGameObjectsFromGameObject(userObj);
+                List<GameObject> allSource = MeshUtilitiesAFWB.GetAllMeshGameObjectsFromGameObject(userPrefab);
                 List<GameObject> allFBX = MeshUtilitiesAFWB.GetAllMeshGameObjectsFromGameObject(exportedGO);
                 List<GameObject> allNew = MeshUtilitiesAFWB.GetAllMeshGameObjectsFromGameObject(instantiatedExpGO);
 
@@ -168,6 +178,45 @@ public static class PrefabMeshExporterAF
         }
         return null;
     }
+    private static GameObject ReexportWithFBXExporter(GameObject prefabWithMesh, PrefabTypeAFWB prefabType, AutoFenceCreator af)
+    {
+
+        var modelExporterType = Type.GetType("UnityEditor.Formats.Fbx.Exporter.ModelExporter, Unity.Formats.Fbx.Editor");
+        if (modelExporterType != null)
+        {
+            var exportObjectMethod = modelExporterType.GetMethod("ExportObject", new[] { typeof(string), typeof(GameObject) });
+            if (exportObjectMethod != null)
+            {
+                MeshFilter meshFilter = prefabWithMesh.GetComponent<MeshFilter>();
+                if (meshFilter == null || meshFilter.sharedMesh == null)
+                {
+                    Debug.Log("Selected GameObject does not have a mesh");
+                    return null;
+                }
+                Mesh mesh = meshFilter.sharedMesh;
+                string meshPath = AssetDatabase.GetAssetPath(mesh);
+                //============================================================
+                //      Export the Mesh - Will overwrite the existing mesh
+                //============================================================
+                //-- Default useBinaryFBX = true
+                if (af.useBinaryFBX == true)
+                {
+                    ExportBinaryFBX(meshPath, prefabWithMesh, mesh.name);
+                }
+                else
+                {
+                    ExportNonBinaryFBX(prefabWithMesh, prefabType, af, exportObjectMethod, meshPath);
+                }
+                return null;
+            }
+            else
+                Debug.LogError("ExportObject method not found in FBX Exporter library.\n");
+        }
+        else
+            Debug.LogError("ModelExporter type not found in FBX Exporter library.\n");
+        
+        return null;
+    }
     //------------------------
     //-- Default is to use binary FBX, not this
     private static void ExportNonBinaryFBX(GameObject userObj, PrefabTypeAFWB objType, AutoFenceCreator af, MethodInfo exportObjectMethod, string fbxExpPath)
@@ -182,13 +231,13 @@ public static class PrefabMeshExporterAF
             meshName = meshName.Replace("]", "");
             meshName = af.StripPanelRailFromName(meshName);
             userObj.name = meshName;
-            //string successPath = ModelExporter.ExportObject(fbxExpPath, userObj);
+            //string successPath = ModelExporter.ExportObject(fbxExpPath, userPrefab);
             exportObjectMethod.Invoke(null, new object[] { fbxExpPath, userObj });
         }
         else if (objType == PrefabTypeAFWB.postPrefab)
         {
             string meshName = userObj.name;
-            //string successPath = ModelExporter.ExportObject(fbxExpPath, userObj);
+            //string successPath = ModelExporter.ExportObject(fbxExpPath, userPrefab);
             exportObjectMethod.Invoke(null, new object[] { fbxExpPath, userObj });
         }
     }
@@ -216,7 +265,7 @@ public static class PrefabMeshExporterAF
         }
     }
     //-----------------------
-    private static void ExportBinaryFBX(string filePath, UnityEngine.Object singleObject)
+    private static void ExportBinaryFBX(string filePath, UnityEngine.Object singleObject, string meshName)
     {
         // Ensure FBX Exporter is available
         if (!FBXExporterChecker.IsFBXExporterAvailable())
@@ -278,9 +327,11 @@ public static class PrefabMeshExporterAF
             Debug.LogError("FBX Exporter ExportObject method not found.\n");
             return;
         }
-
+        string origName = singleObject.name;
+        singleObject.name = meshName;
         exportObjectMethod.Invoke(null, new object[] { filePath, singleObject, optionsInstance });
         Debug.Log($"Object exported successfully to '{filePath}'.\n");
+        singleObject.name = origName;
     }
 
 

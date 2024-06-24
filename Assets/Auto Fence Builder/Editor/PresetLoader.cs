@@ -21,7 +21,7 @@ namespace AFWB
         }
 
         //=================== Load All Presets ===================
-        
+
         // SourceVariants and their menus are setup automatically by an observer on the SourceVariants list
         //---------------
         /// <summary>
@@ -30,23 +30,19 @@ namespace AFWB
         /// </summary>
         /// <param name="zeroContentVersion">If set to <c>true</c>, handles zero content version.</param>
         /// <returns>A list of all loaded scriptable presets.</returns>
-        
+
         public List<ScriptablePresetAFWB> LoadAllScriptablePresets(bool zeroContentVersion)
         {
-            
+
             //========================================================
             //      Load All Presets via ScriptablePresetAFWB
             //========================================================
 
-            if (zeroContentVersion == false)
-                ed.mainPresetList = ScriptablePresetAFWB.ReadAllPresetFiles(af, ed);
-            else if (zeroContentVersion == true)
-                HandleZeroContentPreset();
-
+            ed.mainPresetList = ScriptablePresetAFWB.ReadAllPresetFiles(af, ed);
 
             //     Check if the Presets List has issues ot other details
             //==============================================================
-           if (ed.mainPresetList == null || ed.mainPresetList.Count == 0)
+            if (ed.mainPresetList == null || ed.mainPresetList.Count == 0)
             {
                 Debug.LogWarning("Presets missing from Main AFWB Presets. No presetsEd available\n");
                 Debug.LogWarning("Presets should be in Auto Fence Builder/AFWB_Prests\n");
@@ -67,6 +63,22 @@ namespace AFWB
             for (int i = 0; i < ed.mainPresetList.Count; i++)
             {
                 ScriptablePresetAFWB preset = ed.mainPresetList[i];
+
+
+
+                PresetCheckFixEd.CheckAndRepairSourceVariantsListsAllLayerForPreset(preset, af);
+
+                //-- check for bad Size vectors from obsolete presetsEd
+                for (int j = 0; j < AutoFenceCreator.kMaxNumSeqSteps; j++)
+                {
+                    if (preset.userSequenceRailA[j].size == Vector3.zero)
+                        preset.userSequenceRailA[j].size = Vector3.one;
+                    if (preset.userSequenceRailB[j].size == Vector3.zero)
+                        preset.userSequenceRailB[j].size = Vector3.one;
+                }
+
+
+
                 //-- Check for missing Category name
                 if (preset.categoryName == "")
                 {
@@ -382,7 +394,7 @@ namespace AFWB
             af.extraSeeds.layer = LayerSet.extraLayer;
             af.subpostSeeds.layer = LayerSet.subpostLayer;
 
-            if (af.numStackedRails[0] < 1 )
+            if (af.numStackedRails[0] < 1)
                 af.numStackedRails[0] = 1;
             if (af.numStackedRails[1] < 1)
                 af.numStackedRails[1] = 1;
@@ -430,8 +442,8 @@ namespace AFWB
 
             return ed.currPreset;
         }
-        
-       
+
+
         public ScriptablePresetAFWB SetupPreset(int presetIndex, bool forceRebuild = false)
         {
             if (presetIndex >= ed.mainPresetList.Count)

@@ -271,6 +271,21 @@ namespace AFWB
                 return StripExtraFromName(name);
             return name;
         }
+        public string StripPrefabTypeFromName(string name)
+        {
+            if(name.EndsWith("_Rail") || name.EndsWith("_Panel") || name.EndsWith("_Panel_Rail"))
+                return StripPanelRailFromName(name);
+            else if (name.EndsWith("_Post"))
+                return StripPostFromName(name);
+            else if (name.EndsWith("_Extra"))
+                return StripExtraFromName(name);     
+
+            return name;
+        }
+
+
+
+
         public string StripPanelRailFromName(string name)
         {
             return StripPanelRailFromNameStatic(name);
