@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 //--------------------------
@@ -87,10 +88,11 @@ public partial class AutoFenceEditor : Editor
     public GUIStyle popup11Style, popup12Style, popup13Style, smallModuleLabelStyle;
     public GUIStyle greyStyle, lightGreyStyle2, italicHintStyle, italicHintStyleLight, moduleHeaderLabelStyle, popupLabelStyle, orangePopupStyle;
     public GUIStyle extrasNormalModeLabelStyle, extrasScatterModeLabelStyle;
+    private GUIStyle sceneViewScaleButtonOff;
     public GUIStyle unityBoldLabel, unityBoldLabelLarge, miniBold, smallBoldBlack, cyanBoldStyle, greenStyle2, cyanNonBoldStyle, cyanBoldStyleBigger, sty2, sty3;
     private GUIStyle boxUIStyle, boxUIGreenStyle, boxUIDarkCyanStyle, boxUIStyleNoBorder, boxUIStyleNoBorderLight, boxUIStyleNoBorderDark, boxUIStyleDark;
     public GUIStyle fatButt, biggerPopupStyle, borderedLabelStyle, tooltipStyle, greenPopupStyle;
-    public GUIStyle smallToolbarButtonStyle;
+    public GUIStyle smallToolbarButtonStyle, sceneViewScaleButtonOn;
 
     bool isDark = true;
     bool showBatchingHelp = false, showRefreshAndUnloadHelp = false;
@@ -249,12 +251,19 @@ public partial class AutoFenceEditor : Editor
     private float minPostToPostDistance;
     private string meshName;
     private bool drawEditingGizmo = false;
-    private Vector3 editingGizmoPos = Vector3.zero;
-    private bool isLeftButtonOn = true, isRightButtonOn = false;
-    private bool showSwitches = false;
-    private Vector2 switchPosition;
+    /// <summary>the postion before we changed it</summary>
+    private Vector3 baseEditingGizmoPos = Vector3.zero;
+    /// <summary>the postion while it's being changed</summary>
+    private Vector3 currEditingGizmoPos = Vector3.zero;
+    private bool isAllSectionsOn = true, isThisSectionOn = false;
+    private bool showSceneEditScaleSwitches = false;
+    //private Vector2 switchPosition;
     private bool isUseGameObjectMenuVisible = false;
-
+    private LayerSet sceneEditingLayer = LayerSet.None; //The layer currently being scaled etc. in SceneView
+    private GameObject sceneEditingGo = null; // The GameObject currently being scaled etc. in SceneView
+    private int sceneEditingSectionIndex = 0; // The index of the GameObject currently being scaled etc. in SceneView
+    bool restartingPositionDrag = true;
+    private Vector3 lastHandlePosition = Vector3.zero;
     //private static GizmoDrawManager instance;
 
     //====================================================
@@ -318,15 +327,15 @@ public partial class AutoFenceEditor : Editor
         // GameObjects have seen this. Anyway for .001ms it takes, here we are
 
         //EditorApplication.update += CheckContextMenuVisibility;
-        //EditorApplication.update += DrawSwitches;
-        
+        //EditorApplication.update += DrawScaleSwitches;
+
     }
     private void OnDisable()
     {
         //EditorApplication.update -= OnCustomUpdate;
         af.afwbActive = false;
         //EditorApplication.update -= CheckContextMenuVisibility;
-        //EditorApplication.update -= DrawSwitches;
+        //EditorApplication.update -= DrawScaleSwitches;
     }
     //-------------------------------------------
     //Called by OnEnable()
@@ -1332,8 +1341,80 @@ public partial class AutoFenceEditor : Editor
         return true;
     }
 
+    private string DrawScaleSwitches(Vector2 switchPosition, LayerSet layer)
+    {
+        //Debug.Log("DrawScaleSwitches\n");
+        //if (showSceneEditScaleSwitches == false)
+        //return;
 
-    private Vector3 DrawSmallerPositionHandle(Vector3 position, Quaternion? rotation = null)
+        GUIStyle allStyle = sceneViewScaleButtonOn;
+        GUIStyle thisStyle = sceneViewScaleButtonOff;
+        int allSectionsButtonHeight = 22, thisSectionButtonHeight = 18;
+        Color colorAll = new Color(1, 1, 1, .9f); // Semi-transparent green
+        Color colorThis = new Color(1, 1, 1, .6f); // Semi-transparent green
+        if (isAllSectionsOn == false)
+        {
+            allStyle = sceneViewScaleButtonOff;
+            thisStyle = sceneViewScaleButtonOn;
+            allSectionsButtonHeight = 18;
+            thisSectionButtonHeight = 22;
+            colorThis = new Color(1, 1, 1, .75f);
+            colorAll = new Color(1, 1, 1, .6f);
+        }
+        string layerName = layer.String(false);
+
+
+        Handles.BeginGUI();
+        float buttonWidth = 100;
+        Rect closeButtonRect = new Rect(switchPosition.x - 24, switchPosition.y, 20, 18);
+        Rect allSectionsButtonRect = new Rect(switchPosition.x, switchPosition.y, buttonWidth, allSectionsButtonHeight);
+        Rect thisSectionButtonRect = new Rect(switchPosition.x + buttonWidth, switchPosition.y, buttonWidth, thisSectionButtonHeight);
+        Rect resetPositionButtonRect = new Rect(switchPosition.x + buttonWidth * 2 + 4, switchPosition.y, 50, 18);
+        Rect resetScaleButtonRect = new Rect(switchPosition.x + buttonWidth * 2 + 54, switchPosition.y, 50, 18);
+        Rect layerButtonRect = new Rect(switchPosition.x + buttonWidth * 2 + 108, switchPosition.y, 20, 18);
+
+        Color originalColor = GUI.color;
+        GUI.color = colorAll;
+        if (GUI.Button(allSectionsButtonRect, $"All {layerName}s"))
+        {
+            isAllSectionsOn = true;
+            isThisSectionOn = false;
+        }
+        GUI.color = colorThis;
+        if (GUI.Button(thisSectionButtonRect, $"This {layerName}"))
+        {
+            isThisSectionOn = true;
+            isAllSectionsOn = false;
+        }
+
+        GUI.color = new Color(1, 1, 1, .75f);
+        if (GUI.Button(resetPositionButtonRect, new GUIContent("R Pos", "Reset Position")))
+        {
+            return "ResetPosition";
+        }
+        GUI.color = new Color(1, 1, 1, .75f);
+
+        if (GUI.Button(resetScaleButtonRect, new GUIContent("R Scl", "Reset Scale to (1,1,1)")))
+        {
+            return "ResetScale";
+        }
+
+        if (GUI.Button(layerButtonRect, new GUIContent("L", $"Reset Scale of this {layerName} to the {layerName} Layer's Scale")))
+        {
+            return "Layer";
+        }
+
+        if (GUI.Button(closeButtonRect, new GUIContent("X", $"Close")))
+        {
+            return "Close";
+        }
+
+        GUI.color = originalColor;
+
+        Handles.EndGUI();
+        return "";
+    }
+    private Vector3 DrawSmallerPositionHandle2(Vector3 position, LayerSet layer, Quaternion? rotation = null)
     {
         // Use the provided rotation or default to Quaternion.identity
         Quaternion effectiveRotation = rotation ?? Quaternion.identity;
@@ -1358,33 +1439,136 @@ public partial class AutoFenceEditor : Editor
         Handles.color = originalColor;
 
         // Return the adjusted position
+        newPosition.z *= -1;
         return position + newPosition;
     }
-    /*private void DrawSwitches()
+    private (Vector3 newPosition, Vector3 deltaMovement) DrawSmallerPositionHandle(Vector3 position, LayerSet layer)
     {
-        Debug.Log("DrawSwitches\n");
-        if(showSwitches == false)
-            return;
 
-        Handles.BeginGUI();
-        float buttonWidth = 80;
-        Rect leftButtonRect = new Rect(switchPosition.x, switchPosition.y, buttonWidth, 30);
-        Rect rightButtonRect = new Rect(switchPosition.x + buttonWidth, switchPosition.y, buttonWidth, 30);
+        // Draw the position handle
+        Vector3 newPosition = Handles.PositionHandle(position, Quaternion.identity);
 
-        if (GUI.Button(leftButtonRect, isLeftButtonOn ? "Left On" : "Left"))
-        {
-            isLeftButtonOn = true;
-            isRightButtonOn = false;
-        }
+        // Calculate delta movement
+        Vector3 deltaMovement = newPosition - lastHandlePosition;
 
-        if (GUI.Button(rightButtonRect, isRightButtonOn ? "Right On" : "Right"))
-        {
-            isRightButtonOn = true;
-            isLeftButtonOn = false;
-        }
+        // Update last position for next frame
+        lastHandlePosition = newPosition;
 
-        Handles.EndGUI();
-    }*/
+        return (newPosition, deltaMovement);
+    }
+
+    private Vector3 DrawSmallScaleHandle(Vector3 position, Vector3 scale, LayerSet layer, Quaternion? rotation = null)
+    {
+        // Use the provided rotation or default to Quaternion.identity
+        Quaternion effectiveRotation = rotation ?? Quaternion.identity;
+        // Combine the effective rotation with an additional 90-degree rotation on the Y-axis
+        Quaternion additionalRotation = (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
+        ? Quaternion.Euler(0, 0, 0)
+        : Quaternion.Euler(0, 90, 0);
+        effectiveRotation *= additionalRotation;
+        // Define the scale factor and handle color
+        float scaleFactor = 0.7f;
+        Color handleColor = new Color(0.5f, 0.5f, 0.5f); // Dark gray
+                                                         // Save the original handle matrix and color
+        Matrix4x4 originalMatrix = Handles.matrix;
+        Color originalColor = Handles.color;
+        // Set the new handle matrix and color
+        Handles.matrix = Matrix4x4.TRS(position + new Vector3(0, -2, 0), effectiveRotation, Vector3.one * scaleFactor);
+        Handles.color = handleColor;
+        // Draw the scale handle
+        //Vector3 scaleHandleSize = new Vector3(scale.z, 1, scale.x);
+        Vector3 newScale = Handles.ScaleHandle(scale, Vector3.zero, Quaternion.identity, 1.0f);
+        // Restore the original handle matrix and color
+        Handles.matrix = originalMatrix;
+        Handles.color = originalColor;
+        // Return the adjusted scale
+        return newScale;
+    }
+
+    private Vector3 DrawXZScaleHandle(Vector3 position, Vector3 scale, LayerSet layer, Quaternion? rotation = null)
+    {
+        // Use the provided rotation or default to Quaternion.identity
+        Quaternion effectiveRotation = rotation ?? Quaternion.identity;
+        // Combine the effective rotation with an additional rotation based on the layer
+        Quaternion additionalRotation = (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
+            ? Quaternion.Euler(0, 0 + 45, 0)
+            : Quaternion.Euler(0, 90 + 45, 0);
+        effectiveRotation *= additionalRotation;
+
+        // Define the gizmo scale and handle color
+        float gizmoScale = 0.7f;
+        Color handleColor = new Color(0.6f, 0.5f, 0.6f); // Dark gray
+
+        // Save the original handle matrix and color
+        Matrix4x4 originalMatrix = Handles.matrix;
+        Color originalColor = Handles.color;
+
+        // Set the new handle matrix and color
+        Handles.matrix = Matrix4x4.TRS(position, effectiveRotation, Vector3.one * gizmoScale);
+        Handles.color = handleColor;
+
+        // Calculate the initial ratio between X and Z scales
+        float initialRatio = scale.x / scale.z;
+
+        // Draw the scale handle for X and Z
+        Vector3 newScale = scale;
+        float averageScale = (scale.x + scale.z) / 2f;
+        float newAverageScale = Handles.ScaleSlider(averageScale, Vector3.zero, Vector3.forward, Quaternion.identity, 1.0f, 0f);
+
+        // Calculate the scale factor
+        float scaleFactor = newAverageScale / averageScale;
+
+        // Apply the scale factor while preserving the initial ratio
+        newScale.x = scale.x * scaleFactor;
+        newScale.z = scale.z * scaleFactor;
+
+        // Restore the original handle matrix and color
+        Handles.matrix = originalMatrix;
+        Handles.color = originalColor;
+
+        // Return the adjusted scale
+        return newScale;
+    }
+    private Vector3 DrawZYScaleHandle(Vector3 position, Vector3 scale, LayerSet layer, Quaternion? rotation = null)
+    {
+        // Use the provided rotation or default to Quaternion.identity
+        Quaternion effectiveRotation = rotation ?? Quaternion.identity;
+        // Combine the effective rotation with an additional rotation based on the layer
+        Quaternion additionalRotation = (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
+            ? Quaternion.Euler(0, 0, 0)
+            : Quaternion.Euler(90, 0, 0); // Changed to rotate around X-axis for XY plane
+        effectiveRotation *= additionalRotation;
+
+        // Define the gizmo scale and handle color
+        float gizmoScale = 0.7f;
+        Color handleColor = new Color(0.65f, 0.45f, 0.65f); // Dark gray
+
+        // Save the original handle matrix and color
+        Matrix4x4 originalMatrix = Handles.matrix;
+        Color originalColor = Handles.color;
+
+        // Set the new handle matrix and color
+        Handles.matrix = Matrix4x4.TRS(position, effectiveRotation, Vector3.one * gizmoScale);
+        Handles.color = handleColor;
+
+        // Draw the scale handle for X and Y
+        Vector3 newScale = scale;
+        //float newXScale = Handles.ScaleSlider(scale.x, Vector3.zero, Vector3.right, Quaternion.identity, 1.0f, 0f);
+        //float newZScale = Handles.ScaleSlider(scale.z, Vector3.zero, Vector3.forward, Quaternion.identity, 1.0f, 0f);
+        float newYScale = Handles.ScaleSlider(scale.y, Vector3.zero, Vector3.up, Quaternion.identity, 1.0f, 0f); // Changed to Y-axis
+
+        //float dual = (newZScale + newYScale) / 2.0f;
+        //dual *= 0.2f; //reduce the sensitivity
+        newScale.z = newYScale;
+        newScale.y = newYScale; // Changed to Y-axis
+
+        // Restore the original handle matrix and color
+        Handles.matrix = originalMatrix;
+        Handles.color = originalColor;
+
+        // Return the adjusted scale
+        return newScale;
+    }
 
     //===========================================================================================================
     //
@@ -1420,13 +1604,13 @@ public partial class AutoFenceEditor : Editor
 
         /* if (currEvent.control == true && currEvent.alt == false && currEvent.type == EventType.MouseDown && currEvent.button == 1)
          {
-             showSwitches = true;
+             showSceneEditScaleSwitches = true;
              switchPosition = currEvent.mousePosition;
              //go = UseGameObjectAsAutoFence(currEvent, rayPosition, go);
          }
-         if (showSwitches)
+         if (showSceneEditScaleSwitches)
          {
-             DrawSwitches(switchPosition);
+             DrawScaleSwitches(switchPosition);
          }*/
 
         //===================================================================================
@@ -1521,41 +1705,34 @@ public partial class AutoFenceEditor : Editor
         //=====================================
         //-- Moved 9/6/24 to ensure gizmos drawn behind text for better visibility
         HandleDragAndControls(currEvent);
+
+
         AssignStepIndexForVariations(currEvent, sectionIndexForLayers, hoveredLayer, go);
 
 
         //=======================================================
         //          Mouse Hover 
         //=======================================================
-        go = MouseHover(helpBoxHeight, rayPosition, out hoveredLayer, out isClickPoint);
+        int sectionIndex = -1; //-- This should be the same for posts and rails, the rail index is the same as its starting post index
+        go = MouseHover(helpBoxHeight, rayPosition, out hoveredLayer, out isClickPoint, ref sectionIndex);
         bool overFenceLayer = hoveredLayer.IsFence();
         bool variationsEnabledForLayer = af.GetUseVariationsForLayer(hoveredLayer);
 
         if (overFenceLayer && go == null)
             af.mouseHoveringOverIgnoreLayer = true;
 
-        if (overFenceLayer && currEvent.alt)
+        PostVector postVector = null;
+        Vector3 railMidPointOffset = Vector3.zero;
+        if (overFenceLayer)
         {
-            //Debug.Log("Alt key pressed\n");
-            //currEvent.Use();
-        }
-        if (currEvent.alt == true && currEvent.control == false && currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
-        {
-            Debug.Log("Double-clicked on Fence to Enable Scene Editing");
-            drawEditingGizmo = true;
-            //ToggleNodeGizmos();
-            // consume the event so that it doesn't get passed on to other methods
-            currEvent.Use();
+            postVector = PostVector.GetPostVectorAtIndex(sectionIndex);
+            railMidPointOffset = postVector.GetMidPointOffsetToNextPost();
         }
 
-        if (overFenceLayer && go != null)
-        {
-            editingGizmoPos = go.transform.position;
-            editingGizmoPos.y = af.GetNodeMarkerPosition(0).y;
-        }
 
-        if (drawEditingGizmo)
-            DrawSmallerPositionHandle(editingGizmoPos);
+        //      Scaling Gizmo
+        //=========================
+        UseScalingGizmo(currEvent, go, hoveredLayer, overFenceLayer, sectionIndex);
 
         //============================================
         //          Double-click shortcuts
@@ -1618,16 +1795,16 @@ public partial class AutoFenceEditor : Editor
         //    Control Right-Click  :  Get GameObject to Use as Post
         //===================================================================
 
-        /*if (showSwitches == true)
+        /*if (showSceneEditScaleSwitches == true)
         {
-            DrawSwitches();
+            DrawScaleSwitches();
         }*/
 
         if (currEvent.control == true && currEvent.alt == false && currEvent.type == EventType.MouseDown && currEvent.button == 1)
         {
-            showSwitches = true;
+            showSceneEditScaleSwitches = true;
             isUseGameObjectMenuVisible = true;
-            switchPosition = currEvent.mousePosition;
+            //switchPosition = currEvent.mousePosition;
             go = UseGameObjectAsAutoFence(this, currEvent, rayPosition, go);
         }
 
@@ -1652,16 +1829,197 @@ public partial class AutoFenceEditor : Editor
         //GUI.Label(new Rect(0, 400, 300, 40), $"Extra Build Time: {sceneViewTime.ToString("F2")} ms");
         Handles.EndGUI();
     }
-    /*private void CheckContextMenuVisibility()
+
+    private void UseScalingGizmo(Event currEvent, GameObject go, LayerSet layer, bool overFenceLayer, int sectionIndex)
     {
-        // Reset the context menu visibility flag if the context menu loses focus
-        if (isUseGameObjectMenuVisible && (EditorWindow.focusedWindow == null || EditorWindow.focusedWindow.GetType() != typeof(GenericMenu)))
+        if (currEvent.alt == true && currEvent.control == false && currEvent.type == EventType.MouseDown &&
+                    currEvent.clickCount == 2 && currEvent.button == 0 && overFenceLayer)
         {
-            isUseGameObjectMenuVisible = false;
-            Debug.Log($"isUseGameObjectMenuVisible = {isUseGameObjectMenuVisible}\n");
-            showSwitches = false;
+            Debug.Log("Double-clicked on Fence to Enable Scene Editing");
+            drawEditingGizmo = true;
+            sceneEditingLayer = layer;
+            sceneEditingSectionIndex = sectionIndex;
+            sceneEditingGo = go;
+            currEvent.Use();
         }
-    }*/
+        if (overFenceLayer && go != null)
+        {
+            PostVector postVector = PostVector.GetPostVectorAtIndex(sceneEditingSectionIndex);
+            Vector3 railMidPointOffset = postVector.GetMidPointOffsetToNextPost();
+            baseEditingGizmoPos = go.transform.position;
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
+                baseEditingGizmoPos += new Vector3(railMidPointOffset.x, 0, railMidPointOffset.z);
+            sceneEditingGo = go;
+        }
+
+        if (currEvent.type == EventType.MouseUp)
+        {
+            Debug.Log("Mouse Stropped Drag\n");
+            restartingPositionDrag = true;
+        }
+        //else
+        //restartingPositionDrag = false;
+
+
+
+        EditorGUI.BeginChangeCheck();
+        Vector3 oldScale = Vector3.zero, newScale = Vector3.zero;
+        Vector3 oldPosition = Vector3.zero, currPositionOffset = Vector3.zero, newPosition = Vector3.zero;
+        Vector3 newPositionOffset = af.GetPositionTransformForLayer(sceneEditingLayer);
+        string switchCommand = "";
+        float currTransformY = 0;
+        bool mouseDown = false;
+        if (drawEditingGizmo && sceneEditingGo != null)
+        {
+            currPositionOffset = af.GetPositionTransformForLayer(sceneEditingLayer);
+            oldScale = af.GetScaleTransformForLayer(sceneEditingLayer);
+            newScale = DrawSmallScaleHandle(baseEditingGizmoPos, oldScale, sceneEditingLayer);
+
+
+            if (newScale == oldScale)
+            {
+                newPositionOffset = af.GetPositionTransformForLayer(sceneEditingLayer);
+                Vector3 gizmoPos = Vector3.zero;
+                if (sceneEditingLayer == LayerSet.postLayer)
+                {
+                    gizmoPos = baseEditingGizmoPos - new Vector3(0, 0.02f, 0);
+                    //newScale = DrawXZScaleHandle(gizmoPos, oldScale, sceneEditingLayer);
+                }
+                else if (sceneEditingLayer == LayerSet.railALayer || sceneEditingLayer == LayerSet.railBLayer)
+                {
+                    //Debug.Log($"restartingDrag: {restartingPositionDrag}\n");
+
+
+                    //gizmoPos = baseEditingGizmoPos + new Vector3(0.2f, 0.1f, 0.2f) - af.GetPositionTransformForLayer(sceneEditingLayer);
+                    //newScale = DrawZYScaleHandle(gizmoPos, oldScale, sceneEditingLayer);
+
+                    //     Draw the position handle
+                    //===================================
+                    Vector3 currPosTransform = af.GetPositionTransformForLayer(sceneEditingLayer);
+                    currTransformY = currPosTransform.y;
+                    PostVector postVector = PostVector.GetPostVectorAtIndex(sceneEditingSectionIndex);
+                    Vector3 railMidPointOffset = postVector.GetMidPointOffsetToNextPost();
+                    railMidPointOffset.y = 0;
+
+                    Vector3 currGoPosition = sceneEditingGo.transform.position + new Vector3(railMidPointOffset.x, 0, railMidPointOffset.z);
+                    Vector3 untransformedGoPosition = currGoPosition - currPosTransform;
+
+                    //if (restartingPositionDrag == true)
+                    //gizmoPos = baseEditingGizmoPos + currPosTransform;
+
+                    //Debug.Log($"restartingPositionDrag: {restartingPositionDrag}\n");
+
+                    mouseDown = false;
+                    if (currEvent.type == EventType.MouseDown)
+                    {
+                        mouseDown = true;
+                        Debug.Log("MouseDown\n");
+                    }
+                    gizmoPos = currGoPosition;
+
+                    //      Draw the position handle
+                    //===================================
+                    (Vector3 newPos, Vector3 deltaMovement ) = DrawSmallerPositionHandle(currGoPosition, layer);
+                    
+                    if(Mathf.Abs(deltaMovement.y) > 0f)
+                        Debug.Log($"newPos: {newPos}       deltaMovement:  {deltaMovement}\n");
+
+                    Vector3 currT =  currPosTransform = af.GetPositionTransformForLayer(sceneEditingLayer);
+                    //currT += new Vector3(railMidPointOffset.x, 0, railMidPointOffset.z);
+
+                    Vector3 newT = currT + deltaMovement;
+                    af.SetPositionTransformForLayer(newT, sceneEditingLayer);
+
+                    Debug.Log($"----------\n");
+
+                    //float movedY = newPosition.y - currGoPosition.y;
+                    //newPosition = currGoPosition + movedVector;
+
+                    newPositionOffset = (newPosition - gizmoPos);
+
+                    /*if (mouseDown)
+                    {
+                        newPositionOffset = currPosTransform;
+                        newPositionOffset.y = gizmoPos.y;
+                        af.SetPositionTransformForLayer(newPositionOffset, sceneEditingLayer);
+                    }*/
+
+                    /*if (restartingPositionDrag == true)
+                    {
+                        Vector3 realUnMovedGoPos = baseEditingGizmoPos - currPosTransform;
+                        newPositionOffset = newPosition - realUnMovedGoPos;
+                    }*/
+
+                    if (Mathf.Abs(newPositionOffset.y) > .025f)
+                        restartingPositionDrag = false;
+
+                    //Debug.Log($"go: {sceneEditingGo.name}      {sceneEditingGo.transform.position}   {new Vector3(railMidPointOffset.x, 0, railMidPointOffset.z)}\n");
+                    //if (movedVector.y > 0.03)
+                    {
+                        //Debug.Log($"currGoPosition.y: {currGoPosition.y}     untransformedGoPosition = {untransformedGoPosition.y}\n");
+                        //Debug.Log($"movedVector: {movedVector.y}\n");
+                        /*Debug.Log($"gizmoPos: {gizmoPos.y}\n");
+
+                        currTransformY = af.GetPositionTransformForLayer(sceneEditingLayer).y;
+                        Debug.Log($"currTransformY: {currTransformY}\n");
+
+                        Debug.Log($"newPositionOffset: {newPositionOffset.y}\n");
+                        //restartingPositionDrag = false;*/
+
+
+
+
+                    }
+                }
+            }
+            Vector2 gizmoScreenPos = HandleUtility.WorldToGUIPoint(baseEditingGizmoPos);
+            gizmoScreenPos.y -= 200;
+            switchCommand = DrawScaleSwitches(gizmoScreenPos + new Vector2(-40, -200), sceneEditingLayer);
+        }
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
+            {
+                //Debug.Log($"currTransformY: {currTransformY}\n");
+                //Debug.Log($"newPositionOffset: {newPositionOffset.y}\n");
+
+                Vector3 currTransformPos = af.GetPositionTransformForLayer(sceneEditingLayer);
+
+                Vector3 newOffset = newPositionOffset;
+
+                float diff = Mathf.Abs(currTransformY - newPositionOffset.y);
+                //Debug.Log($"diff: {diff}\n");
+
+                //if (newPositionOffset.y > .01f)
+                //af.SetPositionTransformForLayer(newOffset, sceneEditingLayer);
+            }
+            //Undo.RecordObject(selectedObject.transform, "Move Position");
+            if (switchCommand == "ResetPosition")
+                newPositionOffset = Vector3.zero;
+            if (switchCommand == "ResetScale")
+                newScale = Vector3.one;
+            af.SetScaleTransformForLayer(newScale, sceneEditingLayer);
+            if (switchCommand == "Close")
+                drawEditingGizmo = false;
+            af.ForceRebuildFromClickPoints();
+            //currEditingGizmoPos.y = af.GetNodeMarkerPosition(0).y;
+            //restartingPositionDrag = false;
+            
+        }
+
+    }
+
+    /*private void CheckContextMenuVisibility()
+{
+   // Reset the context menu visibility flag if the context menu loses focus
+   if (isUseGameObjectMenuVisible && (EditorWindow.focusedWindow == null || EditorWindow.focusedWindow.GetType() != typeof(GenericMenu)))
+   {
+       isUseGameObjectMenuVisible = false;
+       Debug.Log($"isUseGameObjectMenuVisible = {isUseGameObjectMenuVisible}\n");
+       showSceneEditScaleSwitches = false;
+   }
+}*/
     //-------------------
     private static GameObject RaycastForGameObject(Ray worldRay)
     {
@@ -2080,10 +2438,17 @@ public partial class AutoFenceEditor : Editor
     {
         if (currEvent.type == EventType.MouseDown && currEvent.clickCount == 2 && currEvent.button == 0)
         {
+            if (drawEditingGizmo == true)
+            {
+                drawEditingGizmo = false;
+                return;
+            }
+
             if (layer <= LayerSet.markerLayer)
             {
                 ToggleNodeGizmos();
                 af.ForceRebuildFromClickPoints();
+                drawEditingGizmo = false;
                 return;
             }
             //Also disable the editing gizmo
@@ -2234,7 +2599,7 @@ public partial class AutoFenceEditor : Editor
     /// <param name="hoveredLayer"></param>
     /// <param name="isClickNode"></param>
     /// <returns></returns>
-    private GameObject MouseHover(int helpBoxHeight, Ray rayPosition, out LayerSet hoveredLayer, out bool isClickNode)
+    private GameObject MouseHover(int helpBoxHeight, Ray rayPosition, out LayerSet hoveredLayer, out bool isClickNode, ref int sectIndex)
     {
         Event currentEvent = Event.current;
 
@@ -2265,6 +2630,11 @@ public partial class AutoFenceEditor : Editor
                 //====================
                 if (hoveredLayer == LayerSet.postLayer)
                 {
+                    List<Transform> posts = af.postsPool;
+                    //-- the real go index in the pool
+                    int postIndex = posts.IndexOf(go.transform);
+                    sectIndex = postIndex;
+
                     //      Determine Name, Position, Index, Post Status
                     //=========================================================
                     layerNameString = af.GetLayerNameAsString(hoveredLayer);
@@ -2287,7 +2657,7 @@ public partial class AutoFenceEditor : Editor
                     string layerStr = "Post:  ", seqString = go.name.Substring(go.name.Length - 2);
                     bool isInt = int.TryParse(seqString, out currSeqPostStepIndex);
                     //string postIndex = Regex.Match(go.name, @"\d+").Value;
-                    string postIndex = PostVector.FindIndexByPosition(go).ToString();
+                    //string postIndex = PostVector.FindIndexByPosition(go).ToString();
                     Vector3 mousePosition = Event.current.mousePosition;
                     int boxPosX = (int)mousePosition.x, boxPosY = (int)mousePosition.y;
                     if (boxPosX < 55)
@@ -2297,9 +2667,9 @@ public partial class AutoFenceEditor : Editor
                     Handles.BeginGUI();
                     //int postnamePos = go.name.IndexOf("_Post");
 
-                    //  DrawTCT the Background Box
+                    //  Draw the Background Box
                     //===========================
-                    Handles.DrawSolidRectangleWithOutline(new Rect(boxPosX - 50, mousePosition.y + 15, boxWidth + 15, boxHeight), sceneViewBoxColor, sceneViewBoxBorderColor);
+                    Handles.DrawSolidRectangleWithOutline(new Rect(boxPosX - 50, mousePosition.y + 15, boxWidth + 15, boxHeight + 28), sceneViewBoxColor, sceneViewBoxBorderColor);
                     string name = "";
                     if (go.name.Contains("_Post"))
                         name = go.name.Substring(0, go.name.IndexOf("_Post"));
@@ -2315,18 +2685,21 @@ public partial class AutoFenceEditor : Editor
                     string posString = af.Vector3ToStringNeat(go.transform.localPosition, 1);
                     GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 16, boxWidth + 15 - 2, 20), postString + name + " [" + postIndex + "]   " + posString);
 
-                    //     Is Post Point
+                    //     Is Post Point -  Hover Label
+                    float y = mousePosition.y + 50, yGap = 20;
                     //=======================
                     if (isPostPoint)
                     {
-                        GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 50, 250, 20), "Right Click for Options ");
+                        GUI.Label(new Rect(boxPosX - 45, y, 250, 20), "Right Click for Options ");
                         if (af.usePostVariations)
-                            GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 68, 250, 20), "Click to view step in Variations Seq ");
+                            GUI.Label(new Rect(boxPosX - 45, y + yGap, 250, 20), "Click to view step in Variations Seq ");
                         else
-                            GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 68, 250, 20), "Click to view Posts in Inspector");
+                            GUI.Label(new Rect(boxPosX - 45, y + yGap, 250, 20), "Click to view Posts in Inspector");
+
+                        GUI.Label(new Rect(boxPosX - 45, y + (yGap * 2), 250, 20), "Alt-Dbl_Click for Scale Gizmo");
                     }
                     else
-                        GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 32, 250, 20), "(This a non-live Finished Post. Or something went wrong.)");
+                        GUI.Label(new Rect(boxPosX - 45, y, 250, 20), "(This a non-live Finished Post. Or something went wrong.)");
                     Handles.EndGUI();
                     Repaint();
                 }
@@ -2335,6 +2708,16 @@ public partial class AutoFenceEditor : Editor
                 //===============================
                 if (hoveredLayer == LayerSet.railALayer || hoveredLayer == LayerSet.railBLayer)
                 {
+                    List<Transform> rails = hoveredLayer == LayerSet.railALayer ? af.railsAPool : af.railsBPool;
+                    //-- the real go index in the pool
+                    int railIndex = rails.IndexOf(go.transform);
+                    //-- the section index after compensating for the number of stacked rails
+                    int numInStack = (int)af.numStackedRails[hoveredLayer.Int()];
+                    int railSectionIndex = Mathf.FloorToInt(railIndex / numInStack);
+                    int stackIndex = railIndex % numInStack;
+                    sectIndex = railSectionIndex;
+
+
                     string layerStr = "";
                     boxHeight = 85;
                     bool isRailPoint = true;
@@ -2360,7 +2743,7 @@ public partial class AutoFenceEditor : Editor
                     }
 
                     //- Infers the section index from the namw
-                    string railIndexStr = Regex.Match(go.name, @"\[(\d+)").Groups[1].Value;
+                    //string railIndexStr = Regex.Match(go.name, @"\[(\d+)").Groups[1].Value;
                     //float sectionLength = af.GetSectionLength(int.Parse(railIndexStr));
                     //Debug.Log("Section Length: " + sectionLength);
 
@@ -2371,8 +2754,9 @@ public partial class AutoFenceEditor : Editor
                     if (boxPosY > Screen.height - helpBoxHeight)
                         boxPosY = Screen.height - helpBoxHeight;
                     Handles.BeginGUI();
-                    float hoverBoxWidth = 290;
-                    Handles.DrawSolidRectangleWithOutline(new Rect(boxPosX - 50, mousePosition.y + 15, hoverBoxWidth, boxHeight), sceneViewBoxColor, sceneViewBoxBorderColor);
+                    float hoverBoxWidth = 330;
+                    Handles.DrawSolidRectangleWithOutline(new Rect(boxPosX - 50, mousePosition.y + 15, hoverBoxWidth, boxHeight),
+                        sceneViewBoxColor, sceneViewBoxBorderColor);
                     int startIndex = go.name.IndexOf("_Rail");
                     if (startIndex == -1)
                         startIndex = go.name.IndexOf("_Panel");
@@ -2393,7 +2777,12 @@ public partial class AutoFenceEditor : Editor
                     GUIStyle testStyle = new GUIStyle(GUI.skin.label);
                     Color testCol = testStyle.normal.textColor;
 
-                    GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 16, 240, 20), layerStr + name + " [" + railIndexStr + "]", testStyle);
+                    string stackIndexStr = "";
+                    if (numInStack > 1)
+                        stackIndexStr = ":" + stackIndex.ToString();
+                    string posString = af.Vector3ToStringNeat(go.transform.localPosition, 1);
+                    GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 16, hoverBoxWidth, 20),
+                        $"{layerStr}{name} [ {railSectionIndex}{stackIndexStr} ]  {posString}", testStyle);
                     if (isRailPoint)
                     {
                         GUI.Label(new Rect(boxPosX - 45, mousePosition.y + 38, 220, 20), "Right Click for Options ", testStyle);

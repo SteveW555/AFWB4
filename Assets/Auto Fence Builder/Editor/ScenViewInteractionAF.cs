@@ -380,7 +380,7 @@ public partial class AutoFenceEditor
 
             // Store the current mouse position
             //switchPosition = currentEvent.mousePosition;
-            //showSwitches = true;
+            //showSceneEditScaleSwitches = true;
 
         }
         currentEvent.Use();

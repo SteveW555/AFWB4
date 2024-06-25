@@ -885,6 +885,15 @@ so = ed.serializedObject;
         smallToolbarButtonStyle = new GUIStyle(EditorStyles.toolbarButton);
         smallToolbarButtonStyle.fontSize = 11;
 
+        sceneViewScaleButtonOn = new GUIStyle(EditorStyles.miniButton);
+        sceneViewScaleButtonOn.fontSize = 13;
+        sceneViewScaleButtonOn.normal.textColor = new Color(0.9f, 1f, 0.9f, 1);
+        sceneViewScaleButtonOn.hover.textColor = new Color(0.9f, 1f, 0.9f, 1);
+
+        sceneViewScaleButtonOff = new GUIStyle(EditorStyles.miniButton);
+        sceneViewScaleButtonOff.fontSize = 11;
+
+
         //--Currently unused
         sty3 = new GUIStyle("button");
         sty3.normal.textColor = cyanBoldStyle.normal.textColor;

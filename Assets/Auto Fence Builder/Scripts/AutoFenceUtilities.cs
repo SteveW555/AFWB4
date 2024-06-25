@@ -140,6 +140,19 @@ namespace AFWB
                 return subpostScale;
             return postScale;
         }
+        public void SetScaleTransformForLayer(Vector3 scale, LayerSet layer)
+        {
+            if (layer == LayerSet.postLayer)
+                postScale = scale;
+            else if (layer == LayerSet.railALayer)
+                railAScale = scale;
+            else if (layer == LayerSet.railBLayer)
+                railBScale = scale;
+            else if (layer == LayerSet.subpostLayer)
+                subpostScale = scale;
+            else if (layer == LayerSet.extraLayer)
+                ex.extraTransformScale = scale;
+        }
         //----------------------------
         public Vector3 GetPositionTransformForLayer(LayerSet layer)
         {
@@ -171,19 +184,7 @@ namespace AFWB
             return Vector3.zero;
         }
 
-        public void SetScaleTransformForLayer(Vector3 scale, LayerSet layer)
-        {
-            if (layer == LayerSet.postLayer)
-                postScale = scale;
-            else if (layer == LayerSet.railALayer)
-                railAScale = scale;
-            else if (layer == LayerSet.railBLayer)
-                railBScale = scale;
-            else if (layer == LayerSet.subpostLayer)
-                subpostScale = scale;
-            else if (layer == LayerSet.extraLayer)
-                ex.extraTransformScale = scale;
-        }
+        
         public void SetPositionTransformForLayer(Vector3 positionOffset, LayerSet layer)
         {
             if (layer == LayerSet.railALayer)

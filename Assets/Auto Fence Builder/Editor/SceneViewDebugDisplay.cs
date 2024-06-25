@@ -773,4 +773,61 @@ public class SceneViewDebugDisplay
         Vector3 labelPosition = midpoint;
         return screenPosition;
     }
+    /*public Vector2 GetCentreRailPosition(LayerSet layer, int sectionNum)
+    {
+        int adjustedSectionNum = sectionNum;
+
+        if (layer == LayerSet.railALayer && af.numStackedRails[0] > 1)
+        {
+            adjustedSectionNum = (int)((float)sectionNum / af.numStackedRails[0]);
+        }
+        else if (layer == LayerSet.railBLayer && af.numStackedRails[1] > 1)
+        {
+            adjustedSectionNum = (int)((float)sectionNum / af.numStackedRails[1]);
+        }
+
+        Vector3 endX = Vector3.zero, midpoint = Vector3.zero, startX = af.allPostPositions[adjustedSectionNum];
+        if (layer == LayerSet.railALayer || layer == LayerSet.railBLayer)
+        {
+            if (sectionNum < af.allPostPositions.Count - 1)
+                endX = af.allPostPositions[adjustedSectionNum + 1]; // use instead of goPositiions to get a better center point and deal with problem of last section
+            else
+                endX = startX;
+            midpoint = (startX + endX) / 2;
+        }
+        else if (layer == LayerSet.postLayer)
+            midpoint = startX;
+        else if (layer == LayerSet.subpostLayer)
+        {
+            startX = af.subpostsPool[sectionNum].localPosition;
+            midpoint = startX;
+            midpoint.y -= 0.3f; // lower the subpost labels a little to avoid the post labels
+        }
+
+        if (layer == LayerSet.railALayer)
+        {
+            midpoint.y = af.railsAPool[adjustedSectionNum].localPosition.y;
+            if (af.numStackedRails[0] > 1 && sectionNum >= af.allPostPositions.Count)
+            {
+                midpoint.y += 20;
+            }
+        }
+        else if (layer == LayerSet.railBLayer)
+        {
+            midpoint.y = af.railsBPool[sectionNum].localPosition.y;
+            if (af.numStackedRails[1] > 1 && sectionNum >= af.allPostPositions.Count)
+            {
+                midpoint.y += 20;
+            }
+        }
+        else if (layer == LayerSet.markerLayer)
+        {
+            List<Transform> markers = af.GetNodeMarkers();
+            midpoint = markers[sectionNum].localPosition;
+        }
+
+        Vector2 screenPosition = HandleUtility.WorldToGUIPoint(midpoint);
+        Vector3 labelPosition = midpoint;
+        return screenPosition;
+    }*/
 }

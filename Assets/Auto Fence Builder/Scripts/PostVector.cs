@@ -783,7 +783,12 @@ public class PostVector
         if (next != null)
             RotatePoints(points, this.Position.To2D(), next.Forward.To2D());
     }
-
+    public Vector3 GetMidPointOffsetToNextPost()
+    {
+        // get the midpoint between this post and the next post
+        Vector3 midPointOffset = ((Position + GetNextPosition()) / 2) - Position;
+        return midPointOffset;
+    }
     //=========================================================================
     //                                Statics
     //=========================================================================
@@ -955,4 +960,6 @@ public class PostVector
         int index = FindIndexByPosition(go.transform.position, tol);
         return index;
     }
+
+    
 }

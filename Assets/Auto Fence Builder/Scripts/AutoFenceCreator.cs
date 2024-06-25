@@ -3469,6 +3469,7 @@ namespace AFWB
                         thisRail.transform.Translate(railPositionOffset.x, 0, railPositionOffset.z);
                     else if (offsetMode == RailOffsetMode.joined)
                     {
+                        thisRail.transform.Translate(railPositionOffset.x, 0, 0);
                         // Do nothing for now, as the new virtual post positions (offsetPosA B C) already account for this position offset
                     }
                 }
